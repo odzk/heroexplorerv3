@@ -1,0 +1,65 @@
+# Hero Explorer Rebuild — root .gitignore
+# Covers heroapp (legacy Angular), heroapi (legacy LoopBack),
+# heroapp-v2 (Next.js), heroapi-v2 (Express/Prisma).
+# Note: heroapp/ and heroapi/ are their own git repos with their own
+# .gitignore — this root file only applies if the whole workspace is
+# ever tracked together, plus general editor/OS hygiene.
+
+# Dependencies
+node_modules/
+/.pnp
+.pnp.js
+heroapi/node_modules/
+heroapp/node_modules/
+heroapi-v2/node_modules/
+heroapp-v2/node_modules/
+heroapi/server/constants.js
+heroapi/common/models/customization/Customization.js
+heroapp/README.md
+
+# Build output
+/dist
+/build
+/out
+.next/
+.vercel
+
+heroapp-v2/build/
+heroapi-v2/dist/
+
+# Env files (never commit secrets)
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Prisma
+prisma/*.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Backup files (created before editing server/system files)
+*.bak
+*.bak[0-9]*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+
+# Testing / coverage
+/coverage

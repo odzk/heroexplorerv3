@@ -1,0 +1,74 @@
+@import "../../../../assets/scss/variables.scss";
+
+.hx-product-item-component {
+  text-align: left;
+  margin-left: 15px;
+  // border-right: 1px solid $light-grey;
+  // border-bottom: 1px solid $light-grey;
+  .product-item--top {
+    img {
+      width: 100%;
+      height: 162px;
+    }
+  }
+  .product-item--bottom {
+    padding: 0 1rem;
+    .product-item-title {
+      height: 57px;
+      margin-bottom: 0;
+      overflow: hidden;
+      a {
+        color: $blue;
+        text-decoration: none;
+        font-family: $second-font-family;
+        font-size: 15px;
+        font-weight: $font-weight-bold;
+      }
+    }
+    .product-item-rate {
+      margin: 0;
+      position: relative;
+      span {
+        position: absolute;
+        font-size: 11px;
+        top: 7px;
+        left: 69px;
+      }
+    }
+    .product-item-currency-code {
+      margin-bottom: 0;
+      font-size: 12px;
+    }
+    .product-item-price {
+      margin-top: 0;
+      font-weight: $font-weight-bold;;
+      font-size: 25px;
+      color: $red;
+    }
+  }
+}
+
+/deep/ .custom-rating-product-item-component {
+  font-size: 24px;
+  line-height: 24px;
+  .rating {
+    span {
+      margin-right: -5px;
+    }
+  }
+}
+
+/deep/ .custom-ngx-lazy-image-product-item-component {
+  img {
+    filter: none !important;
+    border-radius: 10px;
+  }
+}
+/deep/ .ngx-lazy-img-large.loaded {
+  border-radius: 10px;
+}
+/deep/ .city-name {
+  position: relative;
+  bottom: 100px;
+  color: #fff;
+}

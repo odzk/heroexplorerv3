@@ -1,0 +1,10 @@
+<div #scrollContainer>
+  <ngx-loading [show]="isShowLoading"></ngx-loading>
+  <!-- <app-header *ngIf="location !== '/' && location.indexOf('voucher') == -1"></app-header> -->
+  <app-header></app-header>
+  <app-nav-bar *ngIf="location.indexOf('voucher') == -1" [ngClass]="{'special-for-home': location === '/'}"></app-nav-bar>
+  <router-outlet (activate)="onActivate($event, scrollContainer)"></router-outlet>
+  <app-footer *ngIf="location.indexOf('voucher') == -1"></app-footer>
+  <div class="hx-mask" *ngIf="isShowMask" (click)="hideMask()" [@fadeInAnimation]>
+  </div>
+</div>

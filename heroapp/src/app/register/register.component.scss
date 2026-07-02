@@ -1,0 +1,42 @@
+@import "../../assets/scss/variables.scss";
+
+.hx-register-component {
+//  padding-bottom: 250px;
+  //padding-bottom: 498px; //keep footer always at the bottom of the page
+  .header__background--full-screen {
+    // background-image: url('../../assets/images/select-options-bg.png');
+    // background-repeat: no-repeat;
+    // background-position: 50% 50%;
+    height: 360px;
+    background-size: cover;
+    @media screen and (max-width: $media-xs) {
+      height: 155px;
+    }
+   
+  }
+
+  .register-content {
+    max-width: 1168px;
+    position: relative;
+    margin: 0 auto 2rem;
+    padding: 1rem;
+  }
+
+  .register-container {
+    padding-bottom: 5rem;
+    .register-wrapper {
+      margin: 0 auto;
+      /deep/ .mat-form-field {
+        width: 100%;
+      }
+    }
+  }
+  label {
+    font-size: 14px;
+    font-weight: $font-weight-bold;
+  }
+}
+.error {
+  color: $red !important;
+}
+

@@ -1,0 +1,43 @@
+<div class="hx-modal-common-component">
+  <button class="hx-btn-modal-close" mat-dialog-close>×</button>
+
+  <form [formGroup]="form" fxLayout="row wrap">
+    <div fxFlex="100">
+      <h2> Add or remove traveller</h2>
+    </div>
+
+    <div style="margin-top:10px" fxLayout="row" fxLayout.xs="column" fxFill="" *ngFor="let person of lst[0].travellers; let personIndex = index"  fxLayoutGap="10px">
+
+      <label fxFlex="25" fxFlex.xs="100" style="line-height: 36px;">
+        Traveller {{personIndex+1}} ({{person.description}})
+      </label>
+      <div fxFlex="65" fxFlex.xs="100" class="box__name-input">
+        <div fxLayout="row" fxLayout.xs="column" fxLayoutGap="10px">
+          <ng-select class="custom-ng-select-order-component" fxFlex="20" fxFlex.xs="100" [(ngModel)]="person.title" [ngModelOptions]="{standalone: true}"
+            [items]="listTitle" [clearable]="false" [searchable]="false" bindLabel="value" bindValue="value" placeholder="Title">
+          </ng-select>
+          <input fxFlex="40" fxFlex.xs="100" formControlName="{{'person_' + person.randomNumber + '_firstname'}}" placeholder="First/Given Name"
+          />
+          <input fxFlex="40" fxFlex.xs="100" formControlName="{{'person_' + person.randomNumber + '_surname'}}" placeholder="Last/Family Name"
+          />
+        </div>
+      </div>
+
+      <div fxFlex="10" fxFlex.xs="100" fxLayoutAlign="center center"  fxLayoutGap="10px">
+          <a style=" padding:4px; color:#CC5757;cursor: pointer;" (click)="remove(person.randomNumber)" > <i class="fa fa-times"></i> </a>
+      </div>
+
+    </div>
+    <div fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="start flex-start " style="margin-top: 0.7rem">
+    
+        <a style=" color:#28687F;cursor: pointer;" (click)="addMore()"><i class="fa fa-plus"></i> Add traveller</a>
+     
+    </div>
+
+    <div fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center " style="margin-top: 1.3rem">
+      <button  type="button"  [ngClass]="{'disabled': form.invalid}" class="hx-btn-primary" (click)="close()">
+        <a>Check Price</a>
+      </button>
+    </div>
+  </form>
+</div>

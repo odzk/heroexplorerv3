@@ -1,0 +1,52 @@
+{
+  "name": "Project",
+  "plural": "projects",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "projectName": {
+      "type": "string",
+      "required": true
+    },
+    "projectDesc": {
+      "type": "string"
+    },
+    "pages": {
+      "type": [
+        "Page"
+      ]
+    },
+    "createdOn": {
+      "type": "date"
+    },
+    "updatedOn": {
+      "type": "date"
+    },
+    "isSelected": {
+      "type": "string"
+    },
+    "isActive": {
+      "type": "boolean"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "Workspace": {
+      "type": "belongsTo",
+      "model": "Workspace",
+      "foreignKey": "",
+      "primaryKey": "id"
+    },
+    "pages": {
+      "type": "hasMany",
+      "model": "Page",
+      "foreignKey": "projectId",
+      "primaryKey": "id"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

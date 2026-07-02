@@ -1,0 +1,126 @@
+<div class="hx-modal-view-price-calendar-component" fxLayout="">
+  <button class="hx-btn-modal-close" mat-dialog-close>×</button>
+  <!-- <div fxFlex="20" class="hx-modal-view-price-calendar__list-options-container" *ngIf="!isMobile && listOptions.length > 0">
+        <ul>
+            <li *ngFor="let item of listOptions" [ngClass]="{'active': currentOption.gradeCode === item.gradeCode}" (click)="onChangeOption(item)">
+                <p class="no-margin">{{item.gradeTitle}}</p>
+                <span class="font-size-10">From {{currencyCode}} {{item.priceFormatted}}</span>
+            </li>
+        </ul>
+    </div> -->
+
+  <div fxFlex.xs="100" class="mobile-block" fxFlex="">
+    <h2 class="text-center">{{data.title}}</h2>
+    <p class="text-center no-margin">
+      <span class="font-size-12">From {{currencyCode}}</span>
+      <span class="color-red font-size-25">{{data.priceFormatted}}</span>
+    </p>
+    <div style="margin: 1rem 0;" fxLayout="" fxLayoutAlign="space-between" fxLayout.xs="column">
+
+      <div *ngIf="isMobile && listOptions.length > 0" fxLayout="" fxLayoutAlign="space-between" class="hx-modal-view-price-calendar__select-container">
+        <span class="hx-modal-view-price-calendar-component__select-label">Choose option</span>
+        <ng-select class="custom-ng-select-modal-view-price-calendar-component" [items]="listOptions" [clearable]="false" [searchable]="false" [(ngModel)]="optionCode"
+          (ngModelChange)="onDropdownChangeOption(gradeCode)" bindLabel="gradeTitle" bindValue="gradeCode" placeholder="{{currentOption.gradeTitle}}">
+        </ng-select>
+      </div>
+    </div>
+    <div fxLayout="" fxLayout.xs="column" fxLayoutAlign="space-between" style="margin-bottom: 1rem">
+      <div fxLayout="" fxLayoutAlign="space-between" class="hx-modal-view-price-calendar__select-container">
+        <span class="hx-modal-view-price-calendar-component__select-label">Choose currency</span>
+        <ng-select class="custom-ng-select-modal-view-price-calendar-component" [items]="currency" [clearable]="false" [searchable]="false" [(ngModel)]="currencyCode"
+          (ngModelChange)="currencyCodeChange()" bindLabel="name" bindValue="name" placeholder="{{currencyCode}}">
+        </ng-select>
+      </div>
+    </div>
+    <!--<div fxLayout=""-->
+    <!--fxLayoutAlign="space-between"-->
+    <!--class="hx-modal-view-price-calendar__select-container">-->
+    <!--<span class="hx-modal-view-price-calendar-component__select-label">Select your option</span>-->
+    <!--<ng-select class="custom-ng-select-modal-view-price-calendar-component"-->
+    <!--[items]="listOptions"-->
+    <!--[clearable]="false"-->
+    <!--[searchable]="false"-->
+    <!--[(ngModel)]="currencyCode"-->
+    <!--(ngModelChange)="currencyCodeChange()"-->
+    <!--bindLabel="name"-->
+    <!--bindValue="name"-->
+    <!--placeholder="{{currencyCode}}">-->
+    <!--</ng-select>-->
+    <!--</div>-->
+
+    <div fxLayout="" fxLayout.xs="column" fxLayoutAlign="space-between" style="margin-bottom: 0.5rem">
+      <div class="hx-modal-view-price-calendar__select-container" fxLayout="" fxLayoutAlign="space-between">
+        <span class="hx-modal-view-price-calendar-component__select-label">Select a month</span>
+        <ng-select class="custom-ng-select-modal-view-price-calendar-component" [items]="listMonths" [clearable]="false" [searchable]="false" [(ngModel)]="currentDate"
+          (ngModelChange)="currentDateChange()" bindLabel="name" placeholder="{{listMonths[0].name}}">
+        </ng-select>
+      </div>
+      <div class="hx-modal-view-price-calendar-component__btn-select-month">
+        <a href="javascript:void(0)" *ngIf="indexOfCurrentMonth > 0" (click)="onPrevMonth()">« Previous month </a>
+        <span *ngIf="indexOfCurrentMonth > 0 && indexOfCurrentMonth < dayOfNextMonths"> | </span>
+        <a href="javascript:void(0)" *ngIf="indexOfCurrentMonth < dayOfNextMonths" (click)="onNextMonth()">
+          Next month »
+        </a>
+      </div>
+    </div>
+
+    <div *ngIf="!isMobile" class="hx-modal-view-price-calendar-component__price-calendar">
+      <ul>
+        <li class="weekday-name">Sunday</li>
+        <li class="weekday-name">Monday</li>
+        <li class="weekday-name">Tuesday</li>
+        <li class="weekday-name">Wednesday</li>
+        <li class="weekday-name">Thursday</li>
+        <li class="weekday-name">Friday</li>
+        <li class="weekday-name saturday">Saturday</li>
+        <perfect-scrollbar style="max-height: 400px;">
+          <!-- showModalViewPriceDetail(item) -->
+          <li [ngStyle]="{'background-color': item.isCurrentDate ? 'rgb(224, 94, 94)': ''}" class="date-number" *ngFor="let item of calendar" (click)="addToCart(item)" [ngClass]="{'no-boder': item.date === null,
+                      'not-available': item.date !== null && item.price === null}">
+            <div *ngIf="item.date !== null && item.price !== null">
+              <p class="date-number--top" [ngStyle]="{'color': item.isCurrentDate ? 'rgb(225, 255, 255)': ''}">{{item.date}}</p>
+              <p class="no-margin color-grey font-size-12" [ngStyle]="{'color': item.isCurrentDate ? 'rgb(225, 255, 255)': ''}">From {{currencyCode}}</p>
+              <!-- <p style="margin: 0 0 2px;" class="font-size-18 font-weight-bold color-black">{{item.price.tourGrades[0].pricingMatrix[0].ageBandPrices[0].prices[0].priceFormatted}}</p> -->
+              <p style="margin: 0 0 2px;" class="font-size-18 font-weight-bold color-black" [ngStyle]="{'color': item.isCurrentDate ? 'rgb(0, 0, 0)': ''}">{{currentOption.priceFormatted}}</p>
+              <p class="view-child-price__label" [ngStyle]="{'color': item.isCurrentDate ? 'rgb(225, 255, 255)': ''}"> View options</p>
+            </div>
+            <div *ngIf="item.date !== null && item.price === null" style="height: 100%;" fxLayout="column" fxLayoutAlign="space-between">
+              <p style="margin: 0 0 10px;" class="font-size-18 color-grey">{{item.date}}</p>
+              <p class="not-available__label">NOT AVAILABLE</p>
+            </div>
+          </li>
+        </perfect-scrollbar>
+      </ul>
+
+    </div>
+
+
+    <div *ngIf="isMobile" class="hx-modal-view-price-calendar-component__price-calendar smaller">
+      <ul>
+        <li class="weekday-name">Su</li>
+        <li class="weekday-name">Mo</li>
+        <li class="weekday-name">Tu</li>
+        <li class="weekday-name">We</li>
+        <li class="weekday-name">Th</li>
+        <li class="weekday-name">Fr</li>
+        <li class="weekday-name saturday">Sa</li>
+        <perfect-scrollbar style="max-height: 400px;">
+          <li [ngStyle]="{'background-color': item.isCurrentDate ? 'rgb(224, 94, 94)': '' }" class="date-number" *ngFor="let item of calendar" (click)="addToCart(item)" [ngClass]="{'no-boder': item.date === null,
+                      'not-available': item.date !== null && item.price === null}">
+            <div *ngIf="item.date !== null && item.price !== null">
+              <p class="date-number--top" [ngStyle]="{'color': item.isCurrentDate ? 'rgb(225, 255, 255)': ''}">{{item.date}}</p>
+              <p class="no-margin color-grey font-size-12" [ngStyle]="{'color': item.isCurrentDate ? 'rgb(0, 0, 0)': ''}">{{currentOption.priceFormatted}}</p>
+              <!-- <p   style="margin: 0 0 2px;"
+                 class="font-size-18 font-weight-bold color-black">{{item.price.tourGrades[0].pricingMatrix[0].ageBandPrices[0].prices[0].priceFormatted}}</p>
+              <p
+                 class="view-child-price__label"> View child prices & other options</p> -->
+            </div>
+            <div *ngIf="item.date !== null && item.price === null" style="height: 100%;" fxLayout="column" fxLayoutAlign="space-between">
+              <p style="margin: 0 0 0px;" class="font-size-22 color-grey">{{item.date}}</p>
+            </div>
+          </li>
+        </perfect-scrollbar>
+      </ul>
+    </div>
+  </div>
+</div>

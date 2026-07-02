@@ -1,0 +1,94 @@
+<div class="hx-nav-bar-component" [ngStyle]="{ 'margin-right': marginRight }">
+  <div fxLayout="row" class="nav-bar--lg">
+    <!-- <ng-select *ngIf="!isAdminProfileRoute" class="custom-ng-select-nav-bar-component" [items]="currency"
+      [clearable]="false" [searchable]="false" [(ngModel)]="currencyCode" (ngModelChange)="currencyCodeChange()"
+      bindLabel="name" bindValue="name" placeholder="{{ currency[0].name }}">
+    </ng-select> -->
+
+    <!-- <div *ngIf="!isLogged" class="card-container" fxLayout="row" (click)="goToLogin()">
+      <span class="cart__label">{{ 'Login' | translate }}</span>
+    </div> -->
+
+    <div *ngIf="!isLogged" class="card-container" style="margin-left: 0.4rem;" fxLayout="row">
+      <a #matMenuTrigger [matMenuTriggerFor]="login"><i class="fa fa-user"></i>  Login </a>
+      <mat-menu #login="matMenu">
+        <a (click)="goToLogin()" mat-menu-item><i class="fa fa-sign-in"></i> Login</a>
+        <a routerLink="/register" mat-menu-item><i class="fa fa-plus-circle"></i> Register</a>
+      </mat-menu>
+    </div>
+
+    <!-- <div *ngIf="!isLogged && !isFirebaseAuth" class="card-container" fxLayout="row" (click)="goToRegister()">
+      <span class="cart__label">{{ 'Register' | translate }}</span>
+    </div> -->
+
+    <div *ngIf="isLogged" class="card-container" style="margin-left: 0.4rem;" fxLayout="row">
+      <a #matMenuTrigger [matMenuTriggerFor]="menu"><i class="fa fa-user"></i>  Account </a>
+      <mat-menu #menu="matMenu">
+        <a routerLink="/my-profile" mat-menu-item><i class="fa fa-user"></i> My profile</a>
+        <a (click)="logout()" mat-menu-item><i class="fa fa-sign-out"></i> Log out</a>
+      </mat-menu>
+    </div>
+    <div *ngIf="!isAdminProfileRoute" class="card-container" fxLayout="row" (click)="goToOrderPage()">
+      <i class="icon-shopping-cart"></i>
+      <span class="cart__label">{{ 'Cart' | translate }}</span>
+      <p [style.backgroundColor]="customizeSettings?.color_scheme?.primary_color" style="color: #fff;">{{ cartNumber }}</p>
+    </div>
+  </div>
+  <div fxLayout="row" class="nav-bar--sm">
+    <div class="card-container" fxFlex="50" fxLayout="row" (click)="goToOrderPage()">
+      <i class="icon-shopping-cart"></i>
+      <p [style.backgroundColor]="customizeSettings?.color_scheme?.primary_color" style="color: #fff;">{{ cartNumber }}</p>
+    </div>
+    <div class="card-container" fxFlex="50" fxLayout="row">
+      <i class="icon-menu" (click)="toggleShowMenu()"> </i>
+    </div>
+    <div class="nav-bar--sm__menu" *ngIf="isShowMenu" [@fadeInAnimation]>
+      <div>
+        <button mat-button (click)="isShowCurrency = !isShowCurrency">
+          <mat-icon>attach_money</mat-icon>
+          <span>Currency</span>
+        </button>
+        <ul *ngIf="isShowCurrency">
+          <li *ngFor="let item of currency" (click)="onClickChangeCurrency(item.name)">
+            {{ item.name }}
+          </li>
+        </ul>
+      </div>
+      <!-- <div>
+        <button mat-button (click)="isShowLanguage = !isShowLanguage">
+          <mat-icon>language</mat-icon>
+          <span>Language</span>
+        </button>
+        <ul *ngIf="isShowLanguage">
+          <li *ngFor="let item of language">
+            {{item.name}}
+          </li>
+        </ul>
+      </div> -->
+      <div>
+        <button *ngIf="!isLogged" mat-button (click)="goToLogin(); toggleShowMenu()">
+          <mat-icon>account_circle</mat-icon>
+          <span>Login</span>
+        </button>
+      </div>
+      <div>
+        <button *ngIf="!isLogged" mat-button (click)="goToRegister(); toggleShowMenu()">
+          <mat-icon>how_to_reg</mat-icon>
+          <span>Register</span>
+        </button>
+      </div>
+      <div>
+        <button *ngIf="isLogged" mat-button routerLink="/my-profile" (click)="toggleShowMenu()">
+          <mat-icon>account_circle</mat-icon>
+          <span>My profile</span>
+        </button>
+      </div>
+      <div>
+        <button *ngIf="isLogged" mat-button (click)="logout(); toggleShowMenu()">
+          <mat-icon>exit_to_app</mat-icon>
+          <span>Log out</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,312 @@
+{
+	"name": "HeroUser",
+	"base": "User",
+	"properties": {
+		"id": {
+			"type": "number",
+			"required": true,
+			"length": null,
+			"precision": 10,
+			"scale": 0,
+			"mysql": {
+			  "columnName": "id",
+			  "dataType": "int",
+			  "dataLength": null,
+			  "dataPrecision": 10,
+			  "dataScale": 0,
+			  "nullable": "N"
+			}
+		  },
+		"password": {
+			"type": "string",
+			"required": true,
+			"length": 512,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+			  "columnName": "password",
+			  "dataType": "varchar",
+			  "dataLength": 512,
+			  "dataPrecision": null,
+			  "dataScale": null,
+			  "nullable": "N"
+			}
+		 },
+		"firstname": {
+			"type": "string",
+			"required": false,
+			"length": 64,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "firstname",
+				"dataType": "varchar",
+				"dataLength": 64,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"username": {
+			"type": "string",
+			"required": false,
+			"length": 64,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "username",
+				"dataType": "varchar",
+				"dataLength": 64,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"lastname": {
+			"type": "string",
+			"required": false,
+			"length": 64,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "lastname",
+				"dataType": "varchar",
+				"dataLength": 64,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"profileurl": {
+			"type": "string",
+			"required": false,
+			"length": 500,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "profileUrl",
+				"dataType": "varchar",
+				"dataLength": 500,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"mobile": {
+			"type": "string",
+			"required": false,
+			"length": 24,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "mobile",
+				"dataType": "varchar",
+				"dataLength": 24,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"city": {
+			"type": "string",
+			"required": false,
+			"length": 65535,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "city",
+				"dataType": "text",
+				"dataLength": 65535,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"country": {
+			"type": "string",
+			"required": false,
+			"length": 65535,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "country",
+				"dataType": "text",
+				"dataLength": 65535,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"province": {
+			"type": "string",
+			"required": false,
+			"length": 65535,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "province",
+				"dataType": "text",
+				"dataLength": 65535,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"postcode": {
+			"type": "string",
+			"required": false,
+			"length": 65535,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "postcode",
+				"dataType": "text",
+				"dataLength": 65535,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"billingadress": {
+			"type": "string",
+			"required": false,
+			"length": 65535,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "billingAdress",
+				"dataType": "text",
+				"dataLength": 65535,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"createdat": {
+			"type": "date",
+			"required": false,
+			"length": null,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "createdAt",
+				"dataType": "datetime",
+				"dataLength": null,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"updatedAt": {
+			"type": "date",
+			"required": false,
+			"length": null,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "updatedAt",
+				"dataType": "datetime",
+				"dataLength": null,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"email": {
+			"type": "string",
+			"required": true,
+			"length": 512,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "email",
+				"dataType": "varchar",
+				"dataLength": 512,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "N"
+			}
+		},
+		"emailverified": {
+			"type": "number",
+			"required": false,
+			"length": null,
+			"precision": 3,
+			"scale": 0,
+			"mysql": {
+				"columnName": "emailVerified",
+				"dataType": "tinyint",
+				"dataLength": null,
+				"dataPrecision": 3,
+				"dataScale": 0,
+				"nullable": "Y"
+			}
+		},
+		"isUpdateOffer": {
+			"type": "number",
+			"required": false,
+			"length": null,
+			"precision": 3,
+			"scale": 0,
+			"mysql": {
+				"columnName": "isUpdateOffer",
+				"dataType": "tinyint",
+				"dataLength": null,
+				"dataPrecision": 3,
+				"dataScale": 0,
+				"nullable": "Y"
+			}
+		},
+		"verificationtoken": {
+			"type": "string",
+			"required": false,
+			"length": 512,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "verificationToken",
+				"dataType": "varchar",
+				"dataLength": 512,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		},
+		"realm": {
+			"type": "string",
+			"required": false,
+			"length": 512,
+			"precision": null,
+			"scale": null,
+			"mysql": {
+				"columnName": "realm",
+				"dataType": "varchar",
+				"dataLength": 512,
+				"dataPrecision": null,
+				"dataScale": null,
+				"nullable": "Y"
+			}
+		}
+	},
+	"settings": {
+		"strict": false,
+		"forceId": false,
+		"replaceOnPUT": true,
+		"idInjection": false,
+		"mysql": {
+			"schema": "herodbdev",
+			"table": "HeroUser"
+		}
+	},
+	"restrictResetPasswordTokenScope": true,
+	"emailVerificationRequired": true,
+	"validations": [],
+  	"relations": {},
+	"acls": [{
+		"accessType": "EXECUTE",
+		"principalType": "ROLE",
+		"principalId": "$everyone",
+		"permission": "ALLOW"
+	  }],
+	"methods": {}
+}

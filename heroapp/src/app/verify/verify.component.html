@@ -1,0 +1,73 @@
+<div class="hx-login-component">
+  <div class="login-content">
+  <div class="header__background--full-screen">
+    <slideshow [autoPlay]="true" [imageUrls]="pages | toHttps"></slideshow>
+  </div>
+</div>
+  <div class="login-container">
+   
+    <div class="login-wrapper"
+         fxFlex="50" fxFlex.xs="80"
+        >
+      <form *ngIf="!isVerified" [formGroup]="verifyForm"
+            fxLayout="row wrap">
+        <div fxFlex="100">
+          <h2>YOU MUST VERITY YOUR EMAIL ADDRESS</h2>
+          <p>For security reasons, we must verity your email address. Simply click the link in the verification email we've just sent you - it's as easy as that!</p>
+          <br/>
+          <strong>Having trouble with the link?</strong>
+          <p>Alternatively, if the verification link is not working for any reason, enter the verification code we sent you.</p>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput
+                   placeholder="Email"
+                   formControlName="email"
+                   required>
+            <app-control-message [control]="verifyForm.controls.email"></app-control-message>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput
+                   placeholder="Verification Code"
+                   formControlName="verifyCode"
+                   required>
+            <app-control-message [control]="verifyForm.controls.verifyCode"></app-control-message>
+          </mat-form-field>
+        </div>
+        <div class="text-center" fxFlex="100">
+         <label class="error">{{message}}</label>
+        </div>
+
+        <div fxFlex="100"
+             fxLayout=""
+             fxLayoutAlign="center "
+             style="margin-top: 2rem">
+          <button  type="button" [ngClass]="{'disabled': verifyForm.invalid}"
+                  class="hx-btn-primary"
+                  (click)="onSubmit()">
+            <a>Submit</a>
+          </button>
+        </div>
+      </form>
+
+
+      <div *ngIf="isVerified"
+      fxLayout="row wrap">
+   <div fxFlex="100"
+        class="text-center">
+     <h2>CONGRATULATIONS!</h2>
+     <p>You have successful registered and are logged in.
+     </p>
+     <p>
+       <a class="no-decoration color-ocean-blue"
+          routerLink="">
+         Go back home
+       </a>
+     </p>
+   </div>
+ </div>
+    </div>
+  </div>
+</div>

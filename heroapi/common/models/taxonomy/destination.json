@@ -1,0 +1,51 @@
+{
+  "name": "Destination",
+  "plural": "Destinations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "selectable": {
+      "type": "boolean"
+    },
+    "destinationUrlName": {
+      "type": "string"
+    },
+    "defaultCurrencyCode": {
+      "type": "string"
+    },
+    "lookupId": {
+      "type": "string"
+    },
+    "parentId": {
+      "type": "number"
+    },
+    "timeZone": {
+      "type": "string"
+    },
+    "iataCode": {
+      "type": "string"
+    },
+    "destinationName": {
+      "type": "string"
+    },
+    "destinationType": {
+      "type": "string"
+    },
+    "destinationId": {
+      "type": "number"
+    },
+    "longitude": {
+      "type": "number"
+    },
+    "latitude": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

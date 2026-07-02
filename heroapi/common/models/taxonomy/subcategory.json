@@ -1,0 +1,28 @@
+{
+  "name": "Subcategory",
+  "plural": "Subcategories",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "categoryId": {
+      "type": "number"
+    },
+    "subcategoryName": {
+      "type": "string"
+    },
+    "subcategoryUrlName": {
+      "type": "string"
+    },
+    "subcategoryId": {
+      "type": "number",
+      "required": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

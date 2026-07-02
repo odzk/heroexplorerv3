@@ -1,0 +1,318 @@
+@import "../../assets/scss/variables.scss";
+
+table{
+  width: 100%;
+ }
+
+table.mat-elevation-z8 th,
+table.mat-elevation-z8 td {
+  white-space: nowrap;         /* Prevents wrapping */
+  text-overflow: ellipsis;     /* Adds ellipsis (...) if text overflows */
+  overflow: hidden;            /* Hides overflowed text */
+  width: 100%;                 /* Ensures cells use full available width */
+  padding: 12px 20px;          /* Optional: Adjusts padding for better spacing */
+  text-align: center;
+}
+
+
+.hx-my-profile-component {
+  font-family: $primary-font-family;
+  //padding-bottom: 498px; //keep footer always at the bottom of the page
+  .header__background--full-screen {
+    // background-image: url('../../assets/images/detail-bg.png');
+    // background-repeat: no-repeat;
+    // background-position: 50% 50%;
+    height: 360px;
+    background-size: cover;
+    @media screen and (max-width: $media-xs) {
+      height: 155px;
+    }
+ 
+  }
+  .my-profile-content {
+    max-width: 1168px;
+    position: relative;
+    margin: 0 auto 2rem;
+    padding: 1rem;
+  }
+
+  .my-profile-container {
+    max-width: 1168px;
+    margin-left: auto;
+    margin-right: auto;
+    padding-bottom: 2rem;
+    max-width: 1168px;
+    .my-profile-wrapper {
+      margin: 0 auto;
+      .mat-form-field {
+        width: 100%;
+      }
+    }
+    .booking-item {
+      font-family: $primary-font-family;
+      margin-bottom: 5px;
+      .mat-expansion-panel-header {
+        height: 48px;
+        background-color: $ocean-blue !important;
+      }
+
+      .mat-expansion-panel-header-title{
+        color: #ffffff;
+        font-weight: $font-weight-bold;
+      }
+      .title {
+        color: $blue;
+        text-decoration: none;
+        font-family: $second-font-family;
+        font-size: 15px;
+        font-weight: $font-weight-bold;
+      }
+      .mat-expansion-panel:not([class*=mat-elevation-z]) {
+        box-shadow: 0 0 1px rgba(0,0,0,.1);
+        border: 1px solid #efefef;
+    }
+    .mat-expansion-indicator::after {
+      color: #ffffff;
+    }
+      .description {
+        font-family: $primary-font-family;
+        .description-title {
+          font-weight: $font-weight-bold;
+        }
+        p {
+          margin-top: unset;
+          margin-bottom: unset;
+        }
+        .paid-confirmed {
+          font-weight: $font-weight-bold;
+          margin-bottom: 6px;
+        }
+        
+        .paid-confirmed .fa-check {
+        color:$green;
+        }
+        .paid-confirmed .fa-times {
+          color:$red;
+          }
+          .description-image {
+          float: left;
+          width: 93%;
+          padding: 16px;
+          .image-gb{
+            position: relative;
+            background: $white;
+            overflow: hidden;
+            transform: translateZ(0);
+            padding-top: 54.847458%;
+            border-radius: 7px;
+            img {
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+              transition-duration: .5s;
+              transition-property: left;
+              z-index: 1;
+            }
+          }
+         
+      }
+      }
+    }
+    
+
+  }
+ 
+}
+
+.manage-booking {
+  background:$white-grey;
+  font-family: $primary-font-family;
+  padding: 20px;
+  margin-top: 20px;
+}
+.manage-booking  .custom-ng-select-home-component .ng-select-container {
+  border: 1px solid $light-grey;
+
+}
+
+/deep/ .custom-ng-select-home-component {
+  .ng-select-container {
+    border: 1px solid $light-grey;
+    .ng-placeholder, .ng-value-container {
+      color: $light-black;
+    }
+    .ng-arrow {
+      border-color: $black transparent transparent !important;
+      border-width: 10px 5px 2.5px !important;
+      top: 4px !important;
+    }
+    .ng-input {
+      top: 8px !important;
+      input {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+
+.manage-booking  .ng-select-container  .ng-placeholder, .ng-value-container {
+color: $light-black;
+}
+.manage-booking  .ng-select-container .ng-arrow {
+border-color: $black transparent transparent !important;
+border-width: 10px 5px 2.5px !important;
+top: 4px !important;
+}
+.manage-booking .ng-select-container .ng-input {
+top: 8px !important;
+
+}
+.manage-booking .ng-select-container .ng-input input {
+font-size: 14px;
+}
+.manage-booking .select-option-container {
+width: 100%;
+margin-bottom: 2rem;
+}
+.manage-booking .currency {
+font-weight: $font-weight-bold;
+}
+
+.hx-btn-primary, .hx-btn-default{
+// padding: 0.7rem 0.8rem;
+border-radius: 30px;
+border: none;
+font-size: 14px;
+text-align: center;
+font-weight: 500;
+cursor: pointer;
+outline: none;
+}
+.custom-mat-tab-group-product-detail  .mat-ink-bar {
+background-color: $red;
+height: 3px !important;
+}
+
+.custom-mat-tab-group-product-detail  .mat-tab-label-active {
+background-color: $red;
+color: $white;
+opacity: 1 !important;
+}
+
+.custom-mat-tab-group-product-detail  .tab-content {
+padding: 1rem 5px;
+position: relative;
+}  
+
+.tab-content .btn-load-more-review {
+margin-top: 2rem;
+padding: .5rem 2rem;
+background: $white;
+border-radius: 5px;
+color: $bold-grey;
+border: 1px solid $light-grey;
+cursor: pointer;
+}
+.custom-mat-tab-group-product-detail .mat-tab-label-content {
+font-family: $primary-font-family;
+font-size: 15px;
+}
+.custom-mat-tab-group-product-detail  .mat-tab-labels {
+//  border-bottom: 3px solid $red;
+}
+.custom-mat-tab-group-product-detail  strong {
+color: $ocean-blue;
+font-family: $primary-font-family;
+font-weight: $font-weight-bold;
+}
+.custom-mat-tab-group-product-detail ul {
+line-height: 30px;
+}
+.error {
+  color: $red !important;
+}
+
+.success {
+  color: $dark-green !important;
+}
+.btn-square {
+  border-width: 1px;
+  border-style: solid;
+  border-radius: unset;
+}
+
+.btn-save {
+  width: 15%;
+  display: block;
+  margin: 30px auto;
+  color: #fff;
+  cursor: pointer;
+  border-style: solid;
+  padding: 1rem 2rem;
+}
+
+.btn-rounded {
+  border-width: 1px;
+  border-radius: 10px;
+  border-style: solid;
+}
+
+.ok-btn {
+  top: -10px !important;
+  left: 225px !important;
+}
+
+.filter-container {
+  margin-bottom: 20px;
+  .label--left {
+    font-size: 14px;
+    font-weight: $font-weight-bold;
+    line-height: 2rem;
+    margin-right: 1rem;
+  }
+  .filter-group {
+    margin: 1rem 20px 0 0;
+    display: flex;
+  }
+  .select-option {
+    width: 200px;
+  }
+  .input-select-date-container {
+    position: relative;
+  }
+  .input-select-date{
+    height: 35px;
+    width: calc(100% - 1rem);
+    border: 1px solid $light-black;
+    border-radius: $border-radius;
+    padding: 0 .5rem;
+    &.error {
+      border: 1px solid $red;
+    }
+  }
+  .custom-mat-datepicker-toggle-list-result-component {
+    width: 200px;
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    .mat-icon-button {
+      width: calc(100% - 1rem);
+      opacity: 0;
+    }
+  }
+  .filter-buttons {
+    button {
+      height: 35px;
+      margin-right: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  /deep/ .mat-datepicker-content .mat-calendar {
+    width: 270px !important;
+  }
+}

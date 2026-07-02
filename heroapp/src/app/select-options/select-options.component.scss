@@ -1,0 +1,258 @@
+@import "../../assets/scss/variables.scss";
+
+.hx-select-options-component {
+ // padding-bottom: 498px; //keep footer always at the bottom of the page
+  .header__background--full-screen {
+    //background-image: url('../../assets/images/select-options-bg.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    height: 360px;
+    background-size: 100%;
+    width: 100%;
+    margin-bottom: 3rem;
+    @media screen and (max-width: $media-xs) {
+      height: 155px;
+    }
+  }
+  .select-options-content {
+    margin: 0 auto 2rem;
+    max-width: 1168px;
+    position: relative;
+    .select-options__breadcrumbs {
+      margin-bottom: 2rem;
+      color: $red;
+      span {
+        font-size: 12px;
+        &.active {
+          color: $black;
+        }
+      }
+      .icon-right-arrow:before {
+        color: $black;
+        font-size: 8px;
+      }
+    }
+    .select-options-content--left {
+      padding: 1rem;
+      &.mobile-style {
+        padding-top: 476px !important;
+      }
+      h1 {
+        line-height: 38px;
+        margin-bottom: .7rem;
+        font-family: $second-font-family;
+        font-size: 30px;
+      }
+      .base-on__label {
+        font-size: 14px;
+        margin: 0;
+      }
+      .list-options-container {
+        margin-top: 3rem;
+        .option-name {
+            font-size: 20px;
+            font-weight: $font-weight-bold;
+        }
+        .option-content {
+          border: 1px solid $light-grey;
+          margin-bottom: 1rem;
+          &.option-sold-out {
+            color: $light-black;
+          }
+          .option-content--left {
+            padding: 2rem 1rem 0;
+            h3 {
+              margin: 0;
+              color: $light-green;
+              line-height: 25px;
+              font-size: 20px;
+              font-family: $second-font-family;
+            }
+            p {
+              font-size: 14px;
+            }
+          }
+          .option-content--middle {
+            border-left: 1px solid $light-grey;
+            border-right: 1px solid $light-grey;
+            padding: 1rem 1rem 0;
+            @media screen and (max-width: $media-xs) {
+              border-right: initial;
+              border-left: initial;
+              border-top: 1px solid $light-grey;
+              border-bottom: 1px solid $light-grey;
+            }
+            p {
+              line-height: 22px;
+              font-size: 14px;
+            }
+          }
+          .option-content--right {
+            padding: 1rem 0;
+            p {
+              text-align: center;
+            }
+            .option__label {
+              margin: 0 1rem;
+              font-size: 12px;
+            }
+            .option-price {
+              font-size: 25px;
+              color: $red;
+              margin: 0;
+              font-weight: $font-weight-bold;
+            }
+            button {
+              width: 150px;
+              padding: .8rem 0;
+              outline: none;
+              border-radius: $button-border-radius;
+              font-size: 18px;
+              background: $red;
+              border: none;
+              color: $white;
+              font-weight: $font-weight-extra-bold;
+              &.option__btn-sold-out {
+                background: $light-grey;
+              }
+            }
+            button:hover{
+              cursor: pointer;
+            }
+            .option-low-price {
+              font-family: $second-font-family;
+              font-size: 15px;
+              margin: 0;
+            }
+            .icon-award:before {
+              color: $light-blue;
+            }
+          }
+        }
+      }
+    }
+    .select-options-content--right {
+      padding: 1rem;
+      position: absolute;
+      top: 3rem;
+      right: 0;
+      width: 100%;
+      @media screen and (max-width: 1024px) {
+        right: 45px;
+      }
+      @media screen and (max-width: 768px) {
+        right: 100px;
+      }
+      
+      @media screen and (max-width: $media-xs) {
+        top: 10rem;
+        right: 0 !important;
+        margin-left: -1rem;
+      }
+      .select-option__change-btn--header {
+        box-shadow: 0 0 13px 0 rgba(0,0,0,0.24);
+        border-radius: $border-radius;
+        width: 100%;
+        padding: 0rem 2rem;
+        background: white;
+        position: relative;
+        display: none;
+        p {
+          width: 100%;
+        }
+        i {
+          font-size: 12px;
+          line-height: 50px;
+          cursor: pointer;
+          &:before {
+            color: $black;
+          }
+        }
+      }
+      .select-options-filter-container {
+        width: 215px;
+        box-shadow: 0 0 13px 0 rgba(0,0,0,0.24);
+        border-radius: $border-radius;
+        padding: 2rem;
+        background: $white;
+        @media screen and (max-width: $media-xs) {
+          width: auto;
+          margin-top: -2rem;
+        }
+        .select-options-filter__box {
+          h3 {
+            color: $red;
+            font-family: $second-font-family;
+            font-size: 20px;
+          }
+          p {
+            font-size: 12px;
+
+          }
+          .select-options-filter__input-select-day {
+            height: 35px;
+            width: 100%;
+            border: 1px solid $light-black;
+            border-radius: $border-radius;
+            padding: 0 .5rem;
+            &.error {
+              border: 1px solid $red;
+            }
+          }
+        }
+        .select-options-filter__btn {
+          padding: 1rem;
+          border-radius: $button-border-radius;
+          font-size: 20px;
+          background: $red;
+          border: none;
+          box-shadow: 0 1px 2px 0 rgba(0,0,0,0.20);
+          text-align: center;
+          color: $white;
+          cursor: pointer;
+
+        }
+      }
+    }
+  }
+  .travellers-select-container {
+    position: relative;
+    .travellers-select__fake-label {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      font-size: 14px;
+      z-index: 1000;
+    }
+  }
+}
+
+/deep/ .custom-mat-datepicker-toggle-select-options-component {
+  position: absolute;
+  width: calc(100% - 64px);
+  button {
+    width: 100%;
+    opacity: 0;
+  }
+}
+
+/deep/ .custom-ng-select-select-options-component {
+  .ng-select-container {
+    z-index: 1000 !important;
+    border: 1px solid $light-black;
+    margin-bottom: .5rem;
+    .ng-value {
+      position: absolute;
+      right: 40px;
+      top: 9px;
+    }
+    .ng-arrow {
+      border-color: $black transparent transparent !important;
+      border-width: 10px 5px 2.5px !important;
+      top: 3px !important;
+    }
+  }
+  .ng-dropdown-panel {
+    z-index: 1001;
+  }
+}

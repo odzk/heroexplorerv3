@@ -1,0 +1,172 @@
+@import "../../../../assets/scss/variables.scss";
+
+/deep/ app-nav-bar {
+  position: absolute;
+  right: 0;//6rem;
+  top: 0;
+  // color: $white !important;
+  font-weight: $font-weight-semi-bold;
+  z-index: 998;
+  cursor: pointer;
+  @media screen and (max-width: $media-xs) {
+    right: 1rem;
+  }
+  .nav-bar--lg {
+    @media screen and (max-width: $media-sm) {
+      display: none !important;
+    }
+  }
+  .nav-bar--sm {
+    display: none !important;
+    @media screen and (max-width: $media-sm) {
+      display: flex !important;
+      font-size: 18px;
+    }
+    @media screen and (max-width: $media-xs), (min-width: 768px) {
+      .nav-bar--sm__menu {
+        right: 0!important;
+        width: 41vh !important;
+        height: 100vh!important;
+        left: unset !important;
+      }
+    }
+
+    .nav-bar--sm__menu {
+      position: fixed;
+      width: 100%;
+      height: 100vh;
+      left: 75px;
+      background: white;
+      color: black;
+      z-index: 999;
+      button {
+        display: flex;
+        height: 50px;
+        font-size: 14px;
+        line-height: 26px;
+        border: none;
+        border-bottom: 1px solid $light-grey;
+        width: 100%;
+        background: white;
+        span {
+          margin-left: .5rem;
+        }
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        font-size: 14px;
+        li {
+          height: 50px;
+          line-height: 50px;
+          border-bottom: 1px solid $light-grey;
+          padding-left: 3rem;
+        }
+      }
+    }
+  }
+  .card-container {
+    margin-left: 1rem;
+    color: $black;
+    align-items: center;
+    height: 37px;
+    padding-top: 7px;
+    .cart__label {
+      margin: 0 6px;
+    }
+  
+  
+ 
+    i:before{
+        color: $black;
+    }
+    p {
+      width: 20px;
+      height: 20px;
+      background-color: $red;
+      border-radius: 100%;
+      text-align: center;
+      // color: $white;
+      line-height: 20px;
+      font-size: 12px;
+      @media screen and (max-width: $media-xs) {
+        width: 15px;
+        height: 15px;
+        line-height: 15px;
+      }
+    }
+
+  }
+  .menu-container {
+    i:before{
+      color: $black;
+    }
+  }
+ 
+  /deep/ .custom-ng-select-nav-bar-component {
+    outline: none;
+    .ng-select-container {
+      background: inherit !important;
+      border: none;
+      border-radius: 0;
+      font-size: 16px;
+      min-width: 70px;
+    }
+    .ng-placeholder {
+      color: $black;
+      margin-top: 10px;
+    }
+    .ng-value {
+      color: $black;
+      margin-top: 10px;
+    }
+    .ng-arrow {
+      border-color: $black transparent transparent !important;
+      border-width: 10px 5px 2.5px !important;
+      top: 5px !important;
+    }
+  }
+  &.special-for-home {
+    .card-container {
+      margin-left: 1rem;
+      font-size: 18px;
+      // color: $white;
+      height: 37px;
+      padding-top: 14px;
+      @media screen and (max-width: $media-xs) {
+        color: $black !important;
+        i:before {
+          color: $black !important;
+        }
+      }
+      i:before {
+        // color: $white;
+      }
+      p {
+        line-height: 18px;
+        @media screen and (max-width: $media-xs) {
+          line-height: 15px;
+        }
+      }
+    }
+    /deep/ .custom-ng-select-nav-bar-component {
+  
+      .ng-placeholder {
+        // color: $white !important;
+        margin-top: 17px;
+      }
+      .ng-value {
+        // color: $white;
+        margin-top: 17px;
+      }
+      .ng-arrow {
+        // border-color: $white transparent transparent !important;
+        border-width: 10px 5px 2.5px !important;
+        top: 10px !important;
+      }
+    }
+  }
+}
+
+

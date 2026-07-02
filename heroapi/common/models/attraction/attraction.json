@@ -1,0 +1,75 @@
+{
+  "name": "Attraction",
+  "plural": "Attractions",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "webURL": {
+      "type": "string"
+    },
+    "pageUrlName": {
+      "type": "string"
+    },
+    "primaryDestinationUrlName": {
+      "type": "string"
+    },
+    "publishedDate": {
+      "type": "date"
+    },
+    "destinationId": {
+      "type": "number",
+      "required": true
+    },
+    "rating": {
+      "type": "number"
+    },
+    "photoCount": {
+      "type": "number"
+    },
+    "primaryDestinationId": {
+      "type": "string",
+      "required": true
+    },
+    "seoId": {
+      "type": "number",
+      "required": true
+    },
+    "productCount": {
+      "type": "number"
+    },
+    "primaryDestinationName": {
+      "type": "string"
+    },
+    "thumbnailURL": {
+      "type": "string"
+    },
+    "thumbnailHiResURL": {
+      "type": "string"
+    },
+    "attractionLatitude": {
+      "type": "number"
+    },
+    "attractionLongitude": {
+      "type": "number"
+    },
+    "attractionStreetAddress": {
+      "type": "string"
+    },
+    "attractionCity": {
+      "type": "string"
+    },
+    "attractionState": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

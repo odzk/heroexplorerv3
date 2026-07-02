@@ -1,0 +1,44 @@
+{
+  "name": "Page",
+  "plural": "pages",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "pageName": {
+      "type": "string",
+      "required": true
+    },
+    "pageDesc": {
+      "type": "string",
+      "required": true
+    },
+    "blocks": {
+      "type": [
+        "object"
+      ]
+    },
+    "isActive": {
+      "type": "boolean"
+    },
+    "pageType": {
+      "type": "string"
+    },
+    "pageAuthor": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "Project": {
+      "type": "belongsTo",
+      "model": "Project",
+      "foreignKey": "",
+      "primaryKey": "id"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

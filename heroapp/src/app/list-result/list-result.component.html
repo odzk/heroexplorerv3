@@ -1,0 +1,304 @@
+<div class="hx-list-result-component" [ngClass]="{'no-result': listProducts.length === 0}">
+  <div class="list-result-content">
+    <!-- <div class="header__background--full-screen">
+         <img *ngIf="imgHeaderUrl.thumbnailHiResURL != ''" style="width:100%;height:100%;" src="{{imgHeaderUrl.thumbnailHiResURL}}"/>
+    </div> -->
+    <div fxLayout="row"
+         fxLayout.xs="column">
+      <div class="list-result-content--left"
+           fxFlex="100"
+           fxFlex.xs="100"
+           >
+
+        <nav class="list-result__breadcrumbs"
+             *ngIf="breadcrumbs.length > 0"
+             fxHide.xs>
+        <span>
+          <a routerLink="">Home</a>
+          <i class="new-icon-right-arrow"></i>
+        </span>
+          <span *ngFor="let item of breadcrumbs; let last = last"
+                [ngClass]="{'active': last}">
+            <a *ngIf="last">
+               {{item.destinationName || item.subcategoryName || item.groupName}}
+            </a>
+            <i class="new-icon-right-arrow"
+               *ngIf="last"></i>
+          </span>
+        </nav>
+        <nav class="list-result__breadcrumbs"
+             *ngIf="breadcrumbs.length === 0"
+             fxHide.xs>
+        <span>
+          <a routerLink="">Home</a>
+          <i class="new-icon-right-arrow"></i>
+        </span>
+          <span class="active">{{keyword}}</span>
+        </nav>
+        <h1>{{destination ? destination.destinationName : keyword}} Tours, Tickets, Activities & Things To Do</h1>
+        <div class="list-tags-container"
+             fxLayout="row"
+             fxHide.xs>
+        <span class="label--left"
+              *ngIf="keyword && keyword.length ||
+                     startDateFormat && startDateFormat.length && endDateFormat && endDateFormat.length ||
+                     subcategoryName && subcategoryName.length ||
+                     maxPrice !== null || minPrice !== null ||
+                     durationResult && durationResult.length
+                    ">
+              Results for:
+        </span>
+          <div class="list-tags">
+          <span *ngIf="keyword && keyword.length"
+                (click)="clearKeyword()">
+                {{keyword}}
+            <i class="icon-clear"></i>
+          </span>
+            <span *ngIf="startDateFormat && startDateFormat.length && endDateFormat && endDateFormat.length"
+                  (click)="clearDate()">
+                From {{startDateFormat}} To {{endDateFormat}}
+            <i class="icon-clear"></i>
+          </span>
+            <span *ngIf="subcategoryName && subcategoryName.length"
+                  (click)="clearSubcategory()">
+                {{subcategoryName}}
+            <i class="icon-clear"></i>
+          </span>
+            <span *ngIf="maxPrice !== null || minPrice !== null"
+                  (click)="clearPrice()">
+                ${{minPrice}} to ${{maxPrice}}
+            <i class="icon-clear"></i>
+          </span>
+            <span *ngIf="durationResult && durationResult.length"
+                  (click)="clearDuration()">
+                {{durationResult}}
+            <i class="icon-clear"></i>
+          </span>
+            <span class="warning-tag"
+                  *ngIf="keyword && keyword.length ||
+                     startDateFormat && startDateFormat.length && endDateFormat && endDateFormat.length ||
+                     subcategoryName && subcategoryName.length ||
+                     maxPrice !== null || minPrice !== null ||
+                     durationResult && durationResult.length"
+                  (click)="clearAll()">
+            Clear All
+            <i class="icon-clear"></i>
+          </span>
+          </div>
+        </div>
+        <!-- <div class="sort-by-container" fxLayout="row wrap" *ngIf="destinationId > 0">
+          <div class="sort-by-group" fxLayout="row">
+            <span class="label--left">From: </span>
+            <div fxLayout="row" class="input-select-date-container">
+              <input class="input-select-date"
+                      matInput
+                      [matDatepicker]="datesFrom"
+                      [matDatepickerFilter]="dateFromFilter"
+                      [formControl]="startDateForm"
+                      [(ngModel)]="startDate"
+                      [ngModelOptions]="{standalone: true}"
+                      (dateChange)="chooseDatesFrom($event)">
+              <mat-datepicker-toggle class="custom-mat-datepicker-toggle-list-result-component"
+                                      matSuffix
+                                      [for]="datesFrom">
+              </mat-datepicker-toggle>
+              <mat-datepicker #datesFrom></mat-datepicker>
+            </div>
+          </div>
+          <div class="sort-by-group" fxLayout="row">
+            <span class="label--left">To: </span>
+            <div fxLayout="row" class="input-select-date-container">
+              <input class="input-select-date"
+                      matInput
+                      [ngClass]="{'error': errorSelectDateTo}"
+                      [matDatepicker]="datesTo"
+                      [matDatepickerFilter]="dateToFilter"
+                      [formControl]="endDateForm"
+                      [(ngModel)]="endDate"
+                      [ngModelOptions]="{standalone: true}"
+                      (dateChange)="chooseDatesTo($event)">
+              <mat-datepicker-toggle class="custom-mat-datepicker-toggle-list-result-component"
+                                      matSuffix
+                                      [for]="datesTo">
+              </mat-datepicker-toggle>
+              <mat-datepicker #datesTo></mat-datepicker>
+            </div>
+          </div>
+        </div> -->
+        <div class="filter-container" fxLayout="row wrap" fxLayoutAlign="space-between">
+          <div class="sort-by-container" fxLayout="row wrap">
+            <div class="sort-by-group" fxLayout="row">
+              <span class="label--left">Sort by: </span>
+              <div class="select-option">
+                <ng-select class="custom-ng-select-list-result-component"
+                           [(ngModel)]="sort"
+                           (ngModelChange)="sortChange()"
+                           [items]="listOfSort"
+                           [searchable]="false"
+                           [clearable]="false"
+                           bindLabel="name"
+                           bindValue="sort"
+                           placeholder="Top rated">
+                </ng-select>
+              </div>
+            </div>
+            <div class="sort-by-group" fxLayout="row" *ngIf="destinationId > 0 ">
+              <span class="label--left">Category: </span>
+              <div class="select-option">
+                <ng-select class="custom-ng-select-list-result-component"
+                           [(ngModel)]="tagId"  
+                           (ngModelChange)="sortChange()"
+                           [items]="listOfTags"
+                           [searchable]="false"
+                           [clearable]="false"
+                           bindLabel="key"
+                           bindValue="value"
+                           placeholder="Select category">
+                           <ng-template ng-label-tmp let-item="item">
+                            <span *ngIf="tagId===0; else hidden">{{ item.value }}</span> {{item.key}}
+                          </ng-template>
+                </ng-select>
+              </div>
+            </div>
+            <div class="sort-by-group" fxLayout="row" *ngIf="destinationId > 0 ">
+              <span class="label--left">Duration: </span>
+              <div class="select-option">
+                <ng-select class="custom-ng-select-list-result-component"
+                           [(ngModel)]="durationInMinutes"  
+                           (ngModelChange)="sortChange()"
+                           [items]="listOfDuration"
+                           [searchable]="false"
+                           [clearable]="false"
+                           bindLabel="name"
+                           bindValue="sort"
+                           placeholder="Up to 1 hour">
+                </ng-select>
+              </div>
+            </div>
+            <!-- <div class="sort-by-group" fxLayout="row" *ngIf="destinationId > 0 ">
+              <span class="label--left">Categories: </span>
+              <div class="select-option">
+                <ng-select class="custom-ng-select-list-result-component"
+                           [(ngModel)]="filtering"  
+                           (ngModelChange)="sortChange()"
+                           [items]="listOfFilters"
+                           [searchable]="false"
+                           [clearable]="false"
+                           bindLabel="name"
+                           bindValue="sort"
+                           placeholder="Top Attractions">
+                </ng-select>
+              </div>
+            </div> -->
+            <!-- <div class="sort-by-group" fxLayout="row" *ngIf="destinationId > 0 && listOfCategories.length > 0">
+              <span class="label--left" *ngIf="catId > 0 && listOfSubCategories.length > 0">Subcategory: </span>
+              <div class="select-option" *ngIf="catId > 0 && listOfSubCategories.length > 0">
+                <ng-select class="custom-ng-select-list-result-component"
+                           [(ngModel)]="subId"
+                           (ngModelChange)="subCategoryChange()"
+                           [items]="listOfSubCategories"
+                           [searchable]="false"
+                           [clearable]="false"
+                           bindLabel="subcategoryName"
+                           bindValue="subcategoryId"
+                           placeholder="Select subcategory">
+                </ng-select>
+              </div>
+            </div> -->
+          </div>
+          <div class="pagination-top" fxLayout="row" *ngIf="!isLoading && listProducts.length > 0">
+            <div class="list-products__pagination--top">
+              <pagination-controls class="custom-ngx-pagination-list-result-component"
+                                  (pageChange)="onPageChange($event, p.getLastPage())"
+                                  autoHide="true">
+                <pagination-template #p="paginationApi"></pagination-template>
+              </pagination-controls>
+            </div>
+          </div>
+        </div>
+        <div class="no-product-container"
+             *ngIf="!isLoading && listProducts.length === 0">
+          <h1>THERE IS NO RESULT!</h1>
+        </div>
+        <div class="list-products-container"
+             *ngIf="!isLoading && listProducts.length > 0">
+          <div class="list-products-content">
+            <ul fxLayout="row wrap">
+              <li *ngFor="let item of listProducts | paginate: { itemsPerPage: itemsPerPage, currentPage: page }"
+                  fxFlex="25"
+                  fxFlex.xs="100">
+                  <app-product-item *ngIf="destinationId == 0" [data]="item"></app-product-item>
+                  <app-product-item  *ngIf="destinationId > 0" [data]="item"></app-product-item>
+              </li>
+            </ul>
+          </div>
+          <div fxLayout="row"
+               fxLayoutAlign="space-between center"
+               class="list-products__pagination--bottom" [ngStyle]="{float: destinationId > 0 ? 'right' : 'right'}">
+            <!-- <div *ngIf="destinationId > 0" fxLayout="row"
+                 fxHide.xs>
+              <span class="label--left">Sort by: </span>
+              <ng-select class="custom-ng-select-list-result-component"
+                         [(ngModel)]="sort"
+                         (ngModelChange)="sortChange()"
+                         [items]="listOfSort"
+                         [searchable]="false"
+                         [clearable]="false"
+                         bindLabel="name"
+                         bindValue="sort"
+                         placeholder="Most popular">
+              </ng-select>
+            </div> -->
+            <pagination-controls class="custom-ngx-pagination-list-result-component"
+                                 (pageChange)="onPageChange($event, p.getLastPage())"
+                                 autoHide="true">
+              <pagination-template #p="paginationApi"></pagination-template>
+            </pagination-controls>
+          </div>
+        </div>
+      </div>
+      <!-- <div id="filterBar" class="list-result-content--right"
+           fxFlex="30"
+           fxFlex.xs="100"
+           fxLayout="column"
+          >
+         <div class="list-resut__search-btn--header"
+             fxLayout="row"
+             fxHide.lg
+             fxHide.sm
+             fxHide.md
+             fxHide.xl
+             (click)="isShowFilter=!isShowFilter">
+          <p>Search tours</p>
+          <i *ngIf="isShowFilter" class="icon-arrow-up"></i>
+          <i *ngIf="!isShowFilter" class="icon-arrow-down"></i>
+        </div>
+        <div class="filter-container"
+             fxShow.xs="{{isShowFilter}}">
+          <div class="filter__item">
+            <h3 *ngIf="destination">{{destination.destinationName}} Tours</h3>
+            
+          </div>
+          <div class="filter__item">
+            <h3>Price Range</h3>
+            <p class="price-range">Price ${{priceRange[0]}} – ${{priceRange[1]}}</p>
+            <nouislider class="custom-nouislider-list-result-component"
+                        [min]="0"
+                        [max]="10000"
+                        [(ngModel)]="priceRange"
+                        [tooltips]="true">
+            </nouislider>
+          </div>
+          <p class="filter__btn"
+             fxLayout="row"
+             fxLayoutAlign="space-between center"
+             (click)="filter()">
+            <span>Filter Search</span>
+            <i class="icon-search"></i>
+          </p>
+        </div>
+      </div> -->
+    </div>
+    
+  </div>
+</div>

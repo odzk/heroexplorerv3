@@ -1,0 +1,11 @@
+<section>
+  <div class="header">
+    <button class="previous" fxFlex="20" mat-icon-button (click)="previousClicked('month')" [disabled]="!isPrevActive">
+      <mat-icon *ngIf="isPrevActive">keyboard_arrow_left</mat-icon>
+    </button>
+    <span class="label" fxFlex="60">{{ periodLabel }}</span>
+    <button class="next" fxFlex="20" mat-icon-button (click)="nextClicked('month')">
+      <mat-icon>keyboard_arrow_right</mat-icon>
+    </button>
+  </div>
+</section>

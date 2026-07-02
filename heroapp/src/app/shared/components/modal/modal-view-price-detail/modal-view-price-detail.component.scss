@@ -1,0 +1,55 @@
+@import "../../../../../assets/scss/variables.scss";
+
+.hx-modal-view-price-detail-component {
+  font-size: 14px;
+  h4 {
+    margin: 30px 0 15px;
+  }
+  span {
+    color: $grey;
+  }
+  .hx-modal-view-price-detail__prices-container {
+    table {
+      border-collapse: collapse;
+      border-spacing: 0;
+      width: 100%;
+      text-align: right;
+      .bg-light-grey {
+        background: #ececec;
+          span {
+        font-weight: $font-weight-medium;
+        }
+      }
+      th, td {
+        padding: 10px;
+      }
+      tr {
+        border-top: 1px solid $grey;
+        border-bottom: 1px solid $grey;
+      }
+    }
+  }
+  .hx-modal-view-price-detail__list-travellers {
+    
+    p {
+      line-height: 3px;
+    }
+  }
+}
+
+/deep/ .custom-ng-select-modal-view-price-detail-component{
+
+  .ng-dropdown-panel-items {
+    max-height: 100px !important;
+  }
+  .ng-select-container {
+    height: 28px !important;
+    width: 60px;
+    min-height: 28px;
+  }
+  .ng-dropdown-panel{
+    background-color: #fff;
+    border: 1px solid #ccc;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.06);
+  }
+}

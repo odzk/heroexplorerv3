@@ -1,0 +1,293 @@
+/* You can add global styles to this file, and also import other style files */
+
+@import url('https://fonts.googleapis.com/css?family=Comfortaa: 400');
+@import url('https://fonts.googleapis.com/css?family=Raleway: 300,400,600,800');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@import "~@ng-select/ng-select/themes/default.theme.css";
+@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
+@import "./assets/scss/variables.scss";
+//@import url('https://s3-ap-southeast-2.amazonaws.com/herowidget/assets/hero-font.css');
+@import "./assets/scss/font.scss";
+@import "~nouislider/distribute/nouislider.min.css";
+@import '~perfect-scrollbar/css/perfect-scrollbar.css';
+
+.mat-sidenav-container, .mat-sidenav-content, .mat-tab-body-content {
+  transform: none !important;
+}
+body {
+  margin: 0;
+  padding: 0;
+  font-family: $primary-font-family;
+  color: $black;
+  font-weight: 100;
+}
+
+app-root {
+  min-height: 100vh;
+  position: relative;
+  display: block;
+  //@media screen and (max-width: $media-sm) and (min-width: $media-xs) {
+  //  min-width: $media-sm;
+  //}
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+input,
+label,
+p,
+span {
+  font-family: $primary-font-family;
+}
+
+.small-close {
+  position: relative;
+  margin-left: 95%;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.text-left {
+  text-align: left;
+}
+
+.text-right {
+  text-align: right;
+}
+
+app-dropdown {
+  position: relative;
+}
+
+.ng-select {
+  font-size: 14px;
+}
+
+.ng-select.opened>.ng-select-container .ng-arrow {
+  top: 0;
+}
+
+.ng-dropdown-panel {
+  left: 0;
+}
+
+.ng-select .ng-select-container .ng-value-container .ng-placeholder {
+  color: $black;
+}
+
+.hasError .ng-select-container {
+  border-color: #cc5757 !important;
+}
+
+.font-weight-semi-bold {
+  font-weight: $font-weight-semi-bold;
+}
+
+.font-weight-bold {
+  font-weight: $font-weight-bold;
+}
+
+.font-weight-extra-bold {
+  font-weight: $font-weight-extra-bold;
+}
+
+.color-red {
+  color: $red;
+}
+
+.color-grey {
+  color: $grey;
+}
+
+.color-black {
+  color: $black;
+}
+
+.color-light-black {
+  color: $light-black;
+}
+
+.color-ocean-blue {
+  color: $ocean-blue
+}
+
+.uppercase {
+  text-transform: uppercase;
+}
+
+.no-border {
+  border: none !important;
+}
+
+.no-margin {
+  margin: 0 !important;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.hx-print-voucher {
+  display: none;
+}
+
+.font-size-10 {
+  font-size: 10px;
+}
+
+.font-size-12 {
+  font-size: 12px;
+}
+
+.font-size-14 {
+  font-size: 14px;
+}
+
+.font-size-16 {
+  font-size: 16px;
+}
+
+.font-size-18 {
+  font-size: 18px;
+}
+
+.font-size-22 {
+  font-size: 22px;
+}
+
+.font-size-25 {
+  font-size: 25px;
+}
+
+.no-decoration {
+  text-decoration: none;
+}
+
+.float-right {
+  float: right;
+}
+
+.hx-btn-primary {
+  padding: 1rem 2rem;
+  border-radius: $button-border-radius;
+  background: $red;
+  border: none;
+  font-size: 18px;
+  text-align: center;
+  font-weight: $font-weight-extra-bold;
+  cursor: pointer;
+  outline: none;
+
+  a {
+    color: $white;
+    text-decoration: none;
+  }
+
+  &.disabled {
+    opacity: .5;
+    cursor: pointer;
+    pointer-events: none;
+  }
+}
+
+.hx-btn-default {
+  padding: 1rem 2rem;
+  border-radius: $button-border-radius;
+  background: $white;
+  border: none;
+  font-size: 18px;
+  text-align: center;
+  font-weight: $font-weight-extra-bold;
+  cursor: pointer;
+  outline: none;
+
+  a {
+    color: $black;
+    text-decoration: none;
+  }
+
+  &.disabled {
+    opacity: .5;
+    cursor: pointer;
+    pointer-events: none;
+  }
+}
+
+.hx-btn-modal-close {
+  position: absolute;
+  top: -25px;
+  right: -20px;
+  border: none;
+  font-size: 30px;
+  cursor: pointer;
+  outline: none;
+}
+
+.hx-highlight-keyword {
+  text-decoration: underline;
+  font-weight: $font-weight-extra-bold;
+}
+
+.cdk-overlay-container {
+  .cdk-overlay-connected-position-bounding-box {
+    top: 40px !important;
+  }
+
+  .mat-menu-content:not(:empty) {
+    padding-top: unset;
+    padding-bottom: unset;
+  }
+
+  a.mat-menu-item {
+    line-height: 14px;
+    height: 14px;
+    font-size: 14px;
+    background-color: $white;
+    color: $black;
+    padding: 8px 10px;
+  }
+
+  a>i {
+    margin-right: 10px;
+  }
+
+  a.mat-menu-item-highlighted:not([disabled]),
+  a.mat-menu-item.cdk-keyboard-focused:not([disabled]),
+  a.mat-menu-item.cdk-program-focused:not([disabled]),
+  a.mat-menu-item:hover:not([disabled]) {
+    background: $mainly-blue;
+  }
+}
+
+.modal-open .bootbox {
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+
+  .modal-dialog {
+    .btn-primary {
+      background-color: $red;
+      color: $white;
+      border-color: $red;
+    }
+  }
+}
+
+.mat-dialog-container {
+  overflow: visible !important;
+  padding: 15px !important;
+}
+
+.dialog-fullscreen {
+  max-width: none !important;
+  overflow: auto !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: 'Roboto', sans-serif; }

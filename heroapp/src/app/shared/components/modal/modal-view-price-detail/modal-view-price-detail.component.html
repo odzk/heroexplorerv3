@@ -1,0 +1,53 @@
+<div class="hx-modal-view-price-detail-component">
+    <button class="hx-btn-modal-close" mat-dialog-close>×</button>
+    <h4>Pricing detail for {{data.item.dateTime}}</h4>
+    <div class="hx-modal-view-price-detail__prices-container">
+        <table>
+            <tr class="bg-light-grey">
+                <th></th>
+                <th *ngFor="let item of ageBands">
+                    <p class="no-margin">{{item.description}}</p>
+                    <span>(Age {{item.ageFrom}}-{{item.ageTo}})</span>
+                </th>
+            </tr>
+            <tr>
+                <td class="no-padding text-left">Price per person</td>
+                <td>{{currentOption.priceFormatted}}</td>
+                <td>{{gradeCodeChild}}</td>
+                <td>{{gradeCodeInfant}}</td>
+                <!-- <td *ngFor="let item of ageBandPrices | slice:1">{{item.prices[0].priceFormatted}}</td> -->
+            </tr>
+        </table>
+    </div>
+    <h4>How do I book this tour or activity?</h4>
+    <p class="no-margin">Easy! If this is your preferred travel date and tour option, simply enter the number of travelers here andclick "Add to cart".</p>
+    <h4>Total number of travelers</h4>
+    <div class="hx-modal-view-price-detail__list-travellers">
+        <div *ngIf="ageBands?.length > 0" fxLayout="row" fxLayoutAlign="space-between" style="width: 200px">
+            <p>
+                {{ageBands[0].description}}
+                <span>(Age {{ageBands[0].ageFrom}}-{{ageBands[0].ageTo}})</span>
+            </p>
+            <ng-select class="custom-ng-select-modal-view-price-detail-component" [(ngModel)]="ageBands[0].count" (ngModelChange)="listOfTravellersChange()" [items]="ageBands[0].list" [clearable]="false" [searchable]="false" bindLabel="value" bindValue="count">
+            </ng-select>
+
+        </div>
+    </div>
+    <div class="hx-modal-view-price-detail__list-travellers" style="margin-bottom: 2rem;">
+        <div *ngFor="let item of ageBands" fxLayout="row" fxLayoutAlign="space-between" style="width: 200px; margin-bottom: .5rem;">
+            <p *ngIf="item.bandId != 1">
+                {{item.description}}
+                <span>(Age {{item.ageFrom}}-{{item.ageTo}})</span>
+            </p>
+            <ng-select *ngIf="item.bandId != 1" class="custom-ng-select-modal-view-price-detail-component" [(ngModel)]="item.count" (ngModelChange)="listOfTravellersChange()" [items]="item.list" [clearable]="false" [searchable]="false" bindLabel="value" bindValue="count">
+            </ng-select>
+
+        </div>
+    </div>
+
+    <p class="text-center">
+        <button class="hx-btn-primary">
+      <a (click)="addToCart()">Add to cart</a>
+    </button>
+    </p>
+</div>

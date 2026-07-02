@@ -1,0 +1,33 @@
+<div class="hx-product-item-component"
+     *ngIf="data">
+  <div class="product-item--top">
+    <ngx-lazy-image style="cursor: pointer" routerLink="/detail/{{data.productCode}}" class="custom-ngx-lazy-image-product-item-component"
+                    [largeImgUrl]="data.images[0].variants[3].url" *ngIf="data.images[0].variants[3].url">
+    </ngx-lazy-image>
+    <ngx-lazy-image style="cursor: pointer" routerLink="/detail/{{data.productCode}}" class="custom-ngx-lazy-image-product-item-component"
+                    [largeImgUrl]="data.images[0].variants[2].url" *ngIf="!data.images[0].variants[3].url">
+    </ngx-lazy-image>
+  </div>
+  <div class="product-item--bottom">
+    <p class="product-item-title">
+      <a routerLink="/detail/{{data.productCode}}" target="_blank">{{data.title}}</a>
+    </p>
+    <p class="product-item-rate">
+      <rating class="custom-rating-product-item-component"
+              [(ngModel)]="data.reviews.combinedAverageRating"
+              fullIcon="•"
+              emptyIcon="•"
+              [max]="5"
+              [readonly]="true"
+              [float]="true">
+      </rating>
+      <span>{{data.reviews.totalReviews}} reviews</span>
+    </p>
+    <p class="product-item-currency-code">
+      From {{data.pricing.currency}}
+    </p>
+    <p class="product-item-price" [style.color] = "this.primaryColor">
+      $ {{data.pricing.summary.fromPrice | number : '.2-2'}}
+    </p>
+  </div>
+</div>

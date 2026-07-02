@@ -1,0 +1,151 @@
+<div class="hx-select-options-component"
+     *ngIf="listOptionsInfo">
+  <div class="select-options-content"
+       fxLayout="row wrap">
+    <!--<div fxFlex="100">-->
+      <!--<nav class="select-options__breadcrumbs">-->
+        <!--<span>-->
+          <!--Home-->
+          <!--<i class="icon-right-arrow"></i>-->
+        <!--</span>-->
+        <!--<span>-->
+          <!--Australia-->
+          <!--<i class="icon-right-arrow"></i>-->
+        <!--</span>-->
+        <!--<span>-->
+          <!--Queensland-->
+          <!--<i class="icon-right-arrow"></i>-->
+        <!--</span>-->
+        <!--<span>-->
+          <!--Brisbane-->
+          <!--<i class="icon-right-arrow"></i>-->
+        <!--</span>-->
+        <!--<span>-->
+          <!--Multi-day & Extended Tours-->
+          <!--<i class="icon-right-arrow"></i>-->
+        <!--</span>-->
+        <!--<span class="active">-->
+          <!--Multi-day Tours-->
+        <!--</span>-->
+      <!--</nav>-->
+    <!--</div>-->
+    <div class="header__background--full-screen"
+         [ngStyle]="{'background-image': 'url('+listOptionsInfo.thumbnailHiResURL+')' }"></div>
+    <div class="select-options-content--left"
+         fxFlex="70"
+         fxFlex.xs="100"
+         [ngClass]="{'mobile-style': isShowFilter}">
+      <h1>{{listOptionsInfo.productTitle}}</h1>
+      <p class="base-on__label">Pricing based on {{adultCount}} Adults on {{listOptionsInfo.bookingDateFormat}}</p>
+      <div *ngIf="listOptions.length > 0"  class="list-options-container">
+        <p class="option-name">Tour/Activity Options</p>
+        <div class="option-content"
+             fxLayout="row"
+             fxLayout.xs="column"
+             *ngFor="let item of listOptions"
+             [ngClass]="{'option-sold-out': !item.available}">
+          <div class="option-content--left"
+               fxFlex="22">
+            <h3>{{item.gradeTitle}}</h3>
+            <p>Code: {{item.gradeCode}}</p>
+          </div>
+          <div class="option-content--middle"
+               fxFlex="48"
+               fxFlex.xs="100">
+            <p>{{item.gradeDescription}}</p>
+            <p *ngIf="item.available">
+                Lowest price available: {{item.currencyCode}} {{item.retailPriceFormatted || item.priceFormatted}}
+              <br/>
+              <!--<span class="color-red">How was this calculated?</span>-->
+            </p>
+          </div>
+          <div class="option-content--right"
+               *ngIf="item.available"
+               fxFlex="30"
+               fxFlex.xs="100">
+            <p class="option__label">{{item.currencyCode}}</p>
+            <p class="option-price">{{item.retailPriceFormatted || item.priceFormatted}}</p>
+            <p>
+              <button  type="button" (click)="saveAndGoToCartShopping(item.gradeCode, item.gradeTitle)">Add to Cart</button>
+            </p>
+            <p class="option-low-price">
+              <i class="icon-award"></i>
+              <span>Best Price Guaranteed</span>
+            </p>
+          </div>
+          <div class="option-content--right"
+               fxFlex="30"
+               fxFlex.xs="100"
+               *ngIf="!item.available">
+            <p class="option__label">This option is currently unavailable or sold out.</p>
+            <p>
+              <button  type="button"  class="option__btn-sold-out">Sold Out</button>
+            </p>
+            <!--<p class="option__label">Next available date:</p>-->
+            <!--<p class="option__label color-red">Fri, January 5, 2018</p>-->
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="select-options-content--right"
+         fxFlex="30"
+         fxFlex.xs="100">
+      <div class="select-option__change-btn--header"
+           fxLayout="row"
+           fxHide.lg
+           fxHide.sm
+           fxHide.md
+           fxHide.xl
+           (click)="isShowFilter=!isShowFilter">
+        <p>Change Tour Options</p>
+        <i *ngIf="isShowFilter" class="icon-arrow-up"></i>
+        <i *ngIf="!isShowFilter" class="icon-arrow-down"></i>
+      </div>
+      <div class="select-options-filter-container"
+           fxShow.xs="{{isShowFilter}}">
+        <div class="select-options-filter__box">
+          <h3>Date</h3>
+          <div fxLayout="row">
+            <input class="select-options-filter__input-select-day"
+                   matInput
+                   [(ngModel)]="bookingDate"
+                   [ngModelOptions]="{standalone: true}" 
+                   [matDatepicker]="datesFrom"
+                   [matDatepickerFilter]="dateFilter"
+                   placeholder="Choose a date"
+                   [formControl]="date">
+            <mat-datepicker-toggle matSuffix
+                                   [for]="datesFrom"
+                                   class="custom-mat-datepicker-toggle-select-options-component">
+            </mat-datepicker-toggle>
+            <mat-datepicker #datesFrom></mat-datepicker>
+            </div>
+          </div>
+          <div class="select-options-filter__box">
+            <h3>Travellers</h3>
+            <div class="travellers-select-container"
+                 *ngFor="let ageBand of listOptionsInfo.ageBands">
+              <ng-select class="custom-ng-select-select-options-component"
+                         [(ngModel)]="ageBand.count"
+                         (ngModelChange)="listOfTravellersChange()"
+                         [items]="ageBand.list"
+                         [clearable]="false"
+                         [searchable]="false"
+                         bindLabel="value"
+                         bindValue="count">
+              </ng-select>
+              <span class="travellers-select__fake-label">{{ageBand.description + ' (' +ageBand.ageFrom + '-' + ageBand.ageTo + ')'}}</span>
+            </div>
+            <p class="color-red"
+               *ngIf="showWarningTravellers">
+              (*) At least one traveler needs to be selected
+            </p>
+        </div>
+        <p class="select-options-filter__btn"
+           (click)="getlistOptions()">
+          Update Options
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

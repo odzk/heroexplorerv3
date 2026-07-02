@@ -1,0 +1,237 @@
+// ============================================================================
+// Hero Explorer API v2 — Prisma schema (PostgreSQL)
+// ----------------------------------------------------------------------------
+// Ported from the legacy LoopBack 3 "heroapi" (MySQL `heroexplorerdb`).
+//
+// Notes on the port:
+//  * Legacy tinyint(1) flags  -> Int (0/1) preserved for wire-parity, but they
+//    are semantically boolean. Kept as Int to avoid breaking existing clients.
+//  * Legacy float(10,0) money -> Decimal(12,2) (lossless money storage).
+//  * Legacy datetime          -> DateTime.
+//  * MySQL `text`-typed short  -> String (Postgres text; no length penalty).
+//  * The four legacy id-parts on HeroBooking (itineraryId,email,productCode,
+//    stripeCode) become a surrogate autoincrement `id` PK + a composite
+//    @@unique business key (matches legacy identity semantics).
+//  * Pure Viator-proxy "models" in the legacy app (Product, Attraction,
+//    Recommendation, Category proxy, Location, UserReview, UserPhoto) are NOT
+//    persisted — they are represented as TypeScript DTOs in src/types and served
+//    by the Viator service layer. Only genuinely DB-backed tables live here.
+// ============================================================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ── Users & auth ────────────────────────────────────────────────────────────
+
+model HeroUser {
+  id                Int             @id @default(autoincrement())
+  email             String          @unique @db.VarChar(512)
+  password          String          @db.VarChar(512)
+  firstname         String?         @db.VarChar(64)
+  lastname          String?         @db.VarChar(64)
+  username          String?         @db.VarChar(64)
+  profileurl        String?         @map("profileUrl") @db.VarChar(500)
+  mobile            String?         @db.VarChar(24)
+  city              String?
+  country           String?
+  province          String?
+  postcode          String?
+  billingadress     String?         @map("billingAdress") // legacy column spelling preserved
+  emailverified     Int             @default(0) @map("emailVerified") @db.SmallInt
+  isUpdateOffer     Int             @default(0) @db.SmallInt
+  verificationtoken String?         @map("verificationToken") @db.VarChar(512)
+  realm             String?         @db.VarChar(512)
+  subdomain         String?
+  role              Int             @default(0)
+  createdat         DateTime?       @default(now()) @map("createdAt")
+  updatedAt         DateTime?       @updatedAt
+  accessTokens      AccessToken[]
+  customizations    Customization[]
+
+  @@index([subdomain])
+  @@map("HeroUser")
+}
+
+model AccessToken {
+  id      String    @id @db.VarChar(255)
+  ttl     Int?
+  scopes  String?
+  created DateTime?
+  userid  Int?      @map("userId")
+  user    HeroUser? @relation(fields: [userid], references: [id], onDelete: Cascade)
+
+  @@index([userid])
+  @@map("AccessToken")
+}
+
+// ── Multi-tenant registry / white-label ─────────────────────────────────────
+
+model Booker {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(512) // subdomain / tenant key
+
+  @@index([name])
+  @@map("Booker")
+}
+
+model Customization {
+  id              Int       @id @default(autoincrement())
+  user_id         Int?
+  subdomain       String?
+  button_type     String?
+  primary_color   String?
+  secondary_color String?
+  text_color      String?
+  logo_url        String?
+  logo_width      Int?
+  logo_height     Int?
+  user            HeroUser? @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([subdomain])
+  @@map("Customization")
+}
+
+// ── Bookings ────────────────────────────────────────────────────────────────
+
+model HeroBooking {
+  id                     Int       @id @default(autoincrement())
+  itineraryId            String    @db.VarChar(255)
+  email                  String    @db.VarChar(255)
+  productCode            String    @db.VarChar(255)
+  stripeCode             String    @default("") @db.VarChar(500)
+  isCancel               Int       @default(0) @db.SmallInt
+  isRequestCancel        Int       @default(0) @db.SmallInt
+  isRequestEditTraveller Int       @default(0) @db.SmallInt
+  isRequestChangeTour    Int       @default(0) @db.SmallInt
+  isRequestChangeDate    Int       @default(0) @db.SmallInt
+  isRequestChangeName    Int       @default(0) @db.SmallInt
+  travelDate             DateTime?
+  name                   String?
+  homeCity               String?
+  chargedPrice           Decimal?  @db.Decimal(12, 2)
+  retailPrice            Decimal?  @db.Decimal(12, 2)
+  merchantPrice          Decimal?  @db.Decimal(12, 2)
+  tourGradeCode          String?   @db.VarChar(255)
+  currency               String?   @db.VarChar(11)
+  productTitle           String?
+  distributorItemRef     String?   @db.VarChar(255)
+  bookerId               Int?
+  bookingSource          String? // subdomain tenant key
+  voucherKey             String?
+  createdAt              DateTime? @default(now())
+  updatedAt              DateTime? @updatedAt
+
+  @@unique([itineraryId, email, productCode, stripeCode], name: "booking_business_key")
+  @@index([bookingSource])
+  @@index([email])
+  @@index([travelDate])
+  @@index([itineraryId])
+  @@map("HeroBooking")
+}
+
+model HeroBookingBooker {
+  id          Int     @id @default(autoincrement())
+  itineraryId String  @db.VarChar(255)
+  phone       String  @db.VarChar(255)
+  title       String?
+  firstName   String
+  surName     String
+  email       String
+  homeCity    String?
+
+  @@index([itineraryId])
+  @@index([phone])
+  @@map("HeroBookingBooker")
+}
+
+model HeroBookingDetail {
+  id                  Int     @id @default(autoincrement())
+  itemId              String  @db.VarChar(255)
+  itineraryId         String  @db.VarChar(255)
+  distributorItemRef  String? @db.VarChar(255)
+  hotelId             String?
+  pickupPoint         String?
+  productCode         String? @db.VarChar(255)
+  tourGradeCode       String? @db.VarChar(255)
+  languageOptionCode  String? @db.VarChar(255)
+  specialRequirements String?
+
+  @@index([itineraryId])
+  @@index([itemId])
+  @@map("HeroBookingDetail")
+}
+
+model HeroBookingQuestion {
+  id         Int     @id @default(autoincrement())
+  itemId     String  @db.VarChar(255)
+  questionId String?
+  answer     String?
+
+  @@index([itemId])
+  @@map("HeroBookingQuestion")
+}
+
+model HeroBookingTraveller {
+  id        Int     @id @default(autoincrement())
+  itemId    String  @db.VarChar(255)
+  title     String?
+  firstName String
+  surName   String
+
+  @@index([itemId])
+  @@map("HeroBookingTraveller")
+}
+
+// ── Taxonomy (the DB-backed slice; most taxonomy is served live from Viator) ─
+
+model Destination {
+  id                  Int      @id @default(autoincrement())
+  destinationId       Int?     @unique // Viator business key
+  destinationName     String?
+  destinationType     String?
+  destinationUrlName  String?
+  defaultCurrencyCode String?
+  lookupId            String?
+  parentId            Int?
+  timeZone            String?
+  iataCode            String?
+  selectable          Boolean?
+  longitude           Float?
+  latitude            Float?
+  isTop               Boolean  @default(false) // physical column present in legacy MySQL, not in model JSON
+  sortOrder           Int?
+
+  @@index([destinationName])
+  @@index([isTop])
+  @@index([parentId])
+  @@map("Destination")
+}
+
+model Category {
+  id                Int     @id @default(autoincrement())
+  groupName         String?
+  groupUrlName      String?
+  productCount      Int?
+  thumbnailURL      String?
+  thumbnailHiResURL String?
+  subcategories     Json? // legacy ["object"] embedded array -> jsonb
+
+  @@map("Category")
+}
+
+model Subcategory {
+  id                 Int     @id @default(autoincrement())
+  categoryId         Int?
+  subcategoryName    String?
+  subcategoryUrlName String?
+  subcategoryId      Int
+
+  @@index([categoryId])
+  @@map("Subcategory")
+}

@@ -1,0 +1,158 @@
+{
+  "name": "Recommendation",
+  "plural": "Recommendations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "webURL": {
+      "type": "string"
+    },
+    "pageUrlName": {
+      "type": "string"
+    },
+    "primaryDestinationUrlName": {
+      "type": "string"
+    },
+    "publishedDate": {
+      "type": "date"
+    },
+    "panoramaCount": {
+      "type": "number"
+    },
+    "userName": {
+      "type": "string"
+    },
+    "userPhotos": {
+      "type": [
+        "object"
+      ]
+    },
+    "reviews": {
+      "type": [
+        "object"
+      ]
+    },
+    "products": {
+      "type": [
+        "object"
+      ]
+    },
+    "ratingCounts": {
+      "type": "string"
+    },
+    "infoPageOverviewTitle2": {
+      "type": "string"
+    },
+    "infoPageOverview1": {
+      "type": "string"
+    },
+    "infoPageOverview2": {
+      "type": "string"
+    },
+    "attractionAdmission": {
+      "type": "string"
+    },
+    "attractionTransit": {
+      "type": "string"
+    },
+    "attractionOpenHours": {
+      "type": "string"
+    },
+    "keywords": {
+      "type": [
+        "object"
+      ]
+    },
+    "reviewCount": {
+      "type": "number"
+    },
+    "seoType": {
+      "type": "string"
+    },
+    "pageTitle": {
+      "type": "string"
+    },
+    "editorsPick": {
+      "type": "boolean"
+    },
+    "showPhotos": {
+      "type": "boolean"
+    },
+    "showReviews": {
+      "type": "boolean"
+    },
+    "tabTitle": {
+      "type": "string"
+    },
+    "descriptionIntro": {
+      "type": "string"
+    },
+    "descriptionText": {
+      "type": "string"
+    },
+    "keywordCount": {
+      "type": "number"
+    },
+    "overviewSummary": {
+      "type": "string"
+    },
+    "pagePrimaryLanguage": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "destinationId": {
+      "type": "string",
+      "required": true
+    },
+    "thumbnailHiResURL": {
+      "type": "string"
+    },
+    "primaryDestinationName": {
+      "type": "string"
+    },
+    "thumbnailURL": {
+      "type": "string"
+    },
+    "primaryDestinationId": {
+      "type": "number",
+      "required": true
+    },
+    "seoId": {
+      "type": "string",
+      "required": true
+    },
+    "productCount": {
+      "type": "number"
+    },
+    "photoCount": {
+      "type": "number"
+    },
+    "rating": {
+      "type": "number"
+    },
+    "attractionStreetAddress": {
+      "type": "string"
+    },
+    "attractionCity": {
+      "type": "string"
+    },
+    "attractionState": {
+      "type": "string"
+    },
+    "attractionLatitude": {
+      "type": "number"
+    },
+    "attractionLongitude": {
+      "type": "number"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

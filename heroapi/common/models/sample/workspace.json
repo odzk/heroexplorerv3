@@ -1,0 +1,43 @@
+{
+  "name": "Workspace",
+  "plural": "workspaces",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "workspaceName": {
+      "type": "string",
+      "required": true
+    },
+    "workspaceDesc": {
+      "type": "string"
+    },
+    "projects": {
+      "type": [
+        "Project"
+      ]
+    },
+    "createdOn": {
+      "type": "date"
+    },
+    "updatedOn": {
+      "type": "date"
+    },
+    "Owner": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {
+    "projects": {
+      "type": "hasMany",
+      "model": "Project",
+      "foreignKey": "workspaceId",
+      "primaryKey": "id"
+    }
+  },
+  "acls": [],
+  "methods": {}
+}

@@ -1,0 +1,176 @@
+<div fxLayout="row"
+     fxLayout.sm="column"
+     fxLayout.xs="column"
+     class="hx-search-bar-component">
+  <!--<ng-select class="custom-search-bar-destination-select"-->
+             <!--[ngClass]="{'error': errorDestination}"-->
+             <!--[(ngModel)]="destination"-->
+             <!--(ngModelChange)="destinationChange()"-->
+             <!--[items]="listDestination"-->
+             <!--[clearable]="false"-->
+             <!--bindLabel="destinationName"-->
+             <!--placeholder="Destination">-->
+  <!--</ng-select>-->
+  <!--<ng-select class="custom-search-bar-activities-select"-->
+             <!--[(ngModel)]="subcategorie"-->
+             <!--[items]="listActivities"-->
+             <!--(ngModelChange)="activityChange()"-->
+             <!--[clearable]="false"-->
+             <!--[searchable]="false"-->
+             <!--bindLabel="subcategoryName"-->
+             <!--placeholder="Activity">-->
+  <!--</ng-select>-->
+  <div class="search-bar-keyword-container"
+       fxFlex="auto"
+       fxFlex.sm="auto"
+       fxFlex.xs="auto">
+       <form (submit)="search($event)" novalidate="">
+        <span class="search-bar__input-container">
+          <input placeholder="Search Experience"
+                 [(ngModel)]="keyword"
+                 [ngModelOptions]="{standalone: true}"
+                 (keyup)="onSearchInputChange($event.target.value)"
+                 (click)="keyword ? onSearchInputChange(keyword) : showListTop()"
+                 appClickElsewhere
+                 (clickElsewhere)="closeListTop()"/>
+          <i class="icon-search" id="icon-search" (click)="search($event)"></i>
+        </span>
+      </form>          
+      
+    <div class="search-bar__list-top-container" *ngIf="isShowListTop">
+      <div fxFlex="55"
+           fxFlex.sm="100"
+           fxFlex.xs="100" *ngIf="listDestinations.length===0 && listProducts.length===0">
+        <p class="label--top" [style.color]="primaryColor">Top Destinations</p>
+        <ul  class="list-destinations">
+          <li *ngFor="let item of listTopDestinations">
+            <a class="no-decoration color-black"
+               [routerLink]="['/list-result', item.destinationId, 0, 0]">
+              {{item.destinationName}}
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div fxFlex="45"
+           fxFlex.sm="100"
+           fxFlex.xs="100"
+           class="list-attractions"  *ngIf="listDestinations.length===0 && listProducts.length===0">
+        <p class="label--top" [style.color]="primaryColor">Top Tours & Activities</p>
+        <ul>
+          <li *ngFor="let item of listTopAttractions">
+            <a class="no-decoration color-black"
+               [routerLink]="['/list-result', item.destinationId, 0, 0]">
+              {{item.title}}
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="search-bar__list-results" *ngIf="isShowListResults && (listDestinations.length > 0 || listProducts.length > 0)">
+      <div class="list-popular-destinations" *ngIf="listDestinations.length !== 0">
+        <p class="label--top" [style.color]="customizeSettings?.color_scheme?.primary_color">POPULAR DESTINATIONS</p>
+        <ul>
+          <li *ngFor="let item of listDestinations[0]">
+            <a class="no-decoration color-black"
+               [routerLink]="['/list-result', item.id, 0, 0]" >
+               <p style="margin: 0 5px 0 0;">{{item.name}} <span style="margin-top: 1px;" class="color-grey font-size-10">{{item.parentDestinationName}}</span>
+              </p>
+            </a>
+          </li>
+        </ul>
+      </div>
+      <div class="list-tours">
+        <div *ngIf="listCombined.length !== 0">
+          <p class="label--top" [style.color]="customizeSettings?.color_scheme?.primary_color">TOURS & ACTIVITIES</p>
+          <ul class="" *ngFor="let item of listCombined | slice:0:5">
+            <li *ngIf="item.productCode">
+              <a class="no-decoration color-black" [routerLink]="['/detail', item.productCode]" >
+                <p style="margin: 0 5px 0 0;" *ngIf="item.title">{{item.title}} 
+                  <span style="margin-top: 1px;" class="color-grey font-size-10" [attr.data]="listDestinations[0][0].name" >{{listDestinations[0][0].name}}</span>
+                </p>
+              </a>
+            </li>
+            <li *ngIf="item.id" [data]="keyword">
+              <a class="no-decoration color-black" [routerLink]="['/detail', item.primaryDestinationId, item.id, keyword]">
+                <p style="margin: 0 5px 0 0;">{{item.name}} <span style="margin-top: 1px;" class="color-grey font-size-10">{{item.destinationName}}</span></p>
+              </a>
+            </li>
+          </ul>
+        </div>
+      </div>
+     <!--  <div class="list-tours">
+        <div *ngIf="listProducts.length !== 0">
+          <p class="label--top" [style.color]="customizeSettings?.color_scheme?.primary_color">TOURS & ACTIVITIES</p>
+          <ul  class="" *ngFor="let item of listProducts[0]">
+            <li>
+              <a class="no-decoration color-black"
+                 [routerLink]="['/detail', item.productCode]">
+                <p style="margin: 0 5px 0 0;">{{item.title}} <span style="margin-top: 1px;" class="color-grey font-size-10" [attr.data]="listDestinations[0][0].name">{{listDestinations[0][0].name}}</span></p>
+              </a>
+            </li>
+          </ul>
+        </div>
+        <div *ngIf="listAttractions.length !== 0">
+          <ul  class="" *ngFor="let item of listAttractions[0]">
+            <li>
+              <a class="no-decoration color-black"
+                    [routerLink]="['/detail', item.id]">
+                <p style="margin: 0 5px 0 0;">{{item.name}} <span style="margin-top: 1px;" class="color-grey font-size-10">{{listAttractions[0][0].destinationName}}</span></p>
+              </a>
+            </li>
+          </ul>
+          <p class="search-bar__btn-find-more" [style.backgroundColor]="customizeSettings?.color_scheme?.primary_color" [attr.data]="listProducts[0][0].destinations[0].ref">
+            <i class="icon-search" id="icon-search"></i>  
+            <a [routerLink]="['/list-result', listProducts[0][0].destinations[0].ref, 0, 0]">Find more results for
+              <span class="hx-highlight-keyword">{{keyword}}</span>
+            </a>
+          </p>
+        </div>
+      </div> -->
+    </div>
+    <!-- <p>{{ listDestinationResults | json }}</p>
+    <p>{{ listTourResults | json }}</p> -->
+
+    <div class="search-bar__list-results"
+         *ngIf="isShowListResults && (listDestinationResults.length > 0 || listTourResults.length > 0)">
+      <div class="list-popular-destinations"
+           *ngIf="listDestinationResults.length > 0">
+        <p class="label--top" [style.color]="customizeSettings?.color_scheme?.primary_color">POPULAR DESTINATIONS</p>
+        <ul>
+          <li *ngFor="let item of listDestinationResults"
+              [routerLink]="['/list-result', item.id, 0, 0]"
+              [innerHTML]="item.parentDestinationName | highlightKeyword:keyword">
+          </li>
+        </ul>
+      </div>
+      <div class="list-tours"
+           *ngIf="listTourResults.length > 0; else noResults">
+        <p class="label--top" [style.color]="customizeSettings?.color_scheme?.primary_color">TOURS & ACTIVITIES</p>
+        <ul>
+          <li *ngFor="let item of listTourResults"
+              [routerLink]="['/detail', item.productCode]"
+             fxLayout="row">
+            <p style="margin: 0 5px 0 0;"
+               [innerHTML]="item.title | highlightKeyword:keyword">
+            </p>
+            <!-- <span style="margin-top: 1px;"
+                  class="color-grey font-size-10">{{item.data.primaryDestinationName}}</span> -->
+          </li>
+        </ul>
+      </div>
+      <ng-template #noResults>
+        <p class="label--top" [style.color]="customizeSettings?.color_scheme?.primary_color">TOURS & ACTIVITIES</p>
+        <ul>
+          <li>No results found.</li>
+        </ul>
+      </ng-template>
+      <p class="search-bar__btn-find-more" [style.backgroundColor]="customizeSettings?.color_scheme?.primary_color">
+        <i class="icon-search" id="icon-search"></i>
+        <a [routerLink]="['/list-result', destinationId, 0, 0, keyword]">
+          Find more results for
+          <span class="hx-highlight-keyword">{{keyword}}</span>
+        </a>
+      </p>
+    </div>
+  </div>
+</div>

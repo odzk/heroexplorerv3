@@ -1,0 +1,39 @@
+{
+  "name": "Location",
+  "plural": "Locations",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "thumbnailURL": {
+      "type": "string"
+    },
+    "subcategories": {
+      "type": [
+        "object"
+      ]
+    },
+    "thumbnailHiResURL": {
+      "type": "string"
+    },
+    "productCount": {
+      "type": "number"
+    },
+    "groupUrlName": {
+      "type": "string"
+    },
+    "groupName": {
+      "type": "string"
+    },
+    "id": {
+      "type": "number",
+      "require": true
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

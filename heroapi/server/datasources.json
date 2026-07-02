@@ -1,0 +1,16 @@
+{
+  "db": {
+    "name": "db",
+    "connector": "memory"
+  },
+  "herodb": {
+    "host": "proddb.heroexplorer.com",
+    "port": 3306,
+    "database": "heroexplorerdb",
+    "password": "i-|DXhY>5L2_",
+    "name": "herodb",
+    "user": "heroproduser",
+    "connector": "mysql",
+    "connectTimeout": 200000
+  }
+}

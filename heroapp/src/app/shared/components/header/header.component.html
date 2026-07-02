@@ -1,0 +1,18 @@
+<header class="hx-header-component">
+  <div class="header-container">
+    <a
+      routerLink=""
+    >
+      <img
+        *ngIf="logo_url; else heroExplorerLogo"
+        [style.height.px]="logo_height"
+        [style.width.px]="logo_width"
+        [src]="logo_url"
+      />
+
+      <ng-template #heroExplorerLogo>
+        <img src="/assets/images/home-logo-mobile.png" />
+      </ng-template>
+    </a>
+  </div>
+</header>

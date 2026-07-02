@@ -1,0 +1,74 @@
+{
+  "name": "UserPhoto",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "ownerName": {
+      "type": "string"
+    },
+    "ownerCountry": {
+      "type": "string"
+    },
+    "productTitle": {
+      "type": "string"
+    },
+    "productUrlName": {
+      "type": "string"
+    },
+    "ownerAvatarURL": {
+      "type": "string"
+    },
+    "sslSupported": {
+      "type": "boolean"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoId": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "productCode": {
+      "type": "string",
+      "required": true
+    },
+    "caption": {
+      "type": "string"
+    },
+    "thumbnailURL": {
+      "type": "string"
+    },
+    "editorsPick": {
+      "type": "boolean"
+    },
+    "ownerId": {
+      "type": "string",
+      "required": true
+    },
+    "timeUploaded": {
+      "type": "date"
+    },
+    "photoId": {
+      "type": "string",
+      "required": true
+    },
+    "photoHiResURL": {
+      "type": "string"
+    },
+    "photoURL": {
+      "type": "string"
+    },
+    "photoMediumResURL": {
+      "type": "string"
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

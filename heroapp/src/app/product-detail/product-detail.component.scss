@@ -1,0 +1,860 @@
+@import '../../assets/scss/variables.scss';
+
+.mat-datepicker-popup {
+  position: fixed !important;
+}
+
+.mat-datepicker-content {
+  width: auto;
+  box-shadow: none !important;
+  border-radius: 5px !important;
+  border: 1px solid #cccccc !important;
+}
+
+#customPicker {
+  width: 100%;
+  margin: 0 auto;
+  height: 35px;
+  border: 1px solid #909090;
+  border-radius: 5px;
+  padding: 10px 0 0;
+  text-align: center !important;
+  text-decoration: none;
+  font-size: 14px;
+  color: #929292;
+  font-family: 'Raleway';
+  cursor: pointer;
+
+  .mat-form-field-flex {
+    align-items: unset;
+
+    .mat-form-field-infix {
+      border-top: unset;
+      flex: none;
+      width: auto;
+      margin-left: 25%;
+
+      input {
+        cursor: pointer;
+      }
+    }
+  }
+
+  .mat-form-field-underline {
+    display: none;
+  }
+
+  .mat-datepicker-toggle {
+    button.mat-icon-button {
+      padding: 0px 0px 6px 0px !important;
+      color: gray !important;
+      background: none !important;
+      font-size: 1.5rem !important;
+    }
+  }
+
+
+}
+
+.mat-calendar-content {
+  padding: 0 !important;
+  border: 1px solid #cccccc;
+}
+
+@media (min-width: 1205px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 374px !important;
+  }
+}
+
+@media (min-width: 1025px) and (max-width: 1204px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 320px !important;
+  }
+}
+
+@media (min-width: 985px) and (max-width: 1024px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 313px !important;
+  }
+}
+
+@media (min-width: 985px) and (max-width: 984px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 255px !important;
+  }
+}
+
+// iPad
+@media (min-width: 481px) and (max-width: 986px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 225px !important;
+  }
+
+  .mat-form-field-flex {
+    .mat-form-field-infix {
+      margin-left: 10% !important;
+    }
+  }
+}
+
+// iPhone 6/7/8 Plus
+@media (min-width: 414px) and (max-width: 480px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 317px !important;
+  }
+}
+
+// Pixel 2 XL
+@media (min-width: 411px) and (max-width: 413px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 313px !important;
+  }
+}
+
+// iPhone 6/7/8
+@media (min-width: 361px) and (max-width: 410px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 277px !important;
+  }
+
+  .mat-form-field-flex {
+    .mat-form-field-infix {
+      margin-left: 20% !important;
+    }
+  }
+}
+
+// Galaxy S5
+@media (min-width: 321px) and (max-width: 360px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 263px !important;
+  }
+
+  .mat-form-field-flex {
+    .mat-form-field-infix {
+      margin-left: 20% !important;
+    }
+  }
+}
+
+// iPhone 5/SE
+@media (max-width: 320px) {
+  .mat-datepicker-content .mat-calendar {
+    width: 223px !important;
+  }
+
+  .mat-form-field-flex {
+    .mat-form-field-infix {
+      margin-left: 10% !important;
+    }
+  }
+}
+
+.mat-calendar-body-today:not(.mat-calendar-body-selected) {
+  border-style: unset !important;
+  border-color: unset !important;
+}
+
+.mat-calendar-body-disabled {
+  &:hover {
+    background: unset !important;
+
+    .mat-calendar-body-cell-content {
+      color: rgba(0, 0, 0, 0.38) !important;
+    }
+  }
+
+  .date-price {
+    display: none !important;
+  }
+}
+
+.mat-calendar-body-selected {
+ //background: #CC5757;
+}
+
+.mat-calendar-body-cell {
+  &:hover {
+    background: rgba(107, 161, 191, 0.38);
+    .mat-calendar-body-cell-content {
+      color: #ffffff;
+    }
+  }
+
+  .mat-calendar-body-cell-content {
+    border-radius: unset;
+    padding-top: 3px;
+    align-items: unset;
+  }
+
+  .date-price {
+    position: absolute;
+    top: 35%;
+    left: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 90%;
+    height: 90%;
+    line-height: 1;
+    font-size: 9px;
+    font-weight: 410;
+    color: $red;
+  }
+}
+
+.material-icons {
+  color: #80b9bf;
+}
+
+.travellers-select-container {
+  a.color-grey {
+    .icon-travellers {
+      vertical-align: middle;
+      display: inline-block;
+    }
+  }
+
+  a.color-grey-active {
+    color: $black;
+
+    .icon-travellers {
+      vertical-align: middle;
+      display: inline-block;
+    }
+  }
+
+  .choose-travellers-dropdown {
+    padding: 10px;
+    background-color: #ffffff;
+    border: 1px solid $grey;
+
+    .choose-travellers {
+      margin-top: 25px;
+
+      .travellers {
+        font-size: 0.9rem;
+      }
+
+      .count {
+        padding-top: 10px;
+
+        i.material-icons {
+          // color: $red;
+          cursor: pointer;
+        }
+
+        i.material-icons-disable {
+          color: $grey;
+          cursor: not-allowed;
+        }
+      }
+    }
+
+    button.apply {
+      // border-radius: 5px !important;
+      padding: 10px 15px !important;
+      width: 100%;
+      margin-top: 20px;
+    }
+  }
+}
+
+button.search {
+  padding: 10px 15px !important;
+  width: 100%;
+  margin-top: 20px;
+}
+
+button.btn-square {
+  border-radius: unset !important;
+}
+
+button.btn-rounded {
+  border-radius: 10px !important;
+}
+
+.tour-options {
+  background: $white;
+  border-radius: $border-radius;
+  border: 1px solid $light-grey;
+  padding: 10px 20px;
+  margin-bottom: 10px;
+
+  span.title {
+    font-weight: 900;
+  }
+
+  span.booking-date {
+    color: $bold-grey;
+    font-weight: 600;
+  }
+
+  h3,
+  h4,
+  h5 {
+    margin: 0 auto;
+  }
+
+  span.display-travellers {
+    font-size: 1rem;
+    color: $bold-grey;
+  }
+
+  p.total {
+    font-size: 1.5rem;
+    font-weight: 600;
+  }
+
+  button {
+    // padding: 1rem 1.5rem !important;
+    font-size: 18px !important;
+    background: $red;
+    color: #ffffff;
+    font-weight: 900;
+    cursor: pointer;
+    outline: none;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  div.mismatch {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    text-align: center;
+    background: rgba(128, 128, 128, 0.7);
+
+    p {
+      margin-top: 28%;
+      background-color: $red;
+      padding: 10px 0;
+      color: #ffffff;
+      font-weight: 900;
+      border-radius: 5px;
+      font-size: 18px;
+    }
+  }
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.mat-calendar-table {
+  background: white;
+}
+
+.hx-product-detail-component {
+  //padding-bottom: 498px; //keep footer always at the bottom of the page
+  .header__background--full-screen {
+    // background-image: url('../../assets/images/detail-bg.png');
+    background-repeat: no-repeat;
+    background-position: 50% 50%;
+    height: 480px;
+    background-size: cover;
+    width: 100%;
+    margin-bottom: 3rem;
+
+    @media screen and (max-width: $media-xs) {
+      height: 200px;
+    }
+  }
+
+  .product-detail-content {
+    margin: 0 auto 2rem;
+    max-width: 1168px;
+    position: relative;
+    //padding-bottom: 3rem;
+    padding: 1rem;
+
+    .primary-info-content {
+      margin-top: -10rem;
+      background: $white;
+      box-shadow: 0 0 13px 0 rgba(0, 0, 0, 0.24);
+      border-radius: $border-radius;
+
+      @media screen and (max-width: $media-xs) {
+        margin-top: -7rem;
+      }
+
+      .primary-info-content--left {
+        align-items: center;
+        padding: 2rem;
+        border-right: 1px solid $light-grey;
+
+        .primary-info-content--left-top {
+          @media screen and (max-width: $media-xs) {
+            border-bottom: 1px solid $light-grey;
+            padding-bottom: 1.5rem;
+          }
+
+          h2 {
+            margin: 0;
+            line-height: 33px;
+            font-size: 25px;
+            font-family: $second-font-family;
+          }
+
+          .review-count {
+            font-size: 11px;
+            line-height: 26px;
+          }
+
+          .special-offer-txt {
+            margin: 0;
+            font-size: 12px;
+          }
+        }
+
+        .primary-info-content--left-bottom {
+          width: 100%;
+          font-size: 12px;
+
+          @media screen and (max-width: $media-xs) {
+            margin-top: 1rem;
+            border-bottom: 1px solid $light-grey;
+            padding-bottom: 3rem;
+
+            span {
+              margin-bottom: 0.5rem;
+            }
+          }
+
+          @media screen and (min-width: $media-xs) {
+            .middle-item {
+              border-left: 1px solid $light-grey;
+              border-right: 1px solid $light-grey;
+              padding: 0 0.5rem 2rem;
+            }
+          }
+
+          .margin-right {
+            margin-right: 0.5rem;
+          }
+        }
+      }
+
+      @media screen and (min-width: 768px) {
+        .primary-info-content--middle {
+          padding: 1rem !important;
+        }
+      }
+
+      .primary-info-content--middle {
+        padding: 2rem;
+        border-left: 1px solid $light-grey;
+        border-right: 1px solid $light-grey;
+
+        p {
+          font-size: 14px;
+        }
+
+        .travel-dates {
+          margin-top: 0;
+        }
+
+        .travellers-select-container {
+          position: relative;
+          margin-bottom: 1rem;
+
+          .fake-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            z-index: 1000;
+          }
+        }
+
+        .input-select-day {
+          height: 35px;
+          width: 100%;
+          border: 1px solid $light-black;
+          border-radius: $border-radius;
+          padding: 0 0.5rem;
+
+          &.error {
+            border: 1px solid $red;
+          }
+        }
+      }
+
+      .primary-info-content--right {
+        .dateView {
+          height: 35px;
+          width: 100%;
+          border: 1px solid $light-black;
+          border-radius: $border-radius;
+          padding: 10px 0 0;
+          text-align: center;
+          text-decoration: none;
+          font-size: 14px;
+        }
+
+        .iconCal,
+        .dateView {
+          vertical-align: middle;
+          display: inline-block;
+        }
+
+        .travellers-select-container {
+          position: relative;
+          margin-bottom: 1rem;
+
+          .fake-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 14px;
+            z-index: 1000;
+          }
+        }
+
+        .input-select-day {
+          height: 35px;
+          width: 100%;
+          border: 1px solid $light-black;
+          border-radius: $border-radius;
+          padding: 0 0.5rem;
+
+          &.error {
+            border: 1px solid $red;
+          }
+        }
+
+        padding: 2rem;
+
+        @media screen and (min-width: 768px) {
+          padding: 1rem !important;
+        }
+
+        @media screen and (min-width: $media-xs) {
+          padding: 2rem;
+        }
+
+        p {
+          text-align: center;
+        }
+
+        .currency-code {
+          margin: 0;
+          font-size: 12px;
+        }
+
+        .primary-info-price {
+          font-size: 45px;
+          margin: 0;
+          font-weight: $font-weight-bold;
+          color: $red;
+        }
+
+        @media screen and (min-width: 768px) {
+          .primary-info-price {
+            font-size: 30px;
+          }
+        }
+
+        button {
+          padding: 1rem 1.5rem;
+          border-radius: $button-border-radius;
+          font-size: 18px;
+          background: $red;
+          border: none;
+          color: $white;
+          font-weight: $font-weight-extra-bold;
+          cursor: pointer;
+          outline: none;
+        }
+
+        .icon-award:before {
+          color: $light-blue;
+        }
+
+        // .low-price-guarantee {
+        //   font-family: $second-font-family;
+        //   font-size: 15px;
+        // }
+
+        .cancel-booking,
+        .low-price-guarantee {
+          font-family: $second-font-family;
+          font-size: 15px;
+
+          i {
+            position: relative;
+            top: 7px;
+            right: 5px;
+          }
+        }
+      }
+    }
+
+    .second-info-content {
+      margin-top: 2rem;
+
+      p {
+        line-height: 22px;
+      }
+    }
+
+    .icon-media-container {
+      i {
+        margin-right: 0.5rem;
+
+        &:before {
+          color: $black;
+          font-size: 22px;
+        }
+      }
+    }
+
+    .label-share-via {
+      margin-right: 1rem;
+      font-size: 14px;
+      line-height: 22px;
+    }
+
+    .google-map-container {
+      @media screen and (min-width: $media-xs) {
+        padding-left: 2rem;
+      }
+
+      h2 {
+        margin: 2rem 0;
+        color: $ocean-blue;
+        font-size: 25px;
+        font-family: $second-font-family;
+      }
+
+      button {
+        padding: 0.5rem 1rem;
+        font-size: 14px;
+        border-radius: 20px;
+        border: 1px solid $light-black;
+        font-weight: $font-weight-bold;
+      }
+
+      p {
+        line-height: 22px;
+      }
+    }
+
+    .share-container {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+    }
+  }
+
+  .slide-show-container--middle-page {
+    background: $white-grey;
+    padding: 2rem 0;
+
+    .slide-show__box-center {
+      margin: 2rem auto;
+      max-width: 1240px;
+      position: relative;
+
+      i {
+        font-size: 20px;
+        cursor: pointer;
+
+        &:before {
+          color: $black;
+        }
+      }
+
+      h2 {
+        margin-bottom: 30;
+        padding-left: 50px;
+        line-height: 33px;
+        font-size: 25px;
+        font-family: $second-font-family;
+      }
+    }
+  }
+
+  // tab group
+
+  .custom-mat-tab-group-product-detail {
+    .mat-ink-bar {
+      background-color: $red;
+      height: 3px !important;
+    }
+
+    .mat-tab-label-active {
+      background-color: $red;
+      color: $white;
+      opacity: 1 !important;
+    }
+
+    .tab-content {
+      padding: 1rem 2rem;
+
+      .user-review-container {
+        padding-bottom: 2rem;
+        margin-top: 2rem;
+        border-bottom: 1px solid $light-grey;
+
+        .user-review-container--left {
+          margin-right: 1rem;
+
+          img {
+            width: 40px;
+            border-radius: 100%;
+          }
+        }
+
+        p {
+          margin: 0;
+
+          &.user-review__name {
+            font-weight: $font-weight-bold;
+            color: $ocean-blue;
+          }
+
+          &.user-review__description {
+            font-size: 14px;
+          }
+        }
+
+        .user-review__date {
+          font-size: 12px;
+          color: $light-grey;
+        }
+      }
+
+      .btn-load-more-review {
+        margin-top: 2rem;
+        padding: 0.5rem 2rem;
+        background: white;
+        border-radius: 5px;
+        color: $bold-grey;
+        border: 1px solid $light-grey;
+        cursor: pointer;
+      }
+    }
+
+    .mat-tab-label-content {
+      font-family: $second-font-family;
+      font-size: 15px;
+    }
+
+    .mat-tab-labels {
+      border-bottom: 3px solid $red;
+    }
+
+    strong {
+      color: $ocean-blue;
+      font-family: $primary-font-family;
+      font-weight: $font-weight-bold;
+    }
+
+    ul {
+      line-height: 30px;
+    }
+  }
+
+  .custom-rating-product-detail-component {
+    font-size: 24px;
+    line-height: 24px;
+    width: 75px;
+
+    .rating {
+      width: 68px;
+
+      .ng-star-inserted {
+        margin-right: -5px;
+      }
+    }
+  }
+
+  .custom-rating-user-review-product-detail-component {
+    font-size: 8px;
+    margin-right: 0.5rem;
+  }
+
+  .custom-mat-datepicker-toggle-product-detail-component {
+    position: absolute;
+    right: 0;
+    width: 100%;
+
+    .mat-icon-button {
+      border-radius: 0% !important;
+    }
+
+    button {
+      width: 100%;
+      opacity: 1;
+
+      .mat-button-wrapper {
+        float: right;
+        margin-right: 5px;
+      }
+    }
+  }
+
+  .custom-ng-select-product-detail-component {
+    .ng-select-container {
+      z-index: 1000 !important;
+      border: 1px solid $light-black;
+      margin-bottom: 0.5rem;
+    }
+
+    .ng-value {
+      position: absolute;
+      right: 40px;
+      top: 9px;
+    }
+
+    .ng-arrow {
+      border-color: $black transparent transparent !important;
+      border-width: 10px 5px 2.5px !important;
+      top: 3px !important;
+    }
+
+    .ng-dropdown-panel {
+      z-index: 1001;
+    }
+
+    .ng-dropdown-panel .ng-dropdown-panel-items .ng-option.ng-option-disabled {
+      cursor: not-allowed;
+    }
+  }
+}
+
+.list-result__breadcrumbs {
+  color: $red;
+  padding-bottom: 1em;
+  p {
+    display: inline-block;
+  }
+  span {
+    font-size: 12px;
+    a {
+      cursor: pointer;
+      color: inherit;
+      text-decoration: none;
+    }
+    &.active {
+      color: $black;
+      a {
+        cursor: default;
+      }
+    }
+  }
+.new-icon-right-arrow{
+  margin:0 0.4rem;
+}
+
+  .icon-right-arrow:before, .new-icon-right-arrow:before {
+    color: $black;
+    font-size: 8px;
+  }
+}

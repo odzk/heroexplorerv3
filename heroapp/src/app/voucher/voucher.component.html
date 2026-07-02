@@ -1,0 +1,145 @@
+<div class="container">
+    <div style="padding: .5rem 0 1rem;"></div>
+</div>
+<div *ngIf="data && data.length == 0" class="ticket-container">
+    <div class="container" fxLayout="row wrap" fxLayoutAlign="center center">
+        <h2>404: NOT FOUND</h2>
+
+    </div>
+</div>
+<div *ngIf="data" class="ticket-container">
+    <div class="container" fxLayout="row wrap">
+        <div fxFlex="100" fxLayout="row" fxLayout.xs="column">
+            <div class="box-1" fxFlex="100" fxFlex.xs="100" fxLayout="row" fxLayout.xs="column">
+                <div class="block-circle">
+                    <div fxFlex="100" style="position: relative">
+                        <div class="rounded-circle "></div>
+                    </div>
+                </div>
+                <div class="box1-sub" fxFlex="60" fxFlex.xs="100">
+                    <div style="margin-top: 22px;">
+                        <a style="position: relative;width: 110px;height: 110px;">
+                            <img src="../assets/images/home-logo.png" style="width: 200px;height: auto;">
+                        </a>
+                    </div>
+                    <h2 *ngIf="data.LeadTraveler?.length > 0">{{data.LeadTraveler[0]}}</h2>
+                    <p *ngIf="data.ProductTitle?.length > 0">{{data.ProductTitle[0]}}</p>
+                    <p *ngIf="(data.TourGradeCode?.length > 0 && data.TourGradeCode[0] != '')">{{
+                        data.TourGradeCode[0]}}</p>
+                    <p *ngIf="!(data.TourGradeCode?.length > 0 && data.TourGradeCode[0] != '')">DEFAULT</p>
+
+                    <br />
+                    <br />
+                    <p>{{ data.DepartureDate[0]}}</p>
+                    <p *ngFor="let item of data.NumberOfTravelers">{{item}} ,</p>
+                </div>
+                <div class="box1-sub1" fxFlex="40" fxFlex.xs="100">
+                    <p class="title">Booking ref: {{data.BookingReference[0]}}</p>
+                    <br />
+                    <br />
+                    <h2 style="visibility: hidden">Test Booking Only</h2>
+                    <div class="barcode" *ngIf="data.BarcodeImg?.length > 0" >
+                            <a style="position: relative;width: 110px;height: 110px;">
+                                <img src="data:image/png;base64,{{data.BarcodeImg[0]}}" style="max-width: 12rem;min-height: 4rem;">
+                            </a>
+                        </div>
+                </div>
+
+            </div>
+            <div style="display: none;" class="box-mobile" fxFlex="30" fxFlex.xs="100">
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+                    <h2> <i class="fa fa-mobile"></i> Mobile Ticket Accept</h2>
+                </div>
+                <div fxLayout="row" fxLayout.xs="column" fxLayoutAlign="center center">
+                    <button class="hx-btn-primary">
+                        <a (click)="print();"> Download</a>
+
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+</div>
+
+<div *ngIf="data" class="general-info">
+    <div class="container" fxLayout="row wrap">
+        <div fxFlex="100" fxLayout="row" fxLayout.xs="column">
+
+            <div class="block" fxFlex="50" fxFlex.xs="100">
+                <h2>Need to Make Changes or Cancel? </h2>
+                <p>Billing for this booking is by Herobe</p>
+                <br />
+                <div fxLayout="row">
+                    <p fxFlex>Phone Number</p>
+                    <p style="color:#28687F" fxFlex=70 fxFlex.xs=60>+61 7 4763 0295</p>
+                </div>
+                <div fxLayout="row">
+                    <p fxFlex>Email</p>
+                    <p style="color:#28687F" fxFlex=70 fxFlex.xs=60>hello@heroexplorer.com</p>
+                </div>
+
+            </div>
+            <div class="block" fxFlex="50" fxFlex.xs="100">
+                <h2>Tour Specific Inquiries</h2>
+                <p [innerHtml]="data.TicketingDetails[0]"></p>
+
+            </div>
+
+        </div>
+    </div>
+
+
+</div>
+<div *ngIf="data" class="general-info">
+    <div class="container" fxLayout="row wrap">
+        <div fxFlex="100" fxLayout="row" fxLayout.xs="column">
+
+            <div class="block" fxFlex="50" fxFlex.xs="100">
+                <h2>Departure Details </h2>
+                <p>DEPARTURE TIME</p>
+                <p [innerHtml]="data.DepartureTime[0]"></p>
+                <br />
+                <p>DEPARTURE POINT</p>
+                <p>{{data.DeparturePoint[0]}}</p>
+                <br />
+                <p>DEPARTURE SCHEDULE</p>
+                <p>Times are subject to change due to local traffic conditions.</p>
+            </div>
+            <div class="block" fxFlex="50" fxFlex.xs="100">
+                <h2>Inclusions & Exclusions</h2>
+                <p>TOUR OPTION DESCRIPTION</p>
+                <p>{{data.TourGradeDescription[0]}}</p>
+                <br />
+                <p *ngIf="data.Inclusions">WHAT'S INCLUDED</p>
+                <span *ngIf="data.Inclusions" [innerHtml]="data.Inclusions[0]"></span>
+
+                <p *ngIf="data.Exclusions">WHAT'S NOT INCLUDED</p>
+
+                <span *ngIf="data.Exclusions" [innerHtml]="data.Exclusions[0]"></span>
+
+
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div *ngIf="data" class="general-info">
+    <div class="container" fxLayout="row wrap">
+        <div fxFlex="100" fxLayout="row" fxLayout.xs="column">
+
+            <div class="block" fxFlex="50" fxFlex.xs="100">
+                <h2>Tour Language </h2>
+                <p>{{data.LanguageService[0]}}</p>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</div>

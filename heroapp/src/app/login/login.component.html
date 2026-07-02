@@ -1,0 +1,64 @@
+<div class="hx-login-component">
+  <div class="login-content">
+    <div class="header__background--full-screen">
+      <slideshow [autoPlay]="true" [imageUrls]="pages | toHttps"></slideshow>
+    </div>
+  </div>
+  <div class="login-container">
+    <div  *ngIf="!isShowSet" class="login-wrapper" fxFlex="50" fxFlex.xs="80">
+      <form [formGroup]="loginForm" fxLayout="row wrap">
+        <div fxFlex="100">
+          <h2>LOGIN WITH YOUR EMAIL</h2>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput placeholder="Email" formControlName="email" required>
+            <app-control-message [control]="loginForm.controls.email"></app-control-message>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput placeholder="Password" [type]="'password'" formControlName="password" required (keyup.enter)="onSubmit()">
+            <app-control-message [control]="loginForm.controls.password"></app-control-message>
+          </mat-form-field>
+          <div class="font-size-12">
+            <a class="color-ocean-blue no-decoration" style="cursor: pointer;" (click)="showForgotPasswordModal()">Forgot your password?</a>
+            <div class="float-right">
+              <input  type="checkbox" />Keep me logged in
+            </div>
+          </div>
+        </div>
+        <div class="text-center" fxFlex="100">
+          <label class="error">{{message}}</label>
+        </div>
+
+        <div fxFlex="100" fxLayout="" fxLayoutAlign="center " style="margin-top: 2rem">
+          <button [ngClass]="{'disabled': loginForm.invalid, 'btn-square': buttonType === 'square',
+          'btn-rounded': buttonType === 'rounded'}" type="button" class="login" (click)="onSubmit()"
+  [style.border-color]="primaryColor"
+  [style.color]=""
+  [style.backgroundColor]="primaryColor">
+            <a>Log In</a>
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <div class="login-wrapper"
+         fxFlex="50"
+         *ngIf="isShowSet">
+      <div  fxLayout="row wrap">
+        <div fxFlex="100">
+          <p style="text-align: center;font-size: 20px;">We have just sent you an link to reset email, please check your email and simply click on that link to set up new password.</p>
+          <br/>
+          <p style="text-align: center;font-size: 17px;">
+            <a class="no-decoration color-ocean-blue"
+               routerLink="">
+              Go back home
+            </a>
+          </p>
+        </div>
+      </div>
+    </div> 
+  </div>
+</div>

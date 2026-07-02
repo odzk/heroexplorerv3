@@ -1,0 +1,55 @@
+{
+  "name": "Hero",
+  "version": "1.0.0",
+  "main": "server/server.js",
+  "engines": {
+    "node": ">=4"
+  },
+  "scripts": {
+    "lint": "eslint .",
+    "start": "node .",
+    "posttest": "npm run lint && nsp check"
+  },
+  "dependencies": {
+    "@aws-cdk/aws-route53": "^1.71.0",
+    "@loopback/logging": "^0.5.0",
+    "aws-sdk": "^2.779.0",
+    "codedeploy-scripts": "^1.0.0",
+    "compression": "^1.0.3",
+    "cors": "^2.5.2",
+    "helmet": "^1.3.0",
+    "ioredis": "^4.17.3",
+    "json-easy-filter": "^0.3.1",
+    "json-query": "^2.2.2",
+    "loopback": "^3.28.0",
+    "loopback-boot": "^2.6.5",
+    "loopback-component-explorer": "^4.0.0",
+    "loopback-connector-mongodb": "^3.2.1",
+    "loopback-connector-mysql": "^5.2.0",
+    "loopback-ds-timestamp-mixin": "^3.4.1",
+    "merge": "^1.2.0",
+    "mysql": "^2.18.1",
+    "ngx-lazy-images": "^1.4.4",
+    "nodemailer": "^4.6.7",
+    "redis": "^3.0.2",
+    "redis-json": "^4.0.1",
+    "redis-jsonify": "^1.2.0",
+    "request": "^2.83.0",
+    "serve-favicon": "^2.0.1",
+    "stripe": "^5.8.0",
+    "strong-error-handler": "^2.0.0",
+    "xml2js": "^0.4.19"
+  },
+  "devDependencies": {
+    "eslint": "^3.17.1",
+    "eslint-config-loopback": "^8.0.0",
+    "lite-server": "^2.5.4",
+    "nsp": "^2.1.0"
+  },
+  "repository": {
+    "type": "",
+    "url": ""
+  },
+  "license": "UNLICENSED",
+  "description": "Hero API service"
+}

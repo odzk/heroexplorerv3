@@ -1,0 +1,780 @@
+{
+  "name": "HeroBooking",
+  "mixins": {
+    "TimeStamp": true
+  },
+  "settings": {
+    "strict": false,
+    "forceId": false,
+    "replaceOnPUT": true,
+    "idInjection": false,
+    "mysql": {
+      "schema": "herodbdev",
+      "table": "HeroBooking"
+    }
+  },
+  "properties": {
+    "itineraryId": {
+      "type": "string",
+      "id": 1,
+      "required": true,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "itineraryId",
+        "dataType": "varchar",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "updateOnly": false
+    },
+    "isCancel": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isCancel",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "isRequestCancel": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRequestCancel",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "isRequestEditTraveller": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRequestEditTraveller",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "isRequestChangeTour": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRequestChangeTour",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "isRequestChangeDate": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRequestChangeDate",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "isRequestChangeName": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 3,
+      "scale": 0,
+      "mysql": {
+        "columnName": "isRequestChangeName",
+        "dataType": "tinyint",
+        "dataLength": null,
+        "dataPrecision": 3,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "travelDate": {
+      "type": "date",
+      "required": false,
+      "length": null,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "travelDate",
+        "dataType": "datetime",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "email": {
+      "type": "string",
+      "id": 1,
+      "required": true,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "email",
+        "dataType": "varchar",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "updateOnly": false
+    },
+    "productCode": {
+      "type": "string",
+      "id": 1,
+      "required": true,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "productCode",
+        "dataType": "varchar",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "updateOnly": false
+    },
+    "stripeCode": {
+      "type": "string",
+      "id": 1,
+      "required": true,
+      "length": 255,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "stripeCode",
+        "dataType": "varchar",
+        "dataLength": 500,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      },
+      "updateOnly": false
+    },
+    "name": {
+      "type": "string",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "name",
+        "dataType": "text",
+        "dataLength": 65535,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "homeCity": {
+      "type": "string",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "homeCity",
+        "dataType": "text",
+        "dataLength": 65535,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "chargedPrice": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "chargedPrice",
+        "dataType": "float",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "retailPrice": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "retailPrice",
+        "dataType": "float",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "merchantPrice": {
+      "type": "number",
+      "required": false,
+      "length": null,
+      "precision": 10,
+      "scale": 0,
+      "mysql": {
+        "columnName": "merchantPrice",
+        "dataType": "float",
+        "dataLength": null,
+        "dataPrecision": 10,
+        "dataScale": 0,
+        "nullable": "Y"
+      }
+    },
+    "tourGradeCode": {
+      "type": "string",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "tourGradeCode",
+        "dataType": "varchar",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "currency": {
+      "type": "string",
+      "required": false,
+      "length": 11,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "currency",
+        "dataType": "varchar",
+        "dataLength": 11,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "productTitle": {
+      "type": "string",
+      "required": false,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "productTitle",
+        "dataType": "text",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "distributorItemRef": {
+      "type": "string",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "distributorItemRef",
+        "dataType": "varchar",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "bookerId": {
+      "type": "number",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "bookerId",
+        "dataType": "int",
+        "dataLength": 255,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "bookingSource": {
+      "type": "string",
+      "required": false,
+      "length": 32,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "bookingSource",
+        "dataType": "text",
+        "dataLength": null,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    },
+    "voucherKey": {
+      "type": "string",
+      "required": false,
+      "length": 65535,
+      "precision": null,
+      "scale": null,
+      "mysql": {
+        "columnName": "voucherKey",
+        "dataType": "text",
+        "dataLength": 65535,
+        "dataPrecision": null,
+        "dataScale": null,
+        "nullable": "Y"
+      }
+    }
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [
+    {
+      "accessType": "EXECUTE",
+      "principalType": "ROLE",
+      "principalId": "$everyone",
+      "permission": "ALLOW"
+    }
+  ],
+  "methods": {
+    "cancelBookingDB": {
+      "accepts": [
+        {
+          "arg": "bookingId",
+          "type": "string",
+          "required": true,
+          "description": "Booking Reference Id"
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "cancel a booking based from booking reference",
+      "http": [
+        {
+          "path": "/cancelBookingDB",
+          "verb": "get"
+        }
+      ]
+    },
+    "getListAllBookingAdmin": {
+      "accepts": [
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "get list of all booking based for all sub domains",
+      "http": [
+        {
+          "path": "/getListAllBookingAdmin",
+          "verb": "get"
+        }
+      ]
+    },
+    "getListAllPrevBookingAdmin": {
+      "accepts": [
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "get list of all prev/cancel booking based for all sub domains",
+      "http": [
+        {
+          "path": "/getListAllPrevBookingAdmin",
+          "verb": "get"
+        }
+      ]
+    },
+    "getListAllBooking": {
+      "accepts": [
+        {
+          "arg": "subdomain",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "get list of all booking based from sub domains",
+      "http": [
+        {
+          "path": "/getListAllBooking",
+          "verb": "get"
+        }
+      ]
+    },
+    "getListAllBookingPrev": {
+      "accepts": [
+        {
+          "arg": "subdomain",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "get list of all canceled/previous booking based from sub domains",
+      "http": [
+        {
+          "path": "/getListAllBookingPrev",
+          "verb": "get"
+        }
+      ]
+    },
+    "getListMyBooking": {
+      "accepts": [
+        {
+          "arg": "email",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "get list my booking",
+      "http": [
+        {
+          "path": "/getListMyBooking",
+          "verb": "get"
+        }
+      ]
+    },
+    "listPastBooking": {
+      "accepts": [
+        {
+          "arg": "email",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": [
+        {
+          "arg": "result",
+          "type": "array",
+          "root": false,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/listPastBooking",
+          "verb": "get"
+        }
+      ]
+    },
+    "getCancelBookingReasons": {
+      "accepts": [],
+      "returns": [
+        {
+          "arg": "result",
+          "type": "array",
+          "root": false,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/getCancelBookingReasons",
+          "verb": "get"
+        }
+      ]
+    },
+    "cancleABooking": {
+      "accepts": [
+        {
+          "arg": "data",
+          "type": "object",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "returns": [
+        {
+          "arg": "results",
+          "type": "object",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/cancleABooking",
+          "verb": "post"
+        }
+      ]
+    },
+    "getVoucherData": {
+      "accepts": [
+        {
+          "arg": "voucherKey",
+          "type": "string",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "returns": [
+        {
+          "arg": "results",
+          "type": "object",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/getVoucherData",
+          "verb": "get"
+        }
+      ]
+    },
+    "requestEditBooking": {
+      "accepts": [
+        {
+          "arg": "itineraryId",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "arg": "title",
+          "type": "string",
+          "required": true,
+          "description": ""
+        },
+        {
+          "arg": "content",
+          "type": "string",
+          "required": true,
+          "description": ""
+        }
+      ],
+      "returns": [
+        {
+          "arg": "results",
+          "type": "object",
+          "root": true,
+          "description": ""
+        }
+      ],
+      "description": "",
+      "http": [
+        {
+          "path": "/requestEditBooking",
+          "verb": "post"
+        }
+      ]
+    },
+    "getReportBookings": {
+      "accepts": [
+        {
+          "arg": "startDate",
+          "type": "date",
+          "required": true,
+          "description": "startDate : Mon dd, yyyy"
+        },
+        {
+          "arg": "endDate",
+          "type": "date",
+          "required": true,
+          "description": "endDate : Mon dd, yyyy"
+        },
+        {
+          "arg": "offset",
+          "type": "number",
+          "required": true,
+          "description": "offset : 0, 10, 20..."
+        },
+        {
+          "arg": "limit",
+          "type": "number",
+          "required": true,
+          "description": "limit: 10, 20..."
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "get list of bookings for report",
+      "http": [
+        {
+          "path": "/getReportBookings",
+          "verb": "get"
+        }
+      ]
+    },
+    "downloadReportBookings": {
+      "accepts": [
+        {
+          "arg": "startDate",
+          "type": "date",
+          "required": true,
+          "description": "startDate : Mon dd, yyyy"
+        },
+        {
+          "arg": "endDate",
+          "type": "date",
+          "required": true,
+          "description": "endDate : Mon dd, yyyy"
+        }
+      ],
+      "returns": {
+        "arg": "result",
+        "type": "array",
+        "root": true,
+        "description": "array of booking"
+      },
+      "description": "download list of bookings for report",
+      "http": [
+        {
+          "path": "/downloadReportBookings",
+          "verb": "get"
+        }
+      ]
+    }
+  }
+}

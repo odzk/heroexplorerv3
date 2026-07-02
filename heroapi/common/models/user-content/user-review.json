@@ -1,0 +1,64 @@
+{
+    "name": "UserReview",
+    "plural": "UserReviews",
+    "base": "PersistedModel",
+    "idInjection": true,
+    "options": {
+      "validateUpsert": true
+    },
+    "properties": {
+      "ownerName": {
+        "type": "string"
+      },
+      "ownerCountry": {
+        "type": "string"
+      },
+      "productTitle": {
+        "type": "string"
+      },
+      "productUrlName": {
+        "type": "string"
+      },
+      "ownerAvatarURL": {
+        "type": "string"
+      },
+      "sslSupported": {
+        "type": "boolean"
+      },
+      "productCode": {
+        "type": "string",
+        "required": true
+      },
+      "submissionDate": {
+        "type": "date"
+      },
+      "viatorNotes": {
+        "type": "string"
+      },
+      "rating": {
+        "type": "number"
+      },
+      "review": {
+        "type": "string"
+      },
+      "publishedDate": {
+        "type": "date"
+      },
+      "ownerId": {
+        "type": "string",
+        "required": true
+      },
+      "viatorFeedback": {
+        "type": "string"
+      },
+      "reviewId": {
+        "type": "string",
+        "required": true
+      }
+    },
+    "validations": [],
+    "relations": {},
+    "acls": [],
+    "methods": {}
+  }
+  

@@ -1,0 +1,177 @@
+{
+  "name": "Product",
+  "plural": "Products",
+  "base": "PersistedModel",
+  "idInjection": true,
+  "options": {
+    "validateUpsert": true
+  },
+  "properties": {
+    "phone": {
+      "type": "string"
+    },
+    "supplierName": {
+      "type": "string"
+    },
+    "currencyCode": {
+      "type": "string"
+    },
+    "catIds": {
+      "type": [
+        "number"
+      ]
+    },
+    "subCatIds": {
+      "type": [
+        "number"
+      ]
+    },
+    "webURL": {
+      "type": "string"
+    },
+    "specialReservationDetails": {
+      "type": "string"
+    },
+    "panoramaCount": {
+      "type": "number"
+    },
+    "merchantCancellable": {
+      "type": "boolean"
+    },
+    "bookingEngineId": {
+      "type": "string"
+    },
+    "onRequestPeriod": {
+      "type": "string"
+    },
+    "primaryGroupId": {
+      "type": "number"
+    },
+    "pas": {
+      "type": "string"
+    },
+    "available": {
+      "type": "boolean"
+    },
+    "productUrlName": {
+      "type": "string"
+    },
+    "primaryDestinationUrlName": {
+      "type": "string"
+    },
+    "price": {
+      "type": "number"
+    },
+    "supplierCode": {
+      "type": "string"
+    },
+    "translationLevel": {
+      "type": "number"
+    },
+    "priceFormatted": {
+      "type": "string"
+    }, 
+    "rrp": {
+      "type": "number"
+    }, 
+    "rrpformatted": {
+      "type": "string"
+    }, 
+    "rating": {
+      "type": "string"
+    }, 
+    "onSale": {
+      "type": "boolean"
+    }, 
+    "photoCount": {
+      "type": "number"
+    }, 
+    "reviewCount": {
+      "type": "number"
+    }, 
+    "primaryDestinationId": {
+      "type": "number"
+    },  
+    "primaryDestinationName": {
+      "type": "string"
+    }, 
+    "thumbnailURL": {
+      "type": "string"
+    }, 
+    "thumbnailHiResURL": {
+      "type": "string"
+    }, 
+    "specialOfferAvailable": {
+      "type": "boolean"
+    },
+    "shortTitle": {
+      "type": "string"
+    },
+    "uniqueShortDescription": {
+      "type": "string"
+    },
+    "merchantNetPriceFrom": {
+      "type": "number"
+    },
+    "merchantNetPriceFromFormatted": {
+      "type": "string"
+    },
+    "savingAmount": {
+      "type": "number"
+    },
+    "savingAmountFormated": {
+      "type": "string"
+    },
+    "essential": {
+      "type": "string"
+    },
+    "admission": {
+      "type": "string"
+    },
+    "specialReservation": {
+      "type": "boolean"
+    },
+    "title": {
+      "type": "string"
+    },
+    "shortDescription": {
+      "type": "string"
+    },
+    "duration": {
+      "type": "string"
+    },
+    "code": {
+      "type": "string"
+    },
+    "productCode":{
+      "type": "string"
+    },
+    "count":{
+      "type": "integer"
+    },
+    "start":{
+      "type": "integer"
+    },
+    "provider":{
+      "type":"string"
+    },
+    "sortBy":{
+      "type":"string"
+    },
+    "reviewsForNonPrimaryLocale":{
+      "type": "boolean"
+    },
+    "showMachineTranslated":{
+      "type": "boolean"
+    },
+    "ratings":{
+      "type": 
+        "array"
+    }
+
+  },
+  "validations": [],
+  "relations": {},
+  "acls": [],
+  "methods": {}
+}

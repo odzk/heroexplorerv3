@@ -1,0 +1,6 @@
+<svg width="160" height="40" viewBox="0 0 160 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="36" height="36" rx="8" y="2" fill="#28687F"/>
+  <text x="18" y="25" font-family="system-ui,sans-serif" font-size="20" font-weight="700" text-anchor="middle" fill="white">H</text>
+  <text x="50" y="27" font-family="system-ui,sans-serif" font-size="22" font-weight="700" fill="#28687F">Hero</text>
+  <text x="100" y="27" font-family="system-ui,sans-serif" font-size="22" font-weight="400" fill="#414B4C">Explorer</text>
+</svg>

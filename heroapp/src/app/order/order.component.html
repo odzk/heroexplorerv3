@@ -1,0 +1,614 @@
+<div class="hx-order-component">
+  <div class="fake-mat-tab-header-bg fake--top-bg" [style.backgroundColor] = "secondaryColor"></div>
+  <div class="fake-mat-tab-label">
+    <span fxHide.lg fxHide.md fxHide.sm>
+      {{ listTabsLabel[selectedIndex] }}
+    </span>
+  </div>
+  <mat-tab-group class="custom-mat-tab-group-order-component" [(selectedIndex)]="selectedIndex">
+    <mat-tab disabled>
+      <ng-template mat-tab-label>
+        <p fxHide.lg fxHide.md fxHide.sm
+          style="display: block; margin-right: 10px; font-size: 18px; margin-top: 15.5px;">
+          1
+        </p>
+        <p fxHide.xs>ADD TO CART</p>
+      </ng-template>
+    </mat-tab>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <p fxHide.lg fxHide.md fxHide.sm
+          style="display: block; margin-right: 10px; font-size: 18px; margin-top: 15.5px;">
+          2
+        </p>
+        <p fxHide.xs>REVIEW ORDER</p>
+      </ng-template>
+      <div class="custom-mat-tab-content review-order-content" *ngIf="cartShopping.length === 0">
+        <h1>THERE IS NO ITEM HERE!</h1>
+      </div>
+      <div class="custom-mat-tab-content review-order-content" *ngIf="cartShopping.length > 0">
+        <p (click)="onContinueShopping()">
+          <i class="icon-left-arrow"></i>
+          <span class="continue-shopping__label">Continue Shopping</span>
+        </p>
+        <div fxLayout="row" fxLayout.xs="column" class="review-order-info" *ngFor="let item of cartShopping">
+          <div class="review-order-info--left" fxLayout="row" fxLayout.xs="column" fxFlex="75" fxFlex.xs="100">
+            <div>
+              <img [src]="item.thumbnailHiResURL" />
+            </div>
+            <div fxLayout="column" fxLayoutAlign="space-between none">
+              <h3>
+                <a routerLink="/detail/{{ item.code }}">{{ item.title }}</a>
+              </h3>
+              <div>
+                <p>
+                  <span class="font-weight-bold">Travel date:</span>
+                  {{ item.bookingDateFormat }}
+                </p>
+                <p>
+                  <span class="font-weight-bold">Option: </span>
+                  {{ item.gradeTitle }}
+                </p>
+                <p>
+                  <span class="font-weight-bold">Description: </span>
+                  {{ item.gradeDescription }}
+                </p>
+                <div *ngFor="let ageBand of item.ageBands">
+                  <p *ngIf="ageBand.count > 0">
+                    <span class="font-weight-bold">Number of {{ ageBand.ageBand }} :</span>
+                    {{ ageBand.count }}
+                  </p>
+                </div>
+                <p>
+                  <span class="font-weight-bold">Booking status: </span>
+                  On request
+                </p>
+                <!-- <br/>
+                <p class="color-light-black">Confirmation of this activity will take up to 48 hours, depending on availability</p> -->
+              </div>
+            </div>
+          </div>
+          <div class="review-order-info--right color-red" fxFlex="25" fxFlex.xs="100" fxLayout="column"
+            fxLayoutAlign="space-between none">
+            <div>
+              <p class="color-black">{{ currencyCode }}</p>
+              <p class="review-order-price" *ngIf="!item.itineraryFromPrice" [style.color] = "primaryColor">
+                <span *ngIf="item.price == 'Not available'"> {{ item.price }}</span>
+                <span *ngIf="item.price != 'Not available'"> ${{ item.price }}</span>
+              </p>
+              <p class="review-order-price" *ngIf="item.itineraryFromPrice">
+                <span *ngIf="item.itineraryFromPrice == 'Not available'"> {{ item.itineraryFromPrice }}</span>
+                <span *ngIf="item.itineraryFromPrice != 'Not available'"> ${{ item.itineraryFromPrice }}</span>
+              </p>
+              <p class="color-ocean-blue" *ngIf="item.itineraryFromPrice && item.itineraryFromPrice === item.price">
+                (*) This promotion code is invalid
+              </p>
+            </div>
+            <div>
+              <p *ngIf="item.price != 'Not available'" class="review-order-btn">
+                <!-- <a routerLink="{{'/select-options/'+item.code}}">Change dates & details</a> -->
+              </p>
+              <p *ngIf="item.price != 'Not available'" class="review-order-btn">
+                <!-- <a routerLink="{{'/select-options/'+item.code}}">Change # of travellers</a> -->
+              </p>
+              <p class="review-order-btn" (click)="removeFromCart(item)" [style.color]="primaryColor">
+                Remove from Cart
+              </p>
+            </div>
+          </div>
+        </div>
+        <div fxLayout="row" fxLayout.xs="column" class="review-order-confirm">
+          <div class="review-order-confirm--left" fxLayout="row" fxLayout.xs="column" fxFlex="75" fxFlex.xs="100">
+            <!-- <div class="enter-code-container">
+              <label>
+                <span class="font-weight-bold">Enter promotion code </span>
+                (optional)
+                <span class="color-red"> What’s this?</span>
+              </label>
+              <div class="promo-code-container">
+                <input [(ngModel)]="promoCode" [ngModelOptions]="{standalone: true}" placeholder="Enter promo code"
+                  (keyup.enter)="getNewPriceWithPromoCode()" />
+                <i class="icon-right-arrow" (click)="getNewPriceWithPromoCode()">
+                </i>
+              </div>
+            </div> -->
+          </div>
+          <div class="review-order-confirm--right" fxFlex="25" fxFlex.xs="100">
+            <p><span class="font-weight-bold">Current cart total</span> {{ currencyCode }}</p>
+            <p class="review-order-confirm-price">${{ totalPrice }}</p>
+            <button (click)="nextStep()" [ngClass]="{ 'btn-square': buttonType === 'square',
+              'btn-rounded': buttonType === 'rounded'}"
+              [style.border-color]="primaryColor"
+              [style.color]=""
+              [style.backgroundColor]="primaryColor" type="button">
+              Confirm
+            </button>
+          </div>
+        </div>
+        <p class="need-help__label" fxHide.xs>
+          <span class="font-weight-bold">Need Help? Email us: </span>
+          <a class="help-email" href="mailto:hello@heroexplorer.com">hello@heroexplorer.com</a>
+        </p>
+        <p class="need-help__label" fxHide.xs>
+          <span class="font-weight-bold">Call us: +61 7 4763 0295</span>
+          <a class="help-email" href="tel:"></a>
+        </p>
+        <p class="need-help__label" fxHide.xs>
+          <span class="font-weight-bold">Visit our site: </span>
+          <a class="help-email" href="https://support.heroexplorer.com/" target="_blank">https://support.heroexplorer.com/</a>
+        </p>
+      </div>
+    </mat-tab>
+    <mat-tab disabled>
+      <ng-template mat-tab-label>
+        <p fxHide.lg fxHide.md fxHide.sm
+          style="display: block; margin-right: 10px; font-size: 18px; margin-top: 15.5px;">
+          3
+        </p>
+        <p fxHide.xs>SECURE CHECKOUT</p>
+      </ng-template>
+      <div class="custom-mat-tab-content review-order-secure-checkout" *ngIf="cartShopping.length > 0">
+        <form *ngIf="isFormReady" novalidate (ngSubmit)="onBookNow()" [formGroup]="formPayment">
+          <p class="need-help" fxHide.xs>
+            <span class="font-weight-bold">Support: </span>
+            <a class="help-email" href="mailto:hello@heroexplorer.com">hello@heroexplorer.com</a>
+          </p>
+          <div fxLayout="row" fxLayout.xs="column" class="secure-checkout-container">
+            <div class="secure-checkout-container--left" fxFlex="75" fxFlex.xs="100">
+              <h2>Secure Checkout</h2>
+              <p>Items in cart: {{ cartShopping.length }}</p>
+            </div>
+            <div class="secure-checkout-container--right" fxFlex="25" fxFlex.xs="100">
+              <p><span class="bolder">Current cart total</span> {{ currencyCode }}</p>
+              <p class="secure-checkout-price">${{ totalPrice }}</p>
+            </div>
+          </div>
+          <div class="review-order-secure-checkout__box" *ngFor="let product of cartShopping; let i = index">
+            <h4 class="box__title" [style.backgroundColor] = "secondaryColor">Experience Information</h4>
+            <div fxLayout="row" fxLayout.xs="column" class="box__content">
+              <div class="secure-checkout-container--left" fxFlex="35" fxFlex.xs="100">
+                <p class="uppercase">{{ product.bookingDateFormat }}</p>
+                <h3>{{ product.title }}</h3>
+                <p>{{ product.gradeTitle }}</p>
+              </div>
+              <div class="secure-checkout-container--right" fxFlex="75" fxFlex.xs="100">
+                <div fxLayout="row wrap" class="box__name-input" *ngFor="let ageBand of product.ageBands">
+                  <div fxLayout="column" fxFill="" *ngFor="let person of ageBand.travellers; let personIndex = index">
+                    <label fxFlex="100" fxFlex.xs="100">{{ personIndex === 0 ? '(Lead) ' : '' }}Traveller {{ personIndex + 1 }} ({{ person.description }})</label>
+                    <div fxFlex="100" fxFlex.xs="100">
+                        <div *ngFor="let product of bookingQuestionAttach">
+                          <div fxLayout="row wrap" fxLayoutGap="10px">
+                            <ng-container *ngFor="let question of product.bookingQuestionList">
+                              <div *ngIf="question.id !== 'AGEBAND' && question.id !== 'SPECIAL_REQUIREMENTS' && question.id !== 'WEIGHT'" fxFlex="45" fxFlex.xs="100">
+                                <label fxLayout="column">{{ question.label }}</label>
+                                  <div fxLayout="row wrap">
+                                  <input *ngIf="isFormReady" fxFlex="100" fxFlex.xs="100" formControlName="{{ question.id + '_' + person.randomNumber }}" type="{{question.type}}" [placeholder]="question.label"/>
+                                  </div>
+                                </div>
+                              <!-- Weight -->
+                              <div *ngIf="question.id === 'WEIGHT'" fxFlex="100" fxFlex.xs="100">
+                                <label fxLayout="column">{{ question.label }}</label>
+                                <div fxLayout="row wrap" fxLayoutGap="10px">
+                                  <input *ngIf="isFormReady" fxFlex="50" fxFlex.xs="100" formControlName="{{ question.id + '_' + person.randomNumber }}" type="number" placeholder="Weight" maxlength="{{ question.maxLength }}">
+                                  <ng-select *ngIf="isFormReady" fxFlex="25" fxFlex.xs="100" formControlName="{{ question.id + '_unit_' + person.randomNumber }}" [items]="question.units" bindLabel="name" bindValue="id" placeholder="Unit">
+                                    <ng-option *ngFor="let unit of question.units" [value]="unit">{{ unit }}</ng-option>
+                                  </ng-select>
+                                </div>
+                              </div>
+                            </ng-container>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div fxLayout="row wrap" class="box__name-input" *ngFor="let product of orderBookingQuestionPickup">
+                      <div fxLayout="column" fxFill="">
+                          <div *ngIf="product.bookingQuestionList[0].id == 'TRANSFER_ARRIVAL_MODE' && product.noPickup !== 'share'; else noArrivalMode" fxLayout="column" class="arrival-mode">
+                            <label fxLayout="column">Pickup details</label>
+                              <div fxFlex="100" fxFlex.xs="100">
+                                <ng-select fxFlex="50" fxFlex.xs="100" class="custom-ng-select-order-component"
+                                [items]="selectPickupOptions"
+                                bindLabel="label"
+                                bindValue="value"
+                                placeholder="Choose Option"
+                                (clear)="clearPickup()"
+                                (change)="pickupSelect($event)">
+                                </ng-select>
+                              </div>
+                              <div *ngIf="selectedValue.value == 'pickup'">
+                                  <ng-select fxFlex="50" fxFlex.xs="100" class="custom-ng-select-order-component"
+                                            [formControlName]="'TRANSFER_ARRIVAL_MODE_' + product.productCode.value"
+                                            [items]="arrivalModeOptions"
+                                            bindLabel="label"
+                                            bindValue="value"
+                                            placeholder="Choose Arrival Mode"
+                                            (change)="arrivalModeSelect($event, product)">
+                                  </ng-select>
+                                </div>
+                          </div>
+                          <ng-template #noArrivalMode>
+                            <div *ngFor="let check of product.bookingQuestionList">
+                              <div *ngIf="check.id === 'PICKUP_POINT' && !product.noPickup" fxLayout="column" class="no-arrival-mode">
+                              <label fxLayout="column">Pickup mode</label>
+                              <div fxFlex="100" fxFlex.xs="100">
+                                <ng-select fxFlex="50" fxFlex.xs="100" class="custom-ng-select-order-component"
+                                           [formControlName]="'TRANSFER_ARRIVAL_MODE_' + product.productCode.value"
+                                           [items]="getFilteredAllowedAnswers()"
+                                           bindLabel="label"
+                                           bindValue="value"
+                                           placeholder="Choose Pickup Option"
+                                           (change)="arrivalModeSelect($event, product)">
+                                </ng-select>
+                                </div>                            
+                              </div>
+                              </div>
+                          </ng-template>
+                          <!-- Only display PICKUP_POINT after selecting TRANSFER_ARRIVAL_MODE -->
+                           <div fxFlex="100" fxFlex.xs="100" *ngIf="selectedValue.value == 'pickup'">
+                            <div *ngFor="let item of product.bookingQuestionList">
+                              <div *ngIf="item.id === 'PICKUP_POINT' && currentPickupLocations?.length > 0">
+                                <label fxLayout="column">{{ item?.label }}</label>
+                                  <div fxLayout="row" fxLayoutAlign="start center">
+                                  <div fxLayout="column" fxFlex="50" fxFlex.xs="100">
+                                  <ng-select class="custom-ng-select-order-component"
+                                             formControlName="{{ item?.id }}_{{ product.productCode.value }}"
+                                             [items]="currentPickupLocations"
+                                             bindLabel="label"
+                                             bindValue="value"
+                                             placeholder="Select Pickup Location">
+                                  </ng-select>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                           </div>
+                           <div fxLayout="row wrap" fxLayoutGap="10px">
+                              <div *ngIf="formPayment.get('PICKUP_POINT_' + product.productCode.value)?.value === 'SEE_PICKUP_LOCATION'" fxFlex="45" fxFlex.xs="100" class="category-question">
+                                <label fxLayout="column">Enter Pickup Address: </label>
+                                <div fxLayout="row wrap">
+                                <input fxFlex="100" fxFlex.xs="100" type="text" [formControlName]="'custom_pickup_' + product.productCode.value" placeholder="E.g. 1234 Cedar Way, Brooklyn NY 00123">
+                              </div>
+                              </div>
+                          </div>
+
+                          <!-- Questions based on selected Arrival Mode -->
+                          <div fxLayout="row wrap" fxLayoutGap="10px">
+                          <ng-container *ngFor="let question of filteredQuestionsArrival[product.productCode.value]"> 
+                            <div *ngIf="selectedValue.value == 'pickup' && question.id.startsWith(currentArrivalModeFilter) || selectedValue.value == 'pickup' && question.id.startsWith('TRANSFER_ARRIVAL')" fxFlex="45" fxFlex.xs="100" class="category-question">
+                              <div *ngIf="currentArrivalModeFilter !== 'HOTEL'">
+                              <label fxLayout="column">{{ question.label }}</label>
+                              <div fxLayout="row wrap">
+                              <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'STRING'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                              <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'TIME'" type="time" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                              <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'DATE'" type="date" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                              <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'LOCATION_REF_OR_FREE_TEXT'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                              </div>
+                            </div>
+                            </div>
+                          </ng-container>
+                        </div>
+                        <div *ngIf="product.bookingQuestionList[0].id == 'TRANSFER_ARRIVAL_MODE' && currentArrivalModeFilter !== 'HOTEL' && selectedValue.value == 'pickup' || formPayment.get('PICKUP_POINT_' + product.productCode.value)?.value === 'MEET_AT_DEPARTURE_POINT' || formPayment.get('PICKUP_POINT_' + product.productCode.value)?.value === 'CONTACT_SUPPLIER_LATER'" fxLayout="column" class="departure-mode">
+                          <label fxLayout="column">Departure mode</label>
+                          <div fxFlex="100" fxFlex.xs="100">
+                          <ng-select fxFlex="50" fxFlex.xs="100" class="custom-ng-select-order-component"
+                                     [formControlName]="'TRANSFER_DEPARTURE_MODE_' + product.productCode.value"
+                                     [items]="departureModeOptions"
+                                     bindLabel="label"
+                                     bindValue="value"
+                                     placeholder="Choose Departure Mode"
+                                     (change)="departureModeSelect($event, product)">
+                          </ng-select>
+                          </div>
+                        </div>
+
+                      <!-- Questions based on selected Departure Mode -->
+                      <div fxLayout="row wrap" fxLayoutGap="10px">
+                        <ng-container *ngFor="let question of filteredQuestionsDeparture[product.productCode.value]"> 
+                          <div *ngIf="question.id.startsWith(currentDepartureModeFilter) || question.id.startsWith('TRANSFER_DEPARTURE')" fxFlex="45" fxFlex.xs="100" class="category-question"> 
+                            <label fxLayout="column">{{ question.label }}</label>
+                            <div fxLayout="row wrap">
+                            <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'STRING'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                            <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'TIME'" type="time" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                            <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'DATE'" type="date" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                            <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'LOCATION_REF_OR_FREE_TEXT'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                            </div>
+                          </div>
+                        </ng-container>
+                      </div>
+
+                      <!-- Everything Else -->
+                      <div *ngIf="product.bookingQuestionList[0].id !== 'TRANSFER_ARRIVAL_MODE' && cruiseShip === false" fxLayout="row wrap" fxLayoutGap="10px">
+                        <ng-container *ngFor="let product of orderBookingQuestionPickup">
+                          <div *ngFor="let question of product.bookingQuestionList" fxFlex="45" fxFlex.xs="100" class="category-question">
+                            <div *ngIf="question.id !== 'PICKUP_POINT'">
+                            <label fxLayout="column">{{ question.label }}</label>
+                            <div fxLayout="row wrap">
+                            <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'STRING'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                            <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'TIME'" type="time" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                            <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'DATE'" type="time" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                            <input  fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'LOCATION_REF_OR_FREE_TEXT'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                            </div>
+                          </div>
+                          </div>
+                        </ng-container>
+                      </div>
+
+                      <!-- Cruise Ship -->
+                      <div *ngIf="product.bookingQuestionList[0].id !== 'TRANSFER_ARRIVAL_MODE' && cruiseShip === true" fxLayout="row wrap" fxLayoutGap="10px">
+                        
+                        <!-- Arrival Section -->
+                        <ng-container *ngFor="let product of orderBookingQuestionPickup">
+                          <div fxFlex="100"><label style="font-weight: bold;">Arrival</label></div>
+                          <div *ngFor="let question of product.bookingQuestionList" fxFlex="45" fxFlex.xs="100" class="category-question">
+                            <div *ngIf="question.id !== 'PICKUP_POINT' && question.id !== 'TRANSFER_PORT_DEPARTURE_TIME' && question.id !== 'TRANSFER_DEPARTURE_DATE' && question.id !== 'TRANSFER_DEPARTURE_PICKUP'">
+                              <label fxLayout="column">{{ question.label }}</label>
+                              <div fxLayout="row wrap">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'STRING'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'TIME'" type="time" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'DATE'" type="date" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'LOCATION_REF_OR_FREE_TEXT'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+
+                        <!-- Departure Section -->
+                        <ng-container *ngFor="let product of orderBookingQuestionPickup">
+                          <div fxFlex="100"><label style="font-weight: bold;">Departure</label></div>
+                          <div *ngFor="let question of product.bookingQuestionList" fxFlex="45" fxFlex.xs="100" class="category-question">
+                            <div *ngIf="question.id !== 'PICKUP_POINT' && question.id !== 'TRANSFER_PORT_ARRIVAL_TIME' && question.id !== 'TRANSFER_PORT_CRUISE_SHIP'">
+                              <label fxLayout="column">{{ question.label }}</label>
+                              <div fxLayout="row wrap">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'STRING'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'TIME'" type="time" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'DATE'" type="date" [formControlName]="question.id + '_' + product.productCode.value" maxlength="{{ question.maxLength }}">
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'LOCATION_REF_OR_FREE_TEXT'" type="text" [formControlName]="question.id + '_' + product.productCode.value" placeholder="{{ question.hint }}" maxlength="{{ question.maxLength }}">
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+
+                      </div>
+                 
+
+                        <!-- Special Requirement and Guides-->
+                        <ng-container *ngFor="let product of bookingQuestionAttach">
+                          <div *ngFor="let question of product.bookingQuestionList" fxFlex="100" class="category-question">
+                            <div *ngIf="question.id === 'SPECIAL_REQUIREMENTS'" fxLayout="row wrap" fxLayoutGap="10px">
+                              <div fxFlex="45" fxFlex.xs="100" fxLayout="column">
+                                <label>{{ question.label }}</label>
+                                <input fxFlex="100" fxFlex.xs="100" *ngIf="question.type === 'STRING'" type="text" [formControlName]="question.id + '_' + product.productCode" placeholder="e.g. dietary needs, accessibility" maxlength="{{ question.maxLength }}">
+                              </div>
+                              <div fxFlex="45" fxFlex.xs="100" fxLayout="column">
+                                <label>Tour Language</label>
+                                <ng-select fxFlex="100" fxFlex.xs="100" class="custom-ng-select-order-component"
+                                           [formControlName]="'langServices_' + product.productCode"
+                                           [items]="tourLanguagesWithTypes"
+                                           bindLabel="label"
+                                           bindValue="legacyGuide"
+                                           placeholder="Select Language"
+                                           (change)="onLanguageChange($event)">
+                                </ng-select>
+                              </div>
+                            </div>
+                          </div>
+                        </ng-container>
+                        </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="review-order-secure-checkout__box">
+            <h4 class="box__title" [style.backgroundColor] = "secondaryColor">Payment Information</h4>
+            <div fxLayout="row" fxLayout.xs="column" class="box__content">
+              <div class="secure-checkout-container--left" fxFlex="65" fxFlex.xs="100">
+                <div fxLayout="row" fxLayout.xs="column">
+                  <div fxFlex="80" fxFlex.xs="100">
+                    <div fxLayout="row" class="box__name-input" fxLayoutGap="10px">
+                      <input fxFlex formControlName="stripeFullName" placeholder="Full Name" />
+                    </div>
+                    <div fxLayout="row" class="box__payment-images">
+                      <img src="assets/images/visa.png" />
+                      <img src="assets/images/mastercard.png" />
+                      <img src="assets/images/american-express.png" />
+                    </div>
+                    <div fxLayout="row" fxLayout.xs="column" class="box__name-input" fxLayoutGap="10px">
+                      <div fxFlex="50" fxFlex.xs="100" id="card-info" #cardInfo></div>
+                    </div>
+                    <div fxLayout="row" class="box__note">
+                      <i class="icon-lock"></i>
+                      <span>
+                        <span class="color-red">Your payment details are secure.</span>
+                        This booking will be listed as HeroExplorer on your credit card statement
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="review-order-secure-checkout__box">
+            <h4 class="box__title" [style.backgroundColor] = "secondaryColor">Contact Information</h4>
+            <div fxLayout="row wrap" fxLayout.xs="column wrap" class="box__content">
+              <div class="secure-checkout-container--left" fxFlex="70" fxFlex.xs="100">
+                <div fxLayout="row " fxLayout.xs="column " class="box__name-input" fxLayoutGap="10px">
+                  <!-- <ng-select fxFlex="15" [ngModelOptions]="{ standalone: true }" fxFlex.xs="100"
+                    [ngClass]="{ hasError: validateDropdown }" class="custom-ng-select-order-component"
+                    formControlName="bookerTitle" [items]="listTitle" [clearable]="false" [searchable]="false"
+                    bindLabel="value" bindValue="value" placeholder="Title">
+                  </ng-select> -->
+                  <input fxFlex="50" fxFlex.xs="100" formControlName="bookerFirstName" placeholder="First/Given Name" />
+                  <input fxFlex="50" fxFlex.xs="100" formControlName="bookerSurName" placeholder="Last/Family Name" />
+                </div>
+                <div fxLayout="row" fxLayout.xs="column" class="box__name-input" fxLayoutGap="10px">
+                  <input fxFlex="50" [readonly]="isLogged" fxFlex.xs="100" type="email" formControlName="bookerEmail"
+                    placeholder="Email" />
+                  <input fxFlex="50" fxFlex.xs="100" type="phone" formControlName="bookerPhone" placeholder="Phone" />
+                  <input fxFlex="50" fxFlex.xs="100" type="homeCity" formControlName="bookerHomeCity"
+                    placeholder="Home City" />
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="review-order-secure-checkout__condition-content">
+            <h4>Conditions & Cancellation Policy</h4>
+            <p>
+              When paying by credit card, your card is charged the total amount as soon as we receive confirmation of
+              your booking.
+              <br />
+              If confirmation isn't received instantly, an authorization is held against your card until it arrives.
+              <br />
+              If you change or cancel your booking request, charges may apply.
+            </p>
+            <p>
+              {{ cartShopping[0].cancellationPolicy.description }}
+            </p>
+          </div>
+          <div class="review-order-secure-checkout__agree-and-book-content" fxLayout="row" fxLayout.xs="column"
+            fxLayoutAlign="space-between none">
+            <div class="agree-container">
+              <!-- <input type="checkbox" formControlName="agreeConditionsAndPrivace" /> -->
+              I acknowledge that I have read and agree to be bound by HeroExplorer’s
+              <a style="text-decoration: none;" href="https://support.heroexplorer.com/terms-and-conditions/"
+                target="_blank">
+                <span class="color-red">Terms and Conditions </span></a>
+              and
+
+              <a style="text-decoration: none;" href="https://support.heroexplorer.com/privacy-policy/" target="_blank">
+                <span class="color-red">Privacy Statement.</span></a>
+            </div>
+            <button [ngClass]="{ 'btn-square': buttonType === 'square',
+              'btn-rounded': buttonType === 'rounded'}"
+              [style.border-color]="primaryColor"
+              [style.color]=""
+              [style.backgroundColor]="primaryColor" type="submit">
+              Book Now
+            </button>
+          </div>
+        </form>
+      </div>
+    </mat-tab>
+    <mat-tab disabled>
+      <ng-template mat-tab-label>
+        <p fxHide.lg fxHide.md fxHide.sm
+          style="display: block; margin-right: 10px; font-size: 18px; margin-top: 15.5px;">
+          4
+        </p>
+        <p fxHide.xs>PRINT VOUCHERS</p>
+      </ng-template>
+      <div class="custom-mat-tab-content review-order-content" *ngIf="stripeCard">
+        <h1 class="completed-title">You’ve Browsed, you’ve Booked, now it’s time to Enjoy!</h1>
+        <p class="securely__label">
+          We’ve securely taken a payment of
+          <span class="font-weight-bold">{{ currencyCode }} ${{ totalPrice }}</span>
+          from your {{ stripeCard.brand }} ending in {{ stripeCard.last4 }}. You will receive a confirmation email
+          shortly.
+        </p>
+        <!-- <p class="order-reference__label">
+          Order Reference: <span *ngIf="itemSummaries.length > 0">{{ itemSummaries[0].itineraryId }}</span>
+        </p> -->
+        <h3 class="order-summary__label">Order Summary:</h3>
+        <div fxLayout="row" fxLayout.xs="column" class="review-order-info"
+          *ngFor="let item of cartShopping; let i = index">
+          <div class="review-order-info--left" fxLayout="row" fxLayout.xs="column" fxFlex="75" fxFlex.xs="100">
+            <div>
+              <img [src]="item.thumbnailHiResURL" />
+            </div>
+            <div fxLayout="column" fxLayoutAlign="space-between none">
+              <h3>
+                <a routerLink="/detail/{{ item.code }}">{{ item.title }}</a>
+              </h3>
+              <div>
+                <p>
+                  <span class="font-weight-bold">Travel date: </span>
+                  {{ item.bookingDateFormat }}
+                </p>
+                <p>
+                  <span class="font-weight-bold">Option: </span>
+                  {{ item.gradeTitle }}
+                </p>
+                <p>
+                  <span class="font-weight-bold">Description: </span>
+                  {{ item.gradeDescription }}
+                </p>
+                <div *ngFor="let ageBand of item.ageBands">
+                  <p *ngIf="ageBand.count > 0">
+                    <span class="font-weight-bold">Number of {{ ageBand.ageBand }} :</span>
+                    {{ ageBand.count }}
+                  </p>
+                </div>
+                <p>
+                  <span class="font-weight-bold">Price: </span>
+                  ${{ item.price }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="review-order-info--right" fxFlex="25" fxFlex.xs="100">
+            <button [ngClass]="{ 'btn-square': buttonType === 'square',
+              'btn-rounded': buttonType === 'rounded'}"
+              [style.border-color]="primaryColor"
+              [style.color]=""
+              [style.backgroundColor]="primaryColor"> 
+              <!-- <a target="_blank" href="/voucher/{{itemSummaries[i].voucherKey}}">Print Voucher</a> -->
+              <a target="_blank" href="{{ item.voucherUrl }}">Print Voucher</a>
+            </button>
+          </div>
+        </div><!--end-->
+      </div>
+      <div class="contact-container">
+        <div class="contact-content" fxLayout="row" fxLayout.xs="column">
+          <div class="contact-content__box" fxFlex="33" fxFlex.xs="100">
+            <img src="assets/images/logo-min.png" />
+            <h4>Read Our FAQs</h4>
+            <p>Get answers to common questions about vouchers, cancellation and more…</p>
+          </div>
+          <div class="contact-content__box" fxFlex="33" fxFlex.xs="100">
+            <img src="assets/images/logo-min.png" />
+            <h4>Get 24/7 Support</h4>
+            <p>Call or email our Customer Service Team anytime, day or night. We’re here to help!</p>
+          </div>
+          <div class="contact-content__box" fxFlex fxFlex.xs="100">
+            <img src="assets/images/logo-min.png" />
+            <h4>Subscribe to Updates</h4>
+            <p>We like to keep our happy customers informed of promotions and deals. Sign up today.</p>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  <!-- <div class="fake-mat-tab-header-bg fake--bottom-bg" *ngIf="selectedIndex === 3">
+  </div> -->
+  <div *ngIf="voucher" class="hx-print-voucher" [hidden]="isHideVoucherElement" #voucherElement>
+    <div class="review-order-info">
+      <div> 
+        <img [src]="voucher.thumbnailHiResURL | toHttps" />
+      </div>
+      <div fxLayout="column" fxLayoutAlign="space-between none">
+        <h3>
+          <a routerLink="/detail/{{ voucher.code }}">{{ voucher.title }}</a>
+        </h3>
+        <div>
+          <p>
+            <span class="font-weight-bold">Travel date: </span>
+            {{ voucher.bookingDateFormat }}
+          </p>
+          <p>
+            <span class="font-weight-bold">Option: </span>
+            {{ voucher.gradeTitle }}
+          </p>
+          <div *ngFor="let ageBand of voucher.ageBands">
+            <p *ngIf="ageBand.count > 0">
+              <span class="font-weight-bold">Number of {{ ageBand.description }} :</span>
+              {{ ageBand.count }}
+            </p>
+          </div>
+          <p>
+            <span class="font-weight-bold">Price: </span>
+            ${{ voucher.price }}
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

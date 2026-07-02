@@ -1,0 +1,563 @@
+<div class="hx-product-detail-component" *ngIf="data">
+  <div class="product-detail-content" id="travellers-selection-container">
+    <nav class="list-result__breadcrumbs"
+      *ngIf="breadcrumbs.length > 0"
+      fxHide.xs>
+    <span>
+    <a routerLink="">Home</a>
+    <i class="new-icon-right-arrow"></i>
+    </span>
+    <span *ngFor="let item of breadcrumbs; let last = last"
+        [ngClass]="{'active': last}">
+    <a [routerLink]="['/list-result', item.destinationId, 0, 0]">
+        {{item.destinationName || item.subcategoryName || item.groupName}}
+    </a>
+    <i class="new-icon-right-arrow"
+        *ngIf="!last"></i>
+    </span>
+    </nav>    
+    <div fxLayout="row" fxLayout.xs="column" fxFill="" class="primary-info-content" >
+      <div class="primary-info-content--left" fxFlex="65" fxFlex.xs="100" fxLayout="column"
+        fxLayoutAlign="space-between " fxLayoutAlign.xs=" " >
+        <div class="primary-info-content--left-top" *ngIf="!attractions[0]">
+          <h2>{{ data.title }}</h2>
+          <div fxLayout="row" *ngIf="data.reviews">
+            <rating class="custom-rating-product-detail-component" [(ngModel)]="data.reviews.combinedAverageRating " fullIcon="•" emptyIcon="•"
+              [max]="5" [readonly]="true" [float]="true">
+            </rating>
+            <span class="review-count" *ngIf="data.reviews.totalReviews">{{ data.reviews.totalReviews }} reviews</span>
+          </div>
+          <p *ngIf="data.specialOffer && data.specialOffer.length > 0" class="special-offer-txt color-red"
+            [innerHTML]="data.specialOffer"></p>
+          <p [innerHTML]="data.description"></p>
+        </div>
+        <div class="primary-info-content--left-top" *ngIf="attractions[0]">
+          <h2 *ngIf="attractions[0].name">{{attractions[0].name}}</h2>
+          <div fxLayout="row" *ngIf="attractions[0].reviews.length>1">
+            <rating class="custom-rating-product-detail-component" [(ngModel)]="attractions[0].reviews.combinedAverageRating " fullIcon="•" emptyIcon="•"
+              [max]="5" [readonly]="true" [float]="true">
+            </rating>
+            <span class="review-count"  *ngIf="attractions[0].reviews.totalReviews">{{ attractions[0].reviews.totalReviews }} reviews</span>
+          </div>
+          <p *ngIf="data.specialOffer && data.specialOffer.length > 0" class="special-offer-txt color-red"
+            [innerHTML]="data.specialOffer"></p>
+          <p [innerHTML]="attractions[0].description"></p>
+        </div>
+      <div class="primary-info-content--left-bottom" fxLayout.xs="column">
+        <span> <span class="font-weight-extra-bold">Tour code:</span> {{ code }} </span>
+      </div>
+    </div>
+      <div class="primary-info-content--right" fxFlex="35" fxFlex.xs="100" fxLayout="column"
+        fxLayoutAlign="space-between" *ngIf="newPrice">
+        <div>
+          <p class="currency-code"  *ngIf="newPrice.currency">From {{ newPrice.currency }}</p>
+          <p class="primary-info-price" [style.color]="primaryColor" *ngIf="newPrice.summary">${{ newPrice.summary.fromPrice }}</p>
+          <p #datepickerInput>
+            <mat-form-field (click)="picker.open()" id="customPicker">
+              <input matInput [matDatepicker]="picker" [value]="bookingDate" [min]="tomorrow" (dateChange)="onChangeDate($event)"
+                [matDatepickerFilter]="datepickerFilter" />
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker [calendarHeaderComponent]="calendarHeader" [staticPrice]="data.price"> </mat-datepicker>
+            </mat-form-field>
+          </p>
+          
+        </div>
+
+        <div class="travellers-select-container" #travellersSelectionRef appClickElsewhere
+          (clickElsewhere)="onClickElseWhere(ageBands)">
+          <a class="color-grey dateView" [ngClass]="{ 'color-grey-active': displayTravellers }"
+            href="javascript:void(0)" (click)="onTravellerSelection(ageBands)">
+            {{ displayTravellers || 'Select Travellers' }}
+            <svg class="icon-travellers" xmlns="http://www.w3.org/2000/svg" fill="currentColor" focusable="false"
+              height="24px" width="24" height="24" viewBox="0 0 24 24">
+              <path d="M0 0h24v24H0z" fill="none" />
+              <path
+                d="M16.5 12c1.38 0 2.49-1.12 2.49-2.5S17.88 7 16.5 7C15.12 7 14 8.12 14 9.5s1.12 2.5 2.5 2.5zM9 11c1.66 0 2.99-1.34 2.99-3S10.66 5 9 5C7.34 5 6 6.34 6 8s1.34 3 3 3zm7.5 3c-1.83 0-5.5.92-5.5 2.75V19h11v-2.25c0-1.83-3.67-2.75-5.5-2.75zM9 13c-2.33 0-7 1.17-7 3.5V19h7v-2.25c0-.85.33-2.34 2.37-3.47C10.5 13.1 9.66 13 9 13z" />
+            </svg>
+          </a>
+
+          <div class="choose-travellers-dropdown" id="travellers" *ngIf="showTravellersDropdown">
+            <h5>You can select up to {{ data.bookingRequirements.maxTravelersPerBooking }} travellers in total</h5>
+            <div class="choose-travellers" *ngFor="let item of ageBands; let i = index">
+              <div class="travellers" fxFlex="50" fxFlex.xs="100" fxLayout="column" fxLayoutAlign="space-between "
+                fxLayoutAlign.xs=" ">
+                {{ item.ageBand }} (age {{ item.startAge }} - {{ item.endAge }}) <br />
+                Minimum: {{ item.minTravelersPerBooking }} Maximum: {{ item.maxTravelersPerBooking }}
+              </div>
+              <div class="count" fxFlex="50" fxFlex.xs="100" fxLayout="row" fxLayoutAlign="space-between">
+                <i class="material-icons" (click)="onCount('decrement', item.count <= item.minTravelersPerBooking, i)"
+                  [ngClass]="{ 'material-icons-disable': item.count <= item.minTravelersPerBooking }">
+                  remove_circle_outline
+                </i>
+                <span>{{ item.count }}</span>
+                <i class="material-icons" (click)="onCount('increment', item.count >= item.maxTravelersPerBooking, i)"
+                  [ngClass]="{
+                    'material-icons-disable': item.count >= item.maxTravelersPerBooking || calculateTotal() === data.bookingRequirements.maxTravelersPerBooking
+                  }">
+                  add_circle_outline
+                </i>
+              </div>
+            </div>
+            <button type="button" [ngClass]="{ 'btn-square': buttonType === 'square',
+                      'btn-rounded': buttonType === 'rounded'}"
+              [style.border-color]="primaryColor"
+              [style.color]=""
+              [style.backgroundColor]="primaryColor" class="apply"
+              (click)="goToCheckAvailability(ageBands)">Apply</button>
+          </div>
+        </div>
+
+        <div>
+          <p>
+            <button type="button" [ngClass]="{ 'btn-square': buttonType === 'square',
+                      'btn-rounded': buttonType === 'rounded'}"
+              [style.border-color]="primaryColor"
+              [style.color]=""
+              [style.backgroundColor]="primaryColor" class="search"
+              (click)="goToCheckAvailability(ageBands)">
+              Search
+            </button>
+          </p>
+          <p class="low-price-guarantee">
+            <i class="material-icons">star_border</i>
+            <span>Best Price Guaranteed </span>
+          </p>
+          <p class="cancel-booking">
+            <i class="material-icons">check_circle_outline</i>
+            <!-- <span>Free Cancellation up to 48 hours in Advance</span> -->
+            <span>{{data.cancellationPolicy.description}}</span>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="product-detail-content" fxLayout="row wrap" style="padding: 0;">
+    <div fxFlex="60" fxFlex.xs="100">
+      <mat-tab-group class="custom-mat-tab-group-product-detail" #tabGroup (selectedTabChange)="tabsDynamicStyling()">
+        <mat-tab label="Tour Images">
+          <div class="tab-content">
+            <h2>Tour Images</h2>
+            <ngx-gallery [options]="galleryOptions" [images]="galleryImages"></ngx-gallery>
+          </div>
+        </mat-tab>
+        <mat-tab label="Reviews">
+          <div class="tab-content">
+            <div>
+              <p>Total review count and overall rating based on Viator and Tripadvisor reviews</p>
+              <p>Total Average Rating: {{ data.reviews.combinedAverageRating | number:'1.2-2' }}</p>
+              <div *ngFor="let item of listReviews" id="reviews-container" class="user-review-container" fxLayout="row">
+                <div class="user-review-container--left">
+                  <img *ngIf="!item.ownerAvatarURL" src="assets/images/no-avatar.png" />
+                  <img *ngIf="item.ownerAvatarURL" [src]="item.ownerAvatarURL | toHttps" />
+                </div>
+                <div class="user-review-container--right">
+                  <p class="user-review__name"> {{ item.userName }} </p>
+                    <rating class="custom-rating-user-review-product-detail-component" [(ngModel)]="item.rating" [max]="5"
+                      [readonly]="true" [float]="true">
+                    </rating>
+                    <p class="user-review__date"> {{ item.publishedDate }} </p>
+                  <br>
+                  <p *ngIf="item.title" style="font-weight: 700;">{{item.title}}</p>
+                  <br>
+                  <p class="user-review__description" [innerHTML]="item.text"></p>
+                  <br>
+                  <p>Helpful Votes: {{ item.helpfulVotes}} <span style="color: blue;">👍</span></p>
+                  <p>Review Provider: {{ item.provider }}</p>
+                  <br>               
+                </div>
+              </div>
+            </div>
+          
+            <div class="text-center">
+              <button class="btn-load-more-review" type="button" (click)="onLoadMoreReviewsV2()">
+                View More
+              </button>
+            </div>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="What to Expect">
+          <div class="tab-content">
+            <strong>Itinerary</strong>
+            <p *ngIf="data.itinerary.itineraryType === 'STANDARD'">Standard</p>
+            <p *ngIf="data.itinerary.itineraryType === 'ACTIVITY'">Activity</p>
+            <p *ngIf="data.itinerary.itineraryType === 'MULTI_DAY_TOUR'">Multi-day tour</p>
+            <p *ngIf="data.itinerary.itineraryType === 'HOP_ON_HOP_OFF'">Hop-on / hop-off</p>
+            <p *ngIf="data.itinerary.itineraryType === 'UNSTRUCTURED'">Unstructured</p>
+            <p *ngIf="data.itinerary.duration.fixedDurationInMinutes">Duration: {{ convertMinutesToHours(data.itinerary.duration.fixedDurationInMinutes) }} </p>
+            <p *ngIf="data.itinerary.duration.variableDurationFromMinutes">Duration: From {{ convertMinutesToHours(data.itinerary.duration.variableDurationFromMinutes) }} to {{ convertMinutesToHours(data.itinerary.duration.variableDurationToMinutes) }} </p>
+
+            <ul *ngIf="data.itinerary.days">
+              <li *ngFor="let day of data.itinerary.days">
+                <ng-container>
+                  <p><span style="color: green;">&#10003;</span><strong>{{ day.title }}</strong></p>
+                  <ul>
+                    <li *ngFor="let item of day.items">
+                      <p><strong>Description:</strong> {{ item.description }}</p>
+                      <p><strong>Duration:</strong> {{ convertMinutesToHours(item.duration.fixedDurationInMinutes) }} </p>
+                    </li>
+                  </ul>
+                </ng-container>
+              </li>
+            </ul>
+            <ul *ngIf="data.itinerary.itineraryType == 'ACTIVITY'">
+              <li *ngIf="pointsOfInterest">
+                <p><strong>Points of Interest: </strong><span *ngFor="let stopAt of pointsOfInterest">{{ stopAt.label }}, </span></p>
+                <p><strong>Description:</strong> {{ data.itinerary.activityInfo.description }}</p>
+                <p><strong>Duration:</strong> {{ convertMinutesToHours(data.itinerary.duration.fixedDurationInMinutes) }} </p>
+              </li>
+            </ul>
+
+            <ul *ngIf="data.itinerary.itineraryType == 'STANDARD'">
+              <li *ngFor="let iti of data.itinerary.itineraryItems">
+                <p><strong>Description:</strong> {{ iti.description }}</p>
+                <p><strong>Admission Included:</strong> {{ iti.admissionIncluded }}</p>
+                <p *ngIf="iti.duration"><strong>Duration:</strong> {{ convertMinutesToHours(iti.duration.fixedDurationInMinutes) }} </p>
+                <p> -- </p>
+              </li>
+            </ul>
+
+            <ul *ngIf="data.itinerary.itineraryType == 'HOP_ON_HOP_OFF'">
+              <li *ngFor="let iti of data.itinerary.routes">
+                <p><strong>Name:</strong> {{ iti.name }}</p>
+                <p><strong>Operating Schedule:</strong> {{ iti.operatingSchedule }}</p>
+                <p><strong>Stops At:</strong>
+                  <li *ngFor="let stops of iti.stops">
+                    <p>{{ stops.description }}</p>
+                  </li>
+                </p>
+                <p><strong>Duration:</strong> {{ convertMinutesToHours(iti.duration.fixedDurationInMinutes) }} </p>
+                <p> -- </p>
+              </li>
+            </ul>
+
+            <ul *ngIf="data.itinerary.itineraryType == 'UNSTRUCTURED'">
+              <li *ngIf="pointsOfInterest">
+                <p><strong>Description:</strong> {{ data.itinerary.unstructuredDescription }}</p>
+                <p><strong>Point of Interest: </strong>{{ pointsOfInterest[0].label }}</p>
+              </li>
+            </ul>
+
+
+          </div>
+          
+        </mat-tab>
+        <mat-tab label="Important Info">
+          <div class="tab-content">
+            <strong *ngIf="languageGuideNatural">Language Guides</strong>
+            <ul>
+              <li *ngFor="let lang of languageGuideNatural">
+                Type: {{ lang.type }} / Language: {{ lang.language }}
+              </li>
+            </ul>
+            <strong>Inclusions</strong>
+            <ul>
+              <li *ngFor="let inc of data.inclusions">
+                <span style="color: green;">&#10003;</span>
+                <span> {{ inc.description ? inc.description : inc.otherDescription }} </span>
+              </li>
+            </ul>
+            <strong>Exclusions</strong>
+            <ul>
+              <li *ngFor="let exc of data.exclusions">
+                <span style="color: red;">&#10008;</span> {{ exc.description ? exc.description : exc.otherDescription }}
+              </li>              
+            </ul>
+            <strong>Additional Info</strong>
+            <ul>
+              <li *ngFor="let add of data.additionalInfo">
+                <span style="color: green;">&#10003;</span> {{ add.description }}
+              </li>
+            </ul>
+            <strong>Voucher Info</strong> 
+           <ng-container *ngIf="data.ticketInfo; else noItems">
+              <ul>
+                <li>{{ data.ticketInfo.ticketTypeDescription }}</li>
+              </ul>
+            </ng-container>
+
+            <strong>Special Instructions</strong> 
+            <ng-container *ngIf="data.locationref.redemption">
+               <ul>
+                 <li>{{ data.locationref.redemption.specialInstructions }}</li>
+               </ul>
+             </ng-container>
+
+            <ng-template #noItems>
+              <p> <span style="color: red;">&#10008;</span> Not Applicable</p>
+            </ng-template>
+            <strong>Cancellation Policy</strong>
+            <ul *ngIf="data.cancellationPolicy">
+              <li>
+                {{data.cancellationPolicy.description}}
+              </li>
+            </ul>
+            <!-- <p [innerHTML]="data.merchantTermsAndConditions.termsAndConditions"> </p> -->
+            <strong>Local Operator Information</strong>
+            <p>
+              Complete Operator information, including local telephone numbers at your destination, are included on your
+              Confirmation
+              Voucher. Our Product Managers select only the most experienced and reliable operators in each destination,
+              removing the
+              guesswork for you, and ensuring your peace of mind.
+            </p>
+          </div>
+        </mat-tab>
+        <mat-tab label="Pricing/Schedule">
+          <div class="tab-content">
+            <div *ngIf="!data.productOptions && !this.newPrice.bookableItems">
+              <strong>Product Guide:</strong>
+              <p>No Information</p>
+            </div>
+            <div *ngFor="let pro of data.productOptions">
+              <div *ngFor="let new of this.newPrice.bookableItems">
+                <div *ngIf="new.productOptionCode === pro.productOptionCode">
+                  <div style="margin-left: 10px;">
+                    <p><strong>{{pro.productOptionCode}} : {{pro.title}}</strong> <p>
+                    <div style="margin-left: 10px;">
+                      <p><strong>Pricing: </strong></p>
+                      <div *ngFor="let sea of new.seasons[0].pricingRecords[0].pricingDetails" style="margin-left: 10px;">
+                        <div *ngIf="sea.ageBand==='INFANT'">
+                          <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                            <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                          </div>
+                          <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                            <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                              <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                            </div>
+                            <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                              <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                            </div>                  
+                          </div>
+                        </div>
+                        <div *ngIf="sea.ageBand==='CHILD'">
+                          <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                            <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}ren: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                          </div>
+                          <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                            <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                              <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}ren: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                            </div>
+                            <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                              <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}ren: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                            </div>                  
+                          </div>
+                        </div>
+                        <div *ngIf="sea.ageBand==='ADULT'">
+                          <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                            <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                          </div>
+                          <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                            <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                              <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                            </div>
+                            <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                              <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                            </div>
+                          </div>
+                        </div>
+                        <div *ngIf="sea.ageBand==='SENIOR'">
+                          <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                            <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                          </div>
+                          <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                            <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                              <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                            </div>
+                            <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                              <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div>
+                        <strong>Description: </strong>
+                        <p style="margin-left: 10px;" [innerHTML]=pro.description></p>
+                        <p style="margin-left: 10px;" *ngIf="!pro.description">No Additional Information</p>
+                      </div>
+                      <div *ngIf="data.supplier">
+                        <p><strong>Vendor: </strong><a href="{{data.supplier.reference}}" target="_blank"  style="text-decoration: none;">{{data.supplier.name}}</a></p>
+                      </div>
+                      <div *ngIf="new.seasons[0].pricingRecords[0].daysOfWeek">
+                        <p><strong>Operating Days: </strong>
+                          <ng-container *ngFor="let day of new.seasons[0].pricingRecords[0].daysOfWeek; let last = last">
+                            {{day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()}}
+                            <span *ngIf="!last">,</span>
+                          </ng-container>
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <!-- THIS IS IF PRODUCT HAS NO productOptions TO CHECK IT'S VALIDITY -->
+            <div *ngIf="!data.productOptions">
+              <div *ngFor="let new of this.newPrice.bookableItems">
+                <strong>Product Guide:</strong>
+                <div *ngFor="let sea of new.seasons[0].pricingRecords[0].pricingDetails" style="margin-left: 10px;">
+                  <div *ngIf="sea.ageBand==='INFANT'">
+                    <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                      <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                    </div>
+                    <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                      <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                        <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                      </div>
+                      <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                        <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                      </div>                  
+                    </div>
+                  </div>
+                  <div *ngIf="sea.ageBand==='CHILD'">
+                    <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                      <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}ren: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                    </div>
+                    <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                      <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                        <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}ren: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                      </div>
+                      <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                        <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}ren: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                      </div>                  
+                    </div>
+                  </div>
+                  <div *ngIf="sea.ageBand==='ADULT'">
+                    <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                      <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                    </div>
+                    <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                      <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                        <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                      </div>
+                      <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                        <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="sea.ageBand==='SENIOR'">
+                    <div *ngIf="sea.minTravelers===sea.maxTravelers">
+                      <p><strong>For {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                    </div>
+                    <div *ngIf="sea.minTravelers!=sea.maxTravelers">
+                      <div *ngIf="sea.minTravelers && sea.maxTravelers">
+                        <p><strong>From {{sea.minTravelers}} to {{sea.maxTravelers}} {{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{sea.price.original.recommendedRetailPrice}} {{this.newPrice.currency}}/pa</p>
+                      </div>
+                      <div *ngIf="!sea.maxTravelers || !sea.minTravelers">
+                        <p><strong>{{ sea.ageBand.charAt(0).toUpperCase() + sea.ageBand.slice(1).toLowerCase() }}s: </strong>{{ sea.price.original.recommendedRetailPrice }} {{ this.newPrice.currency }}/pa</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div *ngIf="data.supplier">
+                  <p><strong>Vendor: </strong><a href="{{data.supplier.reference}}" target="_blank"  style="text-decoration: none;">{{data.supplier.name}}</a></p>
+                </div>
+                <div *ngIf="new.seasons[0].pricingRecords[0].daysOfWeek">
+                  <p><strong>Operating Days: </strong>
+                    <ng-container *ngFor="let day of new.seasons[0].pricingRecords[0].daysOfWeek; let last = last">
+                      {{day.charAt(0).toUpperCase() + day.slice(1).toLowerCase()}}
+                      <span *ngIf="!last">,</span>
+                    </ng-container>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+
+    <div fxFlex="40" fxFlex.xs="100" class="google-map-container" #tourOptionsDestination>
+      <mat-card class="tour-options" *ngFor="let item of tourOptions; let i = index" #tourOptionsDestinationRef>
+        <div [ngClass]="{ mismatch: !item.available }" *ngIf="!item.available">
+          <p *ngFor="let errorMessage of item.errorMessage">{{ errorMessage }}</p>
+        </div>
+        <mat-card-title>
+          <div *ngFor="let option of data.productOptions">
+          <span class="title" *ngIf="option.productOptionCode === item.productOptionCode" [innerHTML]="option.title"></span>
+          </div> 
+          <span class="title">{{ item.productOptionCode }} {{ item.startTime }}</span>
+          <span class="booking-date">| {{ tourOptions.currentBookingDate }}</span>
+          <div *ngFor="let option of data.productOptions">
+          <span style="font-size:14px;" *ngIf="option.productOptionCode === item.productOptionCode" [innerHTML]="option.description"></span>
+          </div>    
+        </mat-card-title>
+        <mat-card-content>
+          <p class="total">
+            ${{ item.totalPrice.price.recommendedRetailPrice }} <span class="display-travellers">({{ displayTravellers }})</span>
+          </p> 
+        </mat-card-content>
+        <mat-call-to-action>
+          <button type="button" [ngClass]="{ 'btn-square': buttonType === 'square',
+                      'btn-rounded': buttonType === 'rounded'}"
+            [style.border-color]="primaryColor"
+            [style.color]=""
+            [style.backgroundColor]="primaryColor" class="search"
+            (click)="addToCart(item, getDescription(item.productOptionCode))">
+            Add to Cart
+          </button>
+          <p *ngIf="item.unavailableReason">
+            <span style="color: red;"> {{(item.unavailableReason).replace("_", " ").replace("_", " ")}}</span>
+          </p>
+        </mat-call-to-action>
+      </mat-card>
+      <h2 [style.color]="customizeSettings?.color_scheme?.secondary_color">Map Location:</h2>
+      <p *ngIf="pointsOfInterest && pointsOfInterest.length > 0">
+        {{ pointsOfInterest[0].label }}
+      </p>
+      <agm-map class="custom-agm-map-product-detail-component" style="height: 300px;" (mapReady)="getLocations()"
+        [latitude]="lat" [longitude]="lng" [zoom]="12">
+        <agm-marker [latitude]="lat" [longitude]="lng"> </agm-marker>
+      </agm-map>
+      <!-- <h2 [style.color]="customizeSettings?.color_scheme?.secondary_color">Getting There…</h2>
+      <div *ngIf="data.departurePoint && data.departurePoint?.length">
+        <p class="font-weight-extra-bold">Departure point</p>
+        <p [innerHTML]="data.departurePoint"></p>
+      </div>
+      <div *ngIf="data.departureTime?.length">
+        <p class="font-weight-extra-bold">Departure time</p>
+        <p [innerHTML]="data.departureTime"></p>
+      </div>
+      <div *ngIf="data.duration && data.duration?.length">
+        <p class="font-weight-extra-bold">Duration</p>
+        <p [innerHTML]="data.duration"></p>
+      </div>
+      <div *ngIf="data.returnDetails && data.returnDetails?.length">
+        <p class="font-weight-extra-bold">Return details</p>
+        <p [innerHTML]="data.returnDetails"></p>
+      </div> -->
+    </div>
+  </div>
+  <div class="product-detail-content" style="max-width: 100%; padding: 0; margin-bottom: 0;">
+    <div class="slide-show-container--middle-page" *ngIf="listOfImages && listOfImages.length > 0"
+      style="padding:10px 0px;">
+      <div class="slide-show__box-center">
+        <h2>Traveller's Images</h2> 
+        <div ng2-carouselamos [width]="1138" [items]="listOfImages" [$item]="itemTemplate2" [$prev]="prevTemplate"
+          [$next]="nextTemplate" (onSelectedItem)="selectedItem = $event.item" selectedIndex="$event.index"></div>
+        <ng-template #prevTemplate>
+          <i class="new-icon-left-arrow"></i>
+        </ng-template>
+        <ng-template #nextTemplate>
+          <i class="new-icon-right-arrow"></i>
+        </ng-template>
+        <ng-template let-item let-i="index" #itemTemplate2>
+          <div class="image-item" fxFlex fxLayoutAlign="center center">
+            <img [src]="item.big" style="height: 300px;" /> 
+          </div>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+  <!-- <div class="share-container" fxLayout="row">
+      <span class="label-share-via">SHARE VIA: </span>
+      <div class="icon-media-container" fxLayout="row">
+        <a href="https://www.facebook.com/Hero-Explorer-1043711159115328/?modal=admin_todo_tour"> <i class="fa fa-facebook"></i></a>
+        <a href="https://www.instagram.com/weareheroexplorer/"> <i class="fa fa-instagram"></i></a>
+      </div>
+    </div> -->
+</div>
+
+

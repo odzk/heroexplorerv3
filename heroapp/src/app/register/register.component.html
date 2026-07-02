@@ -1,0 +1,107 @@
+<div class="hx-register-component">
+  <div class="register-content">
+  <div class="header__background--full-screen">
+    <slideshow [autoPlay]="true" [imageUrls]="pages | toHttps"></slideshow>
+  </div>
+</div>
+  <div class="register-container">
+    <div class="register-wrapper"
+         fxFlex="50" fxFlex.xs="80">
+      <form fxLayout="row wrap"
+            [formGroup]="registerForm"
+            #registerFormEle="ngForm"
+            *ngIf="!isRegisterSuccessfully">
+        <div fxFlex="100">
+          <h2>SIGN UP WITH YOUR EMAIL ADDRESS</h2>
+          <p *ngIf="isShowEmailExist">Email already exists!</p>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput
+                   placeholder="Email"
+                   formControlName="email"
+                   required>
+            <app-control-message [control]="registerForm.controls.email"></app-control-message>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput
+                   placeholder="Password"
+                   [type]="'password'"
+                   formControlName="password"
+                   required>
+            <app-control-message [control]="registerForm.controls.password"></app-control-message>
+          </mat-form-field>
+        </div>
+        <div fxFlex="100">
+          <mat-form-field>
+            <input matInput
+                   placeholder="Confirm Password"
+                   [type]="'password'"
+                   formControlName="confirmPassword"
+                   required>
+            <app-control-message [control]="registerForm.controls.confirmPassword"></app-control-message>
+          </mat-form-field>
+        </div>
+        <!-- <div fxFlex="100">
+          <mat-form-field>
+            <input matInput
+                   formControlName="nickname"
+                   placeholder="Nickname">
+          </mat-form-field>
+        </div> -->
+        <div fxFlex="100"
+             class="font-size-12">
+          <input type="checkbox"
+                 formControlName="isUpdateOffer"/>
+          I’d like to receive special offers, inspiration, tips and other updates from HeroExplorer. I can unsubscribe at any time.
+        </div>
+        <div class="text-center" fxFlex="100"  style="margin-top: 0.5rem">
+              <label class="error">{{message}}</label>
+        </div>
+        <div fxFlex="100"
+             fxLayout="column"
+             fxLayoutAlign="center "
+             style="margin-top: 2rem">
+         
+          <div fxLayout=""
+               fxLayoutAlign="center ">
+            <button type="button" class="hx-btn-primary"
+                    [ngClass]="{'disabled': registerForm.invalid}"
+                    (click)="onSubmit()">
+              <a>Create Account</a>
+            </button>
+          </div>
+          <p class="text-center font-size-12">Already have an account?
+            <a class="no-decoration color-ocean-blue"
+               routerLink="/login">
+               Log in
+            </a>
+          </p>
+        </div>
+      </form>
+      <div *ngIf="isRegisterSuccessfully"
+           fxLayout="row wrap">
+        <div fxFlex="100"
+             class="text-center">
+          <h2>CONGRATULATIONS!</h2>
+          <p>You have been successfully registered. <br/>
+             To active your account check your email and confirm your registration.
+          </p>
+          <!-- <p>
+            <a class="no-decoration color-ocean-blue"
+               routerLink="">
+              Go back home
+            </a>
+            or
+            <a class="no-decoration color-ocean-blue"
+               routerLink="/login">
+              Login here
+            </a>
+          </p> -->
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

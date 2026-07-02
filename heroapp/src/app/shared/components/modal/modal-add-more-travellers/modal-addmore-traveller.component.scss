@@ -1,0 +1,55 @@
+
+@import "../../../../../assets/scss/variables.scss";
+
+.hx-modal-common-component {
+  position: relative;
+  width: 100%;
+  min-height: 110px;
+
+  h2 {
+    margin-bottom: 25px;
+    margin-top: 0px;
+    padding-top: 4px;
+  }
+ 
+  .box__name-input {
+    &.box__input--last-item {
+      input {
+        margin-bottom: 0;
+      }
+    }
+    &.box__input--full-width {
+      span {
+        display: block;
+        padding-right: 34px;
+        input {
+          width: 100%;
+          padding-left: 1rem;
+          margin-bottom: 1rem;
+        }
+      }
+    }
+    input {
+      border: 1px solid $light-black;
+      padding: 0 1rem;
+      font-size: 14px;
+      border-radius: $border-radius;
+      height: 36px;
+    }
+    label {
+      line-height: 36px;
+      font-size: 14px;
+    }
+  }
+  .edit-travellers-container {
+    padding: 1rem 2rem;
+  }
+
+  .ng-select .ng-select-container {
+    border: 1px solid #909090 !important;
+  }
+}
+.mat-dialog-container {
+  background: #f7f7f7 !important;
+  color: rgba(0,0,0,.87);
+}

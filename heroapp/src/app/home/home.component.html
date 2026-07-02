@@ -1,0 +1,172 @@
+<link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.2/css/all.css" integrity="sha384-XxNLWSzCxOe/CFcHcAiJAZ7LarLmw3f4975gOO6QkxvULbGGNDoSOTzItGUG++Q+" crossorigin="anonymous">
+
+<div class="hx-home-component">
+  <!-- <app-header class="custom-app-header-home-component"></app-header> -->
+  <div class="slide-show--full-screen" fxLayout="row wrap">
+    <slideshow [imageUrls]="pages | toHttps"></slideshow>
+    <!-- <div class="client-logo">
+      <img [src]="customizeSettings?.logo_settings?.url" [width]="customizeSettings?.logo_settings?.width"
+        [height]="customizeSettings?.logo_settings?.height" />
+    </div> -->
+    <div fxFlex="100">
+      <div class="slide-show__box--center">
+        <!-- <img src="/assets/images/home-logo.png" /> -->
+        <app-search-bar></app-search-bar>
+      </div>
+    </div>
+  </div>
+  <div fxLayoutAlign="space-between center" class="line-information"
+    [style.backgroundColor]="secondaryColor">
+    <div fxFlex="33">
+      <p><i class="fa fa-hiking fa-4x"  style="font-size: 4em;"></i></p>
+      <p style="font-size: 23px;">Choice of Adventure!</p>
+      <p style="padding-left: 80px; padding-right:80px;">Hero Explorer brings you over 350,000 tour and activity products globally. We are all about adventure and sharing the passion of travel.</p>
+    </div>
+    <div fxFlex="33">
+      <p><i class="fa fa-money-check fa-4x"  style="font-size: 4em;"></i></p>
+      <p style="font-size: 23px;">Value for Money</p>
+      <p style="padding-left: 80px; padding-right:80px;">We offer the best value for money with our system configured to at least match prices offered by our competitors.</p>
+    </div>
+    <div fxFlex="33">
+      <p><i class="fa fa-user-headset fa-4x"  style="font-size: 4em;"></i></p>
+      <p style="font-size: 23px;">Customer Service</p>
+      <p style="padding-left: 80px; padding-right:80px;">As well as an online portal to manage your booking, we also operate a dedicated customer service center.</p>
+    </div>
+  </div>
+  <div class="home-content">
+    <!-- EXPERIENCES-->
+    <!-- <div class="information-container">
+      <h1>Experiences are everywhere</h1>
+      <p class="sub-title">Explore popular experiences near you</p>
+      <div class="select-option-container">
+        <ng-select class="custom-ng-select-home-component"
+                   [(ngModel)]="destinationNearYouId"
+                   (ngModelChange)="getAllCategoriesOfDestinationNearYou()"
+                   [items]="listDestination"
+                   [clearable]="false"
+                   bindLabel="destinationName"
+                   bindValue="destinationId"
+                   placeholder="Destination">
+        </ng-select>
+      </div>
+      <div class="carousel-container">
+        <ngx-carousel
+          class="custom-carousel-home-component"
+          [inputs]="carouselTwo">
+          <ngx-item NgxCarouselItem
+                    *ngFor="let item of listActivitiesNearYou"
+                    (mouseover)="currentExpId = item.id"
+                    (mouseleave)="currentExpId = 0"
+                    (click)="goToList(destinationNearYouId, item.id, 0)">
+            <p class="custom-carousel__layer large-layer"
+               *ngIf="currentExpId !== item.id">
+            </p>
+            <p class="custom-carousel__title--center large-title">
+               {{item.groupName}}
+            </p>
+            <ngx-lazy-image class="custom-carousel__image-list-near-you"
+                            [largeImgUrl]="item.thumbnailHiResURL"
+                            [thumbnailUrl]="defaultNoImage">
+            </ngx-lazy-image>
+          </ngx-item>
+          <i NgxCarouselPrev
+             class="new-icon-left-arrow">
+          </i>
+          <i NgxCarouselNext
+             class="new-icon-right-arrow">
+          </i>
+        </ngx-carousel>
+      </div>
+
+    </div> -->
+    <!--POPULAR TOURS --reUP  -->
+    <div class="information-container popular-tours">
+      <h1 [style.color]="secondaryColor">Popular tours and activities</h1>
+      <p class="sub-title">Our best selling experiences</p>
+      <div class="select-option-container">
+        <ng-select class="custom-ng-select-home-component" [(ngModel)]="destinationNearYouId"
+          (ngModelChange)="getAllCategoriesOfDestinationNearYou()" [items]="listDestination" [clearable]="false"
+          bindLabel="destinationName" bindValue="destinationId" placeholder="Destination">
+        </ng-select>
+      </div>
+      <div class="carousel-container">
+        <ngx-carousel [inputs]="carouselOne">
+          <ngx-item NgxCarouselItem *ngFor="let item of listProductAtHome">
+            <app-product-item [data]="item"></app-product-item>
+          </ngx-item>
+          <i NgxCarouselPrev class="new-icon-left-arrow">
+          </i>
+          <i NgxCarouselNext class="new-icon-right-arrow">
+          </i>
+        </ngx-carousel>
+      </div>
+    </div>
+    <!--POPULAR DESTINATIONS-->
+    <!-- <div class="information-container">
+      <h1 [style.color]="secondaryColor">Popular destinations</h1>
+      <p class="sub-title">Explore top destinations in {{currentLocation.country}}</p>
+      <div class="select-option-container">
+        <ng-select class="custom-ng-select-home-component" [(ngModel)]="cityOfAustraliaId"
+          (ngModelChange)="goToList(cityOfAustraliaId, 0, 0)" [items]="listCitiesOFAustralia" [clearable]="false"
+          bindLabel="primaryDestinationName" bindValue="primaryDestinationId" placeholder="Select a destination">
+        </ng-select>
+      </div>
+      <div *ngIf="listCitiesOFAustralia.length > 0" class="carousel-container">
+        <ngx-carousel class="custom-carousel-home-component" [inputs]="carouselOne" (onMove)="onmoveFn($event)">
+          <ngx-item NgxCarouselItem *ngFor="let item of listCitiesOFAustralia"
+            (mouseover)="currentCityId = item.destinationId" (mouseleave)="currentCityId = 0"
+            (click)="goToList(item.destinationId, 0, 0)">
+            <div>
+              <p class="custom-carousel__layer small-layer" *ngIf="currentCityId !== item.destinationId"></p>
+              <p class="custom-carousel__title--center small-title">
+                {{item.primaryDestinationName}}
+              </p>
+
+              <ngx-lazy-image *ngIf="item.thumbnailURL" class="custom-carousel__image-popula-destination"
+                [largeImgUrl]="item.thumbnailURL | toHttps" [thumbnailUrl]="defaultNoImage">
+              </ngx-lazy-image>
+            </div>
+          </ngx-item>
+          <i NgxCarouselPrev class="new-icon-left-arrow">
+          </i>
+          <i NgxCarouselNext class="new-icon-right-arrow">
+          </i>
+        </ngx-carousel>
+      </div>
+    </div> -->
+    <div class="information-container">
+      <h1 [style.color]="secondaryColor">Popular destinations</h1>
+      <p class="sub-title">Explore top destinations in {{currentLocation.country}}</p>
+      <div class="select-option-container">
+        <ng-select class="custom-ng-select-home-component" [(ngModel)]="cityOfAustraliaId"
+          (ngModelChange)="goToList(cityOfAustraliaId, 0, 0)" [items]="listCitiesOFAustralia" [clearable]="false"
+          bindLabel="primaryDestinationName" bindValue="primaryDestinationId" placeholder="Select a destination">
+        </ng-select>
+      </div>
+    </div>
+    
+    <div fxLayoutAlign="space-between center">
+      <div *ngFor="let item of listCitiesOFAustralia.slice(0, 5);" fxFlex="25" style="margin-right: 10px;">
+        <a [routerLink]="['/list-result', item.primaryDestinationId, 0, 0]">
+          <ngx-lazy-image [largeImgUrl]="item.thumbnailHiResURL"></ngx-lazy-image>
+        </a>
+        <div class="city-name"><h3>{{item.primaryDestinationName}}</h3></div>
+        <!-- {{item | json}} -->
+      </div>
+    </div>
+    
+  </div>
+
+  <!-- <div class="home__footer"
+       fxLayout="column"
+       fxLayoutAlign="center center">
+      <img src="/assets/images/logo-min.png" />
+     <h1>Explore our Hero Itineraries</h1>
+     <h3>For those times you need a little inspiration…</h3>
+      <button>More</button>
+  </div> -->
+</div>
+
+<!-- <agm-map (mapReady)="onMapReady($event)">
+    <agm-marker></agm-marker>
+</agm-map> -->

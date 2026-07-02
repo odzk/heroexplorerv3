@@ -1,0 +1,881 @@
+<div class="hx-my-profile-component">
+  <div class="my-profile-content">
+      <div class="header__background--full-screen">
+          <slideshow [autoPlay]="true" [imageUrls]="pages | toHttps"></slideshow>
+      </div>
+  </div>
+  <div class="my-profile-container">
+      <div class="my-profile-wrapper" fxFlex="80">
+          <div fxLayout="row wrap">
+              <div fxFlex="100">
+                  <h2>WELCOME TO HEROEXPLORER</h2>
+                  <p>Your email: <span style="font-weight: 600;font-style: italic;">{{email}}<span></span></span>
+                  </p>
+              </div>
+              <div fxFlex="100">
+                  <mat-tab-group (selectedTabChange)="tabChange($event)" class="custom-mat-tab-group-product-detail"> 
+                      <mat-tab label="Account Settings">
+                          <div class="tab-content">
+                              <form fxLayout="row wrap" [formGroup]="changePasswordForm" #changePasswordFormEle="ngForm">
+                                  <div fxFlex="100">
+                                      <h2>Change password</h2>
+                                      <p>Password must be a minimum of 8 characters. Forgot your password?</p>
+                                  </div>
+                                  <div fxFlex="100" fxLayout="column">
+                                      <div fxFlex="">
+                                          <mat-form-field>
+                                              <input matInput placeholder="Password" [type]="'password'" formControlName="password" required>
+                                              <app-control-message [control]="changePasswordForm.controls.password"></app-control-message>
+                                          </mat-form-field>
+                                      </div>
+                                  </div>
+                                  <div fxFlex="100" fxLayout="column">
+                                      <div fxFlex="">
+                                          <mat-form-field>
+                                              <input matInput placeholder="Confirm Password" [type]="'password'" formControlName="confirmPassword" required>
+                                              <app-control-message [control]="changePasswordForm.controls.confirmPassword"></app-control-message>
+                                          </mat-form-field>
+                                      </div>
+                                  </div>
+                                  <div fxFlex="100" fxLayout="column">
+                                      <div style="margin-top: 0.5rem">
+                                          <label class="success">{{message}}</label>
+                                      </div>
+                                  </div>
+                                  <div fxFlex="100" fxLayout="column" style="margin-top: 2rem">
+                                      <div fxFlex="">
+                                          <button class="hx-btn-primary" type="button" [ngClass]="{'disabled': changePasswordForm.invalid}" (click)="changePassword()" [style.backgroundColor] = 'primaryColor'>
+                      <a>Change Password</a>
+                    </button>
+                                      </div>
+
+                                  </div>
+                              </form>
+                          </div>
+                      </mat-tab> 
+                      <mat-tab *ngIf="userData && userData.role !== 9" label="My Bookings">
+                          <div class="tab-content">
+
+                            <div style="overflow-x: auto;">
+                              <table mat-table [dataSource]="lstMyBookings" class="mat-elevation-z8" style="min-width: 800px; border-collapse: collapse; border: 1px solid #ddd;">
+                              
+                                <!-- Voucher Column -->
+                                <ng-container matColumnDef="voucher">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Voucher </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">
+                                    <button (click)="openVoucherUrl(data.voucherKey)">Open</button>
+                                  </td>
+                                </ng-container>
+                              
+                                <!-- Cancel Column -->
+                                <ng-container matColumnDef="cancel" >
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Cancel </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">
+                                    <button (click)="cancelBookingAdmin(data)">Cancel</button>
+                                  </td>
+                                </ng-container>
+                                
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Name </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.name }} </td>
+                                </ng-container>
+                              
+                                <!-- Email Column -->
+                                <ng-container matColumnDef="email">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Email </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{ data.email }} </td>
+                                </ng-container>
+                              
+                                <!-- Product Code Column -->
+                                <ng-container matColumnDef="productCode">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Product Code </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{data.productCode}} </td>
+                                </ng-container>
+                              
+                                <!-- Travel Date Column -->
+                                <ng-container matColumnDef="travelDate">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Travel Date </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.travelDate | date:'dd MMMM yyyy' }}</td>
+                                </ng-container>
+                              
+                                <!-- Order Date Column -->
+                                <ng-container matColumnDef="orderDate">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Order Date </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.createdAt | date:'dd MMMM yyyy'}}  </td>
+                                </ng-container>
+                              
+                                <!-- Booking Reference Column -->
+                                <ng-container matColumnDef="bookingReference">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Booking Reference </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.itineraryId }} </td>
+                                </ng-container>
+                              
+                                <!-- Total Price Paid Column -->
+                                <ng-container matColumnDef="totalPricePaid">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Total Price Paid </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.retailPrice | number:'1.2-2' }} {{ data.currency }} </td>
+                                </ng-container>
+                              
+                                <!-- Header Row -->
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              
+                                <!-- Data Rows -->
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                              </table>                        
+                            </div>
+
+                          </div>
+                      </mat-tab>
+                      <mat-tab *ngIf="userData && userData.role == 9" label="Info">
+                        <div class="tab-content">
+                          <h2>Hello {{userData.firstname}},</h2>
+                          <p>For security reasons, please allow us to verify your account and the domain you registered. We will get back to you as soon as possible. For now, we advise you to update your password. If you need further assistance, please send an email at <a href="mailto:hello@heroexplorer.com">hello@heroexplorer.com</a>. Thank you.</p>
+
+                        </div>
+                    </mat-tab>
+                      <mat-tab *ngIf="userData && userData.role !== 9" label="Past Bookings">
+                          <div class="tab-content">
+
+                            <div style="overflow-x: auto;">
+                              <table mat-table [dataSource]="lstBookingHistories" class="mat-elevation-z8" style="min-width: 800px; border-collapse: collapse; border: 1px solid #ddd;">
+                                 
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="name">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Name </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.name }} </td>
+                                </ng-container>
+                              
+                                <!-- Email Column -->
+                                <ng-container matColumnDef="email">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Email </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{ data.email }} </td>
+                                </ng-container>
+                              
+                                <!-- Product Code Column -->
+                                <ng-container matColumnDef="productCode">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Product Code </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{data.productCode}} </td>
+                                </ng-container>
+                              
+                                <!-- Travel Date Column -->
+                                <ng-container matColumnDef="travelDate">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Travel Date </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.travelDate | date:'dd MMMM yyyy' }}</td>
+                                </ng-container>
+                              
+                                <!-- Order Date Column -->
+                                <ng-container matColumnDef="orderDate">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Order Date </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.createdAt | date:'dd MMMM yyyy'}}  </td>
+                                </ng-container>
+                              
+                                <!-- Booking Reference Column -->
+                                <ng-container matColumnDef="bookingReference">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Booking Reference </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.itineraryId }} </td>
+                                </ng-container>
+                              
+                                <!-- Total Price Paid Column -->
+                                <ng-container matColumnDef="totalPricePaid">
+                                  <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Total Price Paid </th>
+                                  <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.retailPrice | number:'1.2-2' }} {{ data.currency }} </td>
+                                </ng-container>
+                              
+                                <!-- Header Row -->
+                                <tr mat-header-row *matHeaderRowDef="displayedColumnsPrev"></tr>
+                              
+                                <!-- Data Rows -->
+                                <tr mat-row *matRowDef="let row; columns: displayedColumnsPrev;"></tr>
+                              </table>                        
+                            </div>
+                          </div>
+                      </mat-tab>
+                      <!-- <mat-tab label="My Offer & Discount">
+            <div class="tab-content">
+              <div fxLayout="row wrap">
+                <h2> There is no discount/offer now</h2>
+              </div>
+            </div>
+          </mat-tab> -->
+
+          <mat-tab *ngIf="userData && userData.role !== 0" label="Account Status">
+              <div class="tab-content">
+                  <div fxLayout="row wrap">
+                      <!-- <h2 *ngIf="allBookingsSub.length == 0"> Feature coming soon!</h2> -->
+                      <!-- <div *ngIf="allBookingsSub.length > 1" fxFlex="100"> -->
+                        <!-- <div fxFlex="100">
+                          <h2>Current / Future Bookings</h2>
+                          <table mat-table [dataSource]="allBookingsSub" class="mat-elevation-z8">
+                              <ng-container matColumnDef="travelDate">
+                                <th mat-header-cell *matHeaderCellDef> Travel Date </th>
+                                <td mat-cell *matCellDef="let data"> {{data.data[0].itemSummaries[0].travelDate}} </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="orderDate">
+                                <th mat-header-cell *matHeaderCellDef> Order Date </th>
+                                <td mat-cell *matCellDef="let data"> {{data.data[0].bookingDate}} </td>
+                              </ng-container>
+                            
+                              <ng-container matColumnDef="bookingReference">
+                                <th mat-header-cell *matHeaderCellDef> Booking Reference </th>
+                                <td mat-cell *matCellDef="let data">BR-{{data.data[0].itemSummaries[0].itemId}} </td>
+                              </ng-container>
+                            
+                              <ng-container matColumnDef="totalPricePaid">
+                                <th mat-header-cell *matHeaderCellDef> Total Price Paid </th>
+                                <td mat-cell *matCellDef="let data">{{data.data[0].itemSummaries[0].price}} {{data.data[0].itemSummaries[0].currencyCode}}</td>
+                              </ng-container>
+                            
+                              <ng-container matColumnDef="taxPaid">
+                                  <th mat-header-cell *matHeaderCellDef> Tax Paid </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="commissionPaid">
+                                  <th mat-header-cell *matHeaderCellDef> Commission Paid </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="transactionFee">
+                                  <th mat-header-cell *matHeaderCellDef> Transaction Fee </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="netAmount">
+                                  <th mat-header-cell *matHeaderCellDef> Net Amount </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+                          <h2>Cancelled / Past Bookings</h2>
+                          <table mat-table [dataSource]="allBookingsSubPrev" class="mat-elevation-z8">
+                              <ng-container matColumnDef="travelDate">
+                                <th mat-header-cell *matHeaderCellDef> Travel Date </th>
+                                <td mat-cell *matCellDef="let data"> {{data.data[0].itemSummaries[0].travelDate}} </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="orderDate">
+                                <th mat-header-cell *matHeaderCellDef> Order Date </th>
+                                <td mat-cell *matCellDef="let data"> {{data.data[0].bookingDate}} </td>
+                              </ng-container>
+                            
+                              <ng-container matColumnDef="bookingReference">
+                                <th mat-header-cell *matHeaderCellDef> Booking Reference </th>
+                                <td mat-cell *matCellDef="let data">BR-{{data.data[0].itemSummaries[0].itemId}} </td>
+                              </ng-container>
+                            
+                              <ng-container matColumnDef="totalPricePaid">
+                                <th mat-header-cell *matHeaderCellDef> Total Price Paid </th>
+                                <td mat-cell *matCellDef="let data">{{data.data[0].itemSummaries[0].price}} {{data.data[0].itemSummaries[0].currencyCode}}</td>
+                              </ng-container>
+                            
+                              <ng-container matColumnDef="taxPaid">
+                                  <th mat-header-cell *matHeaderCellDef> Tax Paid </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="commissionPaid">
+                                  <th mat-header-cell *matHeaderCellDef> Commission Paid </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="transactionFee">
+                                  <th mat-header-cell *matHeaderCellDef> Transaction Fee </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <ng-container matColumnDef="netAmount">
+                                  <th mat-header-cell *matHeaderCellDef> Net Amount </th>
+                                  <td mat-cell *matCellDef="let data"> N/A </td>
+                              </ng-container>
+      
+                              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+                      </div> -->
+                  </div>
+              </div>
+          </mat-tab>
+
+          <mat-tab *ngIf="userData && userData.role == 2 || userData && userData.role == 3" label="White Label">
+              <div class="tab-content" >
+                  <form [formGroup]="customSettingsForm" autocomplete="off">
+                      <div class="container">
+                        <div class="settings-container" fxFlex="50" fxFlex.xs="80" fxLayout="row wrap">
+                          <ng-container formGroupName="color_scheme">
+                            <h1>Color Theme Settings</h1>
+                            <mat-form-field fxFlex="80">
+                              <input matInput formControlName="primary_color" placeholder="Primary Color"
+                                [(colorPicker)]="customSettingsForm.controls.color_scheme.value.primary_color"
+                                [cpOKButtonClass]="'ok-btn'" [cpOKButton]="true" [cpSaveClickOutside]="true"
+                                (colorPickerChange)="onChangeColor($event, 'primary_color', 'color_scheme')" />
+                              <div matPrefix class="color-preview"
+                                [style.background]="customSettingsForm.controls.color_scheme.value.primary_color"></div>
+                            </mat-form-field>
+                            <mat-form-field fxFlex="80">
+                              <input matInput formControlName="secondary_color" placeholder="Secondary Color"
+                                [(colorPicker)]="customSettingsForm.controls.color_scheme.value.secondary_color"
+                                [cpOKButtonClass]="'ok-btn'" [cpOKButton]="true" [cpSaveClickOutside]="true"
+                                (colorPickerChange)="onChangeColor($event, 'secondary_color', 'color_scheme')" />
+                              <div matPrefix class="color-preview"
+                                [style.background]="customSettingsForm.controls.color_scheme.value.secondary_color"></div>
+                            </mat-form-field>
+                          </ng-container>
+              
+                          <h1>Button Type: </h1>
+                          <mat-radio-group fxFlex="100" ngDefaultControl formControlName="button_type" aria-label="Select an option">
+                            <mat-radio-button fxFlex="100" value="square" [checked]="buttonTypeOpt === 'square'">Square</mat-radio-button>
+                            <mat-radio-button fxFlex="100" value="rounded" [checked]="buttonTypeOpt === 'rounded'">Rounded</mat-radio-button>
+                          </mat-radio-group>
+                        </div>
+              
+                        <div class="settings-container" formGroupName="logo_settings" fxFlex="50" fxFlex.xs="80" fxLayout="row wrap">
+                          <h1>Logo Settings</h1>
+                          <div class="settings-preview" fxFlex="100">
+                            <div class="image-container">
+                              <img class="image-uploaded"
+                                [style.height.px]="customSettingsForm.controls.logo_settings.value.height"
+                                [style.width.px]="customSettingsForm.controls.logo_settings.value.width"
+                                [src]="imagePreview || customSettingsForm.controls.logo_settings.value.url" />
+                            </div>
+              
+                            <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+                            [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+                            <p>
+                              <label class="upload-button">
+                                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+                                  [uploadInput]="uploadInput" />
+                              </label>
+                            </p>
+                          </div>
+              
+                            <div class="image-config">
+                              <label>Image Width (px)</label>
+                              <mat-slider thumbLabel="true" min="100" max="600" value="345" step="2" formControlName="width"></mat-slider>
+                            </div>
+                            <div class="image-config">
+                              <label>Image Height (px)</label>
+                              <mat-slider thumbLabel="true" min="10" max="480" value="70" step="2" formControlName="height"></mat-slider>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <button class="btn-save" (click)="save('')" role="button" type="submit" [ngClass]="{ 'btn-square': customSettingsForm.controls.button_type.value === 'square',
+                      'btn-rounded': customSettingsForm.controls.button_type.value === 'rounded'}"
+                [style.backgroundColor]="customSettingsForm.controls.color_scheme.value.primary_color"
+                        >
+                        SAVE
+                      </button>
+                    </form>
+
+              </div>
+          </mat-tab>
+
+          <mat-tab *ngIf="userData && userData.role == 3" label="Admin">
+              <div class="tab-content">
+                <mat-accordion class="" multi>
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Add New Subdomain
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        Add new subdomain to AWS Route 53 and heroexplorer database
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="adminSettingsForm" autocomplete="off">
+                      <h2>Add New Subdomain</h2>
+                      <div class="container">
+                          <div class="settings-container" fxFlex="50" fxFlex.xs="80" fxLayout="row wrap">
+                                  <mat-form-field fxFlex="80">
+                                      <input matInput formControlName="add_subdomain" placeholder="Enter subdomain">
+                                  </mat-form-field>
+                          </div>
+                          <div class="">
+                          <button class="hx-btn-primary" type="button" (click)="addSubDomain()" [style.backgroundColor] = 'primaryColor' [ngClass]="{ 'btn-square': buttonTypeOpt === 'square',
+                          'btn-rounded': buttonTypeOpt === 'rounded'}">
+                              <a>Add New Subdomain</a>
+                            </button>
+                            </div>
+                      </div>
+                  </form>
+                  </mat-expansion-panel>
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Customize subdomain
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        Customize settings for all subdomain
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <form [formGroup]="customSettingsForm" autocomplete="off">
+                      <div class="container">
+                        <div class="settings-container" fxFlex="50" fxFlex.xs="80" fxLayout="row wrap">
+                          <ng-container formGroupName="color_scheme">
+                            <h1>Color Theme Settings</h1>
+                            <mat-form-field appearance="fill" fxFlex="80">
+                            <mat-label>Choose Subdomain </mat-label>
+                            <mat-select (selectionChange)="domainChange($event)" formControlName="adminSubdomain">
+                              <mat-option *ngFor="let item of allList" [value]="item.subdomain">
+                                  {{item.subdomain}}
+                              </mat-option>
+                          </mat-select>
+                            </mat-form-field>
+                            <mat-form-field fxFlex="80">
+                              <input matInput formControlName="primary_color" placeholder="Primary Color"
+                                [(colorPicker)]="customSettingsForm.controls.color_scheme.value.primary_color"
+                                [cpOKButtonClass]="'ok-btn'" [cpOKButton]="true" [cpSaveClickOutside]="true"
+                                (colorPickerChange)="onChangeColor($event, 'primary_color', 'color_scheme')" />
+                              <div matPrefix class="color-preview"
+                                [style.background]="customSettingsForm.controls.color_scheme.value.primary_color"></div>
+                            </mat-form-field>
+                            <mat-form-field fxFlex="80">
+                              <input matInput formControlName="secondary_color" placeholder="Secondary Color"
+                                [(colorPicker)]="customSettingsForm.controls.color_scheme.value.secondary_color"
+                                [cpOKButtonClass]="'ok-btn'" [cpOKButton]="true" [cpSaveClickOutside]="true"
+                                (colorPickerChange)="onChangeColor($event, 'secondary_color', 'color_scheme')" />
+                              <div matPrefix class="color-preview"
+                                [style.background]="customSettingsForm.controls.color_scheme.value.secondary_color"></div>
+                            </mat-form-field>
+                          </ng-container>
+              
+                          <h1>Button Type: </h1>
+                          <mat-radio-group fxFlex="100" ngDefaultControl formControlName="button_type" aria-label="Select an option">
+                            <mat-radio-button fxFlex="100" value="square" [checked]="buttonTypeOpt === 'square'">Square</mat-radio-button>
+                            <mat-radio-button fxFlex="100" value="rounded" [checked]="buttonTypeOpt === 'rounded'">Rounded</mat-radio-button>
+                          </mat-radio-group>
+                        </div>
+              
+                        <div class="settings-container" formGroupName="logo_settings" fxFlex="50" fxFlex.xs="80" fxLayout="row wrap">
+                          <h1>Logo Settings</h1>
+                          <div class="settings-preview" fxFlex="100">
+                            <div class="image-container">
+                              <img class="image-uploaded"
+                                [style.height.px]="customSettingsForm.controls.logo_settings.value.height"
+                                [style.width.px]="customSettingsForm.controls.logo_settings.value.width"
+                                [src]="imagePreview || customSettingsForm.controls.logo_settings.value.url" />
+                            </div>
+              
+                            <div class="drop-container" ngFileDrop [options]="options" (uploadOutput)="onUploadOutput($event)"
+                            [uploadInput]="uploadInput" [ngClass]="{ 'is-drop-over': dragOver }">
+                            <p>
+                              <label class="upload-button">
+                                <input type="file" ngFileSelect [options]="options" (uploadOutput)="onUploadOutput($event)"
+                                  [uploadInput]="uploadInput" />
+                              </label>
+                            </p>
+                          </div>
+              
+                            <div class="image-config">
+                              <label>Image Width (px)</label>
+                              <mat-slider thumbLabel="true" min="100" max="600" value="345" step="2" formControlName="width"></mat-slider>
+                            </div>
+                            <div class="image-config">
+                              <label>Image Height (px)</label>
+                              <mat-slider thumbLabel="true" min="10" max="480" value="70" step="2" formControlName="height"></mat-slider>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <button class="hx-btn-primary btn-save" type="button" (click)="save('admin')" [style.backgroundColor] = 'primaryColor' [ngClass]="{ 'btn-square': buttonTypeOpt === 'square',
+                      'btn-rounded': buttonTypeOpt === 'rounded'}">
+                          <a>Save</a>
+                        </button>
+                    </form>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Check All Bookings
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          Check all bookings made in Hero Explorer
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <h2>Current Bookings</h2>
+                      <div style="overflow-x: auto;">
+                        <table mat-table [dataSource]="allBookingsSubAdmin" class="mat-elevation-z8" style="min-width: 800px; border-collapse: collapse; border: 1px solid #ddd;">
+                        
+                          <!-- Voucher Column -->
+                          <ng-container matColumnDef="voucher">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Voucher </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">
+                              <button (click)="openVoucherUrl(data.voucherKey)">Open</button>
+                            </td>
+                          </ng-container>
+                        
+                          <!-- Cancel Column -->
+                          <ng-container matColumnDef="cancel" >
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Cancel </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">
+                              <button (click)="cancelBookingAdmin(data)">Cancel</button>
+                            </td>
+                          </ng-container>
+                          
+                          <!-- Name Column -->
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Name </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.name }} </td>
+                          </ng-container>
+                        
+                          <!-- Email Column -->
+                          <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Email </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{ data.email }} </td>
+                          </ng-container>
+                        
+                          <!-- Product Code Column -->
+                          <ng-container matColumnDef="productCode">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Product Code </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{data.productCode}} </td>
+                          </ng-container>
+                        
+                          <!-- Travel Date Column -->
+                          <ng-container matColumnDef="travelDate">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Travel Date </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.travelDate | date:'dd MMMM yyyy' }}</td>
+                          </ng-container>
+                        
+                          <!-- Order Date Column -->
+                          <ng-container matColumnDef="orderDate">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Order Date </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.createdAt | date:'dd MMMM yyyy'}}  </td>
+                          </ng-container>
+                        
+                          <!-- Booking Reference Column -->
+                          <ng-container matColumnDef="bookingReference">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Booking Reference </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.itineraryId }} </td>
+                          </ng-container>
+                        
+                          <!-- Total Price Paid Column -->
+                          <ng-container matColumnDef="totalPricePaid">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Total Price Paid </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.retailPrice | number:'1.2-2' }} {{ data.currency }} </td>
+                          </ng-container>
+                        
+                          <!-- Booking Source Column -->
+                          <ng-container matColumnDef="bookingSource">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Source of Booking </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.bookingSource }} </td>
+                          </ng-container>
+                        
+                          <!-- Header Row -->
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsAllBookings"></tr>
+                        
+                          <!-- Data Rows -->
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsAllBookings;"></tr>
+                        </table>                        
+                      </div>
+                      
+
+                      <h2>Previous / Cancelled Bookings</h2>
+                      <div style="overflow-x: auto;">
+                        <table mat-table [dataSource]="allPrevBookingsSubAdmin" class="mat-elevation-z8" style="min-width: 800px; border-collapse: collapse; border: 1px solid #ddd;">
+                        
+                          <!-- Name Column -->
+                          <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Name </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.name }} </td>
+                          </ng-container>
+                        
+                          <!-- Email Column -->
+                          <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Email </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{ data.email }} </td>
+                          </ng-container>
+                        
+                          <!-- Product Code Column -->
+                          <ng-container matColumnDef="productCode">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Product Code </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;">{{data.productCode}} </td>
+                          </ng-container>
+                        
+                          <!-- Travel Date Column -->
+                          <ng-container matColumnDef="travelDate">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Travel Date </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.travelDate | date:'dd MMMM yyyy' }}</td>
+                          </ng-container>
+                        
+                          <!-- Order Date Column -->
+                          <ng-container matColumnDef="orderDate">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Order Date </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.createdAt | date:'dd MMMM yyyy'}}  </td>
+                          </ng-container>
+                        
+                          <!-- Booking Reference Column -->
+                          <ng-container matColumnDef="bookingReference">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Booking Reference </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.itineraryId }} </td>
+                          </ng-container>
+                        
+                          <!-- Total Price Paid Column -->
+                          <ng-container matColumnDef="totalPricePaid">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Total Price Paid </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.retailPrice | number:'1.2-2' }} {{ data.currency }} </td>
+                          </ng-container>
+                        
+                          <!-- Booking Source Column -->
+                          <ng-container matColumnDef="bookingSource">
+                            <th mat-header-cell *matHeaderCellDef style="text-align: center; border: 1px solid #ddd;"> Source of Booking </th>
+                            <td mat-cell *matCellDef="let data" style="border: 1px solid #ddd;"> {{ data.bookingSource }} </td>
+                          </ng-container>
+                        
+                          <!-- Header Row -->
+                          <tr mat-header-row *matHeaderRowDef="displayedColumnsAllPrevBookings"></tr>
+                        
+                          <!-- Data Rows -->
+                          <tr mat-row *matRowDef="let row; columns: displayedColumnsAllPrevBookings;"></tr>
+                        </table>                        
+                      </div>
+                      <br>
+                      <button *ngIf="allPrevBookingsSubAdmin.length > 0 && prevmore" (click)="getAllPrevBookingSubAdmin()">Load More</button>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel>
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          Assign User Email to subdomain
+                        </mat-panel-title>
+                        <mat-panel-description>
+                          Assign an email to manage a subdomain
+                        </mat-panel-description>
+                      </mat-expansion-panel-header>
+                      <form [formGroup]="heroUserSubdomainForm" autocomplete="off">
+                      <h2>Assign User Email to subdomain</h2>
+                        <div class="container">
+                          <div fxFlex="50" fxFlex.xs="80" fxLayout="row wrap" fxLayoutAlign="center center">
+                            <mat-form-field appearance="fill" fxFlex="80">
+                              <mat-label>Choose Email</mat-label>
+                              <mat-select (selectionChange)="heroUserChange($event)" formControlName="email">
+                                <mat-option *ngFor="let item of allHeroUsers" [value]="item.email">
+                                    {{item.email}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                          <div fxFlex="50" fxFlex.xs="80" fxLayout="row wrap" fxLayoutAlign="center center">
+                            <mat-form-field appearance="fill" fxFlex="80">
+                              <mat-label>Choose Subdomain</mat-label>
+                              <mat-select formControlName="subdomain">
+                                <mat-option *ngFor="let item of allList" [value]="item.subdomain">
+                                    {{item.subdomain}}
+                                </mat-option>
+                              </mat-select>
+                            </mat-form-field>
+                          </div>
+                        </div>
+                        <button class="hx-btn-primary btn-save" type="button" (click)="updateHeroUserSubdomain()" [style.backgroundColor] = 'primaryColor' [ngClass]="{ 'btn-square': buttonTypeOpt === 'square', 'btn-rounded': buttonTypeOpt === 'rounded'}">
+                          <a>Save</a>
+                        </button>
+                      </form>
+                    </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+          </mat-tab>
+
+          <mat-tab *ngIf="userData && userData.role !== 0" label="Reports">
+              <div class="tab-content">
+                <mat-accordion class="" multi>
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Hero Explorer Bookings
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        List of Bookings made in Hero Explorer
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="filter-container" fxLayout="row wrap">
+                      <div class="filter-group">
+                        <span class="label--left">From: </span>
+                        <div class="input-select-date-container">
+                          <input class="input-select-date"
+                                  matInput
+                                  [ngClass]="{'error': errorSelectDates}"
+                                  [matDatepicker]="datesFrom"
+                                  [formControl]="startDateForm"
+                                  [(ngModel)]="startDate"
+                                  [ngModelOptions]="{standalone: true}"
+                                  (dateChange)="chooseDates($event)">
+                          <mat-datepicker-toggle class="custom-mat-datepicker-toggle-list-result-component"
+                                                  matSuffix
+                                                  [for]="datesFrom">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #datesFrom></mat-datepicker>
+                        </div>
+                      </div>
+                      <div class="filter-group">
+                        <span class="label--left">To: </span>
+                        <div class="input-select-date-container">
+                          <input class="input-select-date"
+                                  matInput
+                                  [ngClass]="{'error': errorSelectDates}"
+                                  [matDatepicker]="datesTo"
+                                  [formControl]="endDateForm"
+                                  [(ngModel)]="endDate"
+                                  [ngModelOptions]="{standalone: true}"
+                                  (dateChange)="chooseDates($event)">
+                          <mat-datepicker-toggle class="custom-mat-datepicker-toggle-list-result-component"
+                                                  matSuffix
+                                                  [for]="datesTo">
+                          </mat-datepicker-toggle>
+                          <mat-datepicker #datesTo></mat-datepicker>
+                        </div>
+                      </div>
+                      <div class="filter-group">
+                        <div class="filter-buttons">
+                          <button (click)="searchReportBookings(true)">Search</button>
+                          <button (click)="downloadReportBookings()">Download</button>
+                        </div>
+                      </div>
+                    </div>
+                    <table mat-table [dataSource]="reportBookings" class="mat-elevation-z8">
+                        <!-- <ng-container matColumnDef="name">
+                          <th mat-header-cell *matHeaderCellDef> Name </th>
+                          <td mat-cell *matCellDef="let data">{{data.data[0].itemSummaries[0].leadTravellerFirstname}} {{data.data[0].itemSummaries[0].leadTravellerSurname}} </td>
+                        </ng-container> -->
+
+                        <!-- <ng-container matColumnDef="email">
+                          <th mat-header-cell *matHeaderCellDef> Email </th>
+                          <td mat-cell *matCellDef="let data">{{data.data[0].bookerEmail}} </td>
+                        </ng-container> -->
+
+                        <ng-container matColumnDef="productCode">
+                          <th mat-header-cell *matHeaderCellDef> Product Code </th>
+                          <td mat-cell *matCellDef="let data">{{data.data[0].itemSummaries[0].productCode}} </td>
+                        </ng-container>
+                      
+                        <ng-container matColumnDef="travelDate">
+                          <th mat-header-cell *matHeaderCellDef> Travel Date</th>
+                          <td mat-cell *matCellDef="let data"> {{data.data[0].itemSummaries[0].travelDate}}</td>
+                        </ng-container>
+                      
+                        <ng-container matColumnDef="orderDate">
+                            <th mat-header-cell *matHeaderCellDef> Order Date </th>
+                            <td mat-cell *matCellDef="let data"> {{data.data[0].bookingDate}}  </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="bookingReference">
+                            <th mat-header-cell *matHeaderCellDef> Booking Reference </th>
+                            <td mat-cell *matCellDef="let data"> BR-{{data.data[0].itemSummaries[0].itemId}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="totalPricePaid">
+                          <th mat-header-cell *matHeaderCellDef> Total Price Paid </th>
+                          <td mat-cell *matCellDef="let data"> {{data.data[0].totalPriceFormatted}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="bookingSource">
+                          <th mat-header-cell *matHeaderCellDef> Source of Booking</th>
+                          <td mat-cell *matCellDef="let data"> {{data.bookingSource}} </td>
+                        </ng-container>
+
+                        <!-- <ng-container matColumnDef="voucher">
+                          <th mat-header-cell *matHeaderCellDef> Voucher</th>
+                          <td mat-cell *matCellDef="let data"><a href="{{data.data[0].itemSummaries[0].voucherURL}}" target="_blank"><button>Open</button></a></td>
+                        </ng-container> -->
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsReportBookings"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsReportBookings;"></tr>
+                    </table>
+                    <br>
+                      <button *ngIf="reportBookings.length > 0 && reportBookingsPrevmore" (click)="searchReportBookings()">Load More</button>
+                  </mat-expansion-panel>
+                </mat-accordion>
+                <mat-accordion class="" multi>
+                  <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                      <mat-panel-title>
+                        Hero Explorer Users
+                      </mat-panel-title>
+                      <mat-panel-description>
+                        List of Users in Hero Explorer
+                      </mat-panel-description>
+                    </mat-expansion-panel-header>
+                    <div class="filter-container" fxLayout="row wrap">
+                      <div class="filter-group">
+                        <div class="filter-buttons">
+                          <button (click)="downloadReportUsers()">Download</button>
+                        </div>
+                      </div>
+                    </div>
+                    <table mat-table [dataSource]="reportUsers" class="mat-elevation-z8">
+                        <ng-container matColumnDef="id">
+                          <th mat-header-cell *matHeaderCellDef> ID </th>
+                          <td mat-cell *matCellDef="let data">{{data.id}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="username">
+                          <th mat-header-cell *matHeaderCellDef> Username </th>
+                          <td mat-cell *matCellDef="let data">{{data.username}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="firstname">
+                          <th mat-header-cell *matHeaderCellDef> First Name </th>
+                          <td mat-cell *matCellDef="let data">{{data.firstname}} </td>
+                        </ng-container>
+                      
+                        <ng-container matColumnDef="lastname">
+                          <th mat-header-cell *matHeaderCellDef> Last Name</th>
+                          <td mat-cell *matCellDef="let data"> {{data.lastname}}</td>
+                        </ng-container>
+                      
+                        <ng-container matColumnDef="email">
+                            <th mat-header-cell *matHeaderCellDef> Email </th>
+                            <td mat-cell *matCellDef="let data"> {{data.email}}  </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="mobile">
+                            <th mat-header-cell *matHeaderCellDef> Mobile </th>
+                            <td mat-cell *matCellDef="let data"> {{data.mobile}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="city">
+                          <th mat-header-cell *matHeaderCellDef> City </th>
+                          <td mat-cell *matCellDef="let data"> {{data.city}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="country">
+                          <th mat-header-cell *matHeaderCellDef> Country</th>
+                          <td mat-cell *matCellDef="let data"> {{data.country}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="province">
+                          <th mat-header-cell *matHeaderCellDef> Province</th>
+                          <td mat-cell *matCellDef="let data"> {{data.province}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="postcode">
+                          <th mat-header-cell *matHeaderCellDef> Postcode</th>
+                          <td mat-cell *matCellDef="let data"> {{data.postcode}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="billingadress">
+                          <th mat-header-cell *matHeaderCellDef> Billing Address</th>
+                          <td mat-cell *matCellDef="let data"> {{data.billingadress}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="subdomain">
+                          <th mat-header-cell *matHeaderCellDef> Subdomain</th>
+                          <td mat-cell *matCellDef="let data"> {{data.subdomain}} </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumnsReportUsers"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumnsReportUsers;"></tr>
+                    </table>
+                    <br>
+                      <button *ngIf="reportUsers.length > 0 && reportUsersPrevmore" (click)="getReportUsers()">Load More</button>
+                  </mat-expansion-panel>
+                </mat-accordion>
+              </div>
+          </mat-tab>
+                  </mat-tab-group>
+              </div>
+          </div>
+      </div>
+  </div>

@@ -1,0 +1,153 @@
+{
+  "_meta": {
+    "sources": [
+      "loopback/common/models",
+      "loopback/server/models",
+      "../common/models",
+      "../common/models/booking",
+      "../common/models/sample",
+      "../common/models/product",
+      "../common/models/user-content",
+      "../common/models/taxonomy",
+      "../common/models/attraction",
+      "../common/models/recommendation",
+      "../common/models/customization",
+      "../common/models/seo",
+      "./models"
+    ],
+    "mixins": [
+      "loopback/common/mixins",
+      "loopback/server/mixins",
+      "../node_modules/loopback-ds-timestamp-mixin",
+      "../common/mixins",
+      "./mixins"
+    ]
+  },
+  "User": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "AccessToken": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "ACL": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "RoleMapping": {
+    "dataSource": "herodb",
+    "public": false,
+    "options": {
+      "strictObjectIDCoercion": true
+    }
+  },
+  "Role": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "Page": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "Project": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "Workspace": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "Product": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "UserReview": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "UserPhoto": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "Destination": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "Category": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "Subcategory": {
+    "dataSource": "herodb",
+    "public": false
+  },
+  "Attraction": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "Recommendation": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "HeroUser": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "Customization": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "HeroBooking": {
+    "dataSource": "herodb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "cancelBookingDB": true,
+          "getListAllBookingAdmin": true,
+          "getListAllPrevBookingAdmin": true,
+          "getListAllBooking": true,
+          "getListAllBookingPrev": true,
+          "getListMyBooking": true,
+          "listPastBooking": true,
+          "getCancelBookingReasons": true,
+          "cancelABooking": true,
+          "getVoucherData": true,
+          "requestEditBooking": true,
+          "getReportBookings": true,
+          "downloadReportBookings": true
+        }
+      }
+    }
+  },
+  "HeroBookingDetail": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "Booker": {
+    "dataSource": "herodb",
+    "public": true,
+    "options": {
+      "remoting": {
+        "sharedMethods": {
+          "*": false,
+          "getBookerId": true
+        }
+      }
+    }
+  },
+  "HeroBookingTraveller": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "HeroBookingQuestion": {
+    "dataSource": "herodb",
+    "public": true
+  },
+  "HeroBookingBooker": {
+    "dataSource": "herodb",
+    "public": true
+  }
+}

@@ -1,0 +1,16 @@
+@import "../../../../assets/scss/variables.scss";
+
+.hx-header-component {
+  padding: 1rem 5rem;
+  position: relative;
+  @media screen and (max-width: $media-xs) {
+    padding: 1rem !important;
+    img {
+      height: 40px
+    }
+  }
+  .header-container {
+    max-width: 1168px;
+    margin: 0 auto;
+  }
+}

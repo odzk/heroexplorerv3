@@ -1,0 +1,15 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "chrome",
+        "request": "launch",
+        "name": "Launch Chrome in Incognito",
+        "url": "http://localhost:4200/detail/5010SYDNEY",
+        "webRoot": "${workspaceFolder}",
+        "userDataDir": "${workspaceFolder}/.vscode/chrome-profile",
+        "runtimeArgs": ["--incognito"]
+      }
+    ]
+  }
+  

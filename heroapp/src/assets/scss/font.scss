@@ -1,0 +1,144 @@
+ @font-face {
+  font-family: 'IconFontHeroExplorer';
+  src:  url('./assets/fonts/main/IconFontHeroExplorer.eot?ocnnnn');
+  src:  url('./assets/fonts/main/IconFontHeroExplorer.eot?ocnnnn#iefix') format('embedded-opentype'),
+    url('./assets/fonts/main/IconFontHeroExplorer.ttf?ocnnnn') format('truetype'),
+    url('./assets/fonts/main/IconFontHeroExplorer.woff?ocnnnn') format('woff'),
+    url('./assets/fonts/main/IconFontHeroExplorer.svg?ocnnnn#IconFontHeroExplorer') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  // font-family: 'IconFontHeroExplorer';
+  // src: url('//s3-ap-southeast-2.amazonaws.com/herowidget/assets/IconFontHeroExplorer.eot');
+  // src: url('https://s3-ap-southeast-2.amazonaws.com/herowidget/assets/IconFontHeroExplorer.eot?ocnnnn#iefix') format('embedded-opentype'), 
+  //     url('https://s3-ap-southeast-2.amazonaws.com/herowidget/assets/IconFontHeroExplorer.ttf') format('truetype'), 
+  //     url('https://s3-ap-southeast-2.amazonaws.com/herowidget/assets/IconFontHeroExplorer.woff') format('woff'), 
+  //     url('https://s3-ap-southeast-2.amazonaws.com/herowidget/assets/IconFontHeroExplorer.svg?ocnnnn#IconFontHeroExplorer') format('svg');
+  // font-weight: normal;
+  // font-style: normal;
+ }
+
+@font-face {
+  font-family: 'fontello';
+  src:  url('./assets/fonts/arrow-font/fontello.eot?ocnnnn');
+  src:  url('./assets/fonts/arrow-font/fontello.eot?ocnnnn#iefix') format('embedded-opentype'),
+    url('./assets/fonts/arrow-font/fontello.ttf?ocnnnn') format('truetype'),
+    url('./assets/fonts/arrow-font/fontello.woff?ocnnnn') format('woff'),
+    url('./assets/fonts/arrow-font/fontello.svg?ocnnnn#fontello') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'iconFontHeroExplorer' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+[class^="new-icon-"], [class*=" new-icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'fontello' !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-arrow-down:before {
+  content: "\e900";
+  color: #fff;
+}
+.icon-arrow-up:before {
+  content: "\e901";
+  color: #fff;
+}
+.icon-award:before {
+  content: "\e902";
+  color: #fff;
+}
+.icon-clear:before {
+  content: "\e903";
+  color: #fff;
+}
+.icon-email:before {
+  content: "\e904";
+  color: #fff;
+}
+.icon-facebook:before {
+  content: "\e905";
+  color: #fff;
+}
+.icon-globe:before {
+  content: "\e906";
+  color: #fff;
+}
+.icon-google-plus:before {
+  content: "\e907";
+  color: #fff;
+}
+.icon-instagram:before {
+  content: "\e908";
+  color: #fff;
+}
+.icon-left-arrow:before {
+  content: "\e909";
+  color: #fff;
+}
+.icon-lock:before {
+  content: "\e90a";
+  color: #fff;
+}
+.icon-menu:before {
+  content: "\e90b";
+  color: #fff;
+}
+.icon-printerest:before {
+  content: "\e90c";
+  color: #fff;
+}
+.icon-right-arrow:before {
+  content: "\e90d";
+  color: #fff;
+}
+.icon-search:before {
+  content: "\e90e";
+  // color: #fff;
+}
+.icon-shopping-cart:before {
+  content: "\e90f";
+  color: #fff;
+}
+.icon-ticket:before {
+  content: "\e910";
+  // color: #fff;
+}
+.icon-twitter:before {
+  content: "\e911";
+  color: #fff;
+}
+.icon-youtube:before {
+  content: "\e912";
+  color: #fff;
+}
+.new-icon-right-arrow:before {
+  content: "\f006";
+  color: #fff;
+}
+.new-icon-left-arrow:before {
+  content: "\f007";
+  color: #fff;
+}
