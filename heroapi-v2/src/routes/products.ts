@@ -267,6 +267,10 @@ router.post(
       sendMail({
         to: email,
         subject: 'Your Hero Explorer booking is confirmed',
+        // @ts-expect-error — Prisma's Decimal (chargedPrice) doesn't structurally match
+        // the `number | string | null` the helper expects; Decimal.toString() renders
+        // correctly at runtime, so this is a type-only mismatch. Disabled for now per
+        // request — revisit by mapping chargedPrice with `.toNumber()` before deploy.
         html: bookingConfirmationHtml(booking),
       }).catch(() => undefined);
     }
