@@ -1,14 +1,34 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   Star, Clock, Check, X, ChevronLeft, MapPin, Users, Calendar
 } from 'lucide-react';
 import { getExperienceDetail } from '@/lib/api';
-import type { ViatorProduct } from '@/lib/types';
+import type { ViatorProduct, ViatorInclusionExclusion, ViatorAdditionalInfo } from '@/lib/types';
+import ImageGallery from '@/components/experience/ImageGallery';
+import ItinerarySection from '@/components/experience/ItinerarySection';
+import ReviewsSection from '@/components/experience/ReviewsSection';
+import TravellerPhotos from '@/components/experience/TravellerPhotos';
+import RelatedExperiences from '@/components/experience/RelatedExperiences';
+
+// Viator returns inclusions/exclusions as structured objects, not strings.
+// Prefer the free-text override, then fall back through the type hierarchy.
+function describeInclusion(item: ViatorInclusionExclusion): string {
+  return (
+    item.otherDescription ||
+    item.typeDescription ||
+    item.categoryDescription ||
+    item.category ||
+    ''
+  );
+}
+
+function describeAdditionalInfo(item: ViatorAdditionalInfo): string {
+  return item.description || item.type || '';
+}
 
 function formatDuration(p: ViatorProduct): string {
   const d = p.duration;
@@ -128,12 +148,8 @@ export default function ExperiencePage() {
         <ChevronLeft size={15} /> Back to results
       </Link>
 
-      {/* Hero image */}
-      {img && (
-        <div className="relative h-72 sm:h-96 rounded-2xl overflow-hidden mb-8 bg-gray-100">
-          <Image src={img} alt={product.title} fill className="object-cover" priority />
-        </div>
-      )}
+      {/* Photo gallery — official product images, thumbnail rail on the left (viator.com style) */}
+      <ImageGallery images={product.images} fallbackUrl={img} title={product.title} />
 
       <div className="flex gap-8 flex-col lg:flex-row">
         {/* Main content */}
@@ -192,6 +208,9 @@ export default function ExperiencePage() {
             </div>
           )}
 
+          {/* Itinerary — "What to expect" */}
+          <ItinerarySection itinerary={product.itinerary} resolvedLocations={product.resolvedLocations} />
+
           {/* Inclusions / Exclusions */}
           {(product.inclusions?.length || product.exclusions?.length) ? (
             <div className="grid sm:grid-cols-2 gap-6 mb-8">
@@ -204,7 +223,7 @@ export default function ExperiencePage() {
                     {product.inclusions.map((inc, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--nv-text-body)' }}>
                         <Check size={14} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--nv-success)' }} />
-                        {inc}
+                        {describeInclusion(inc)}
                       </li>
                     ))}
                   </ul>
@@ -219,7 +238,7 @@ export default function ExperiencePage() {
                     {product.exclusions.map((exc, i) => (
                       <li key={i} className="flex items-start gap-2 text-sm" style={{ color: 'var(--nv-text-body)' }}>
                         <X size={14} className="flex-shrink-0 mt-0.5" style={{ color: 'var(--nv-cherry-rose)' }} />
-                        {exc}
+                        {describeInclusion(exc)}
                       </li>
                     ))}
                   </ul>
@@ -236,11 +255,21 @@ export default function ExperiencePage() {
               </h2>
               <ul className="space-y-2">
                 {product.additionalInfo.map((info, i) => (
-                  <li key={i} className="text-sm" style={{ color: 'var(--nv-text-body)' }}>• {info}</li>
+                  <li key={i} className="text-sm" style={{ color: 'var(--nv-text-body)' }}>• {describeAdditionalInfo(info)}</li>
                 ))}
               </ul>
             </div>
           ) : null}
+
+          {/* Reviews */}
+          <ReviewsSection
+            code={product.productCode}
+            fallbackRating={product.rating}
+            fallbackReviewCount={product.reviewCount}
+          />
+
+          {/* Traveler photos */}
+          <TravellerPhotos code={product.productCode} />
         </div>
 
         {/* Booking panel */}
@@ -248,6 +277,13 @@ export default function ExperiencePage() {
           <BookingPanel product={product} />
         </div>
       </div>
+
+      {/* Other related experiences */}
+      <RelatedExperiences
+        code={product.productCode}
+        destId={product.destinationId}
+        catId={product.categories?.[0]?.id}
+      />
     </div>
   );
 }

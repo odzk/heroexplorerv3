@@ -13,6 +13,8 @@ import type {
   BookingResult,
   HeroBookingRecord,
   PaxMixEntry,
+  ViatorReviewsResponse,
+  RelatedExperiencesResponse,
 } from './types';
 
 const BASE_URL =
@@ -94,6 +96,29 @@ export async function getExperienceAvailability(
   return request<AvailabilitySchedule>(
     `/api/experiences/${code}/availability${params}`,
   );
+}
+
+// Reviews are fetched client-side only (never SSR'd) — Viator's terms
+// require review text to be excluded from indexable page source
+// (docs.viator.com/partner-api/technical/#section/Key-concepts/Protecting-unique-content).
+export async function getExperienceReviews(
+  code: string,
+  page = 1,
+  perPage = 10,
+): Promise<ViatorReviewsResponse> {
+  const qs = new URLSearchParams({ page: String(page), perPage: String(perPage) });
+  return request<ViatorReviewsResponse>(`/api/experiences/${code}/reviews?${qs}`);
+}
+
+export async function getRelatedExperiences(
+  code: string,
+  params: { destId?: number; catId?: number; limit?: number },
+): Promise<RelatedExperiencesResponse> {
+  const qs = new URLSearchParams();
+  if (params.destId != null) qs.set('destId', String(params.destId));
+  if (params.catId != null) qs.set('catId', String(params.catId));
+  if (params.limit != null) qs.set('limit', String(params.limit));
+  return request<RelatedExperiencesResponse>(`/api/experiences/${code}/related?${qs}`);
 }
 
 // ── auth ──────────────────────────────────────────────────────

@@ -99,7 +99,7 @@ export default function HeroSearch() {
               className="m-1.5 px-6 py-2.5 rounded-full font-semibold text-white text-sm transition"
               style={{ background: 'var(--nv-blue-slate)', fontFamily: 'var(--font-comfortaa)' }}
             >
-              {loading ? '...' : <><Search size={14} className="inline mr-1.5" />Search</>}
+              <Search size={14} className="inline mr-1.5" />Search
             </button>
           </form>
 

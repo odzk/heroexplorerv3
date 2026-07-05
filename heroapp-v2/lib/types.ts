@@ -47,9 +47,142 @@ export interface ViatorProduct {
   bookingConfirmationSettings?: {
     confirmationType: string;
   };
-  inclusions?: string[];
-  exclusions?: string[];
-  additionalInfo?: string[];
+  inclusions?: ViatorInclusionExclusion[];
+  exclusions?: ViatorInclusionExclusion[];
+  additionalInfo?: ViatorAdditionalInfo[];
+  itinerary?: ViatorItinerary;
+  // Populated server-side (heroapi-v2) by resolving every itinerary
+  // location ref via Viator's /locations/bulk — see backend
+  // src/lib/itineraryLocations.ts. Keyed by the raw `LOC-...` ref.
+  resolvedLocations?: Record<string, { name?: string; address?: string }>;
+}
+
+// ── itinerary ("What to expect") ────────────────────────────────
+// Polymorphic by itineraryType. Modeled on Viator's documented shapes
+// (docs.viator.com/partner-api/technical/#section/Key-concepts/Itineraries).
+// Kept loose ([key: string]: unknown) since not every field of every variant
+// is exercised here — components must only read named fields, never spread
+// a raw node into JSX (that's what caused the earlier "object with keys..."
+// React error).
+export interface ViatorLocationRef {
+  location?: { ref?: string };
+  attractionId?: number;
+}
+
+export interface ViatorItineraryDuration {
+  fixedDurationInMinutes?: number;
+  variableDurationFromMinutes?: number;
+  variableDurationToMinutes?: number;
+  description?: string;
+}
+
+export interface ViatorItineraryItem {
+  pointOfInterestLocation?: ViatorLocationRef;
+  duration?: ViatorItineraryDuration;
+  passByWithoutStopping?: boolean;
+  admissionIncluded?: 'YES' | 'NO' | 'NOT_APPLICABLE';
+  description?: string;
+  [key: string]: unknown;
+}
+
+export interface ViatorItineraryDay {
+  title?: string;
+  dayNumber?: number;
+  items?: ViatorItineraryItem[];
+  accommodations?: Array<{ description?: string }>;
+  [key: string]: unknown;
+}
+
+export interface ViatorItineraryStop {
+  stopLocation?: { ref?: string };
+  description?: string;
+}
+
+export interface ViatorItineraryRoute {
+  name?: string;
+  operatingSchedule?: string;
+  duration?: ViatorItineraryDuration;
+  stops?: ViatorItineraryStop[];
+  [key: string]: unknown;
+}
+
+export interface ViatorItinerary {
+  itineraryType?: 'STANDARD' | 'ACTIVITY' | 'MULTI_DAY_TOUR' | 'HOP_ON_HOP_OFF' | 'UNSTRUCTURED' | string;
+  skipTheLine?: boolean;
+  privateTour?: boolean;
+  maxTravelersInSharedTour?: number;
+  duration?: ViatorItineraryDuration;
+  unstructuredDescription?: string;
+  unstructuredItinerary?: string;
+  // STANDARD
+  itineraryItems?: ViatorItineraryItem[];
+  // ACTIVITY
+  activityInfo?: { description?: string };
+  foodMenus?: Array<{ course?: string; dishName?: string; dishDescription?: string }>;
+  // MULTI_DAY_TOUR
+  days?: ViatorItineraryDay[];
+  // HOP_ON_HOP_OFF
+  routes?: ViatorItineraryRoute[];
+  [key: string]: unknown;
+}
+
+// ── reviews ──────────────────────────────────────────────────────
+// Response shape for POST /reviews/product is not exhaustively confirmed
+// against a live sandbox response, so this is kept intentionally loose.
+// Render code must only read named string/number fields below — never
+// render an unrecognized nested object directly.
+export interface ViatorReviewPhoto {
+  url?: string;
+  caption?: string;
+  [key: string]: unknown;
+}
+
+export interface ViatorReview {
+  provider?: string;
+  rating?: number;
+  title?: string;
+  text?: string;
+  travelDate?: string;
+  publishedDate?: string;
+  authorName?: string;
+  userAvatarUrl?: string;
+  photos?: Array<ViatorReviewPhoto | string>;
+  [key: string]: unknown;
+}
+
+export interface ViatorReviewsSummary {
+  combinedAverageRating?: number;
+  totalReviews?: number;
+  reviewCountTotals?: Array<{ rating?: number; count?: number }>;
+  [key: string]: unknown;
+}
+
+export interface ViatorReviewsResponse {
+  reviews?: ViatorReview[];
+  products?: ViatorReviewsSummary[];
+  [key: string]: unknown;
+}
+
+// ── related experiences ────────────────────────────────────────
+export interface RelatedExperiencesResponse {
+  products: ViatorProduct[];
+}
+
+// Viator v2 "inclusions" / "exclusions" item — a structured description,
+// not a plain string. otherDescription is a free-text override; when absent,
+// fall back to typeDescription, then categoryDescription, then category.
+export interface ViatorInclusionExclusion {
+  otherDescription?: string;
+  category?: string;
+  categoryDescription?: string;
+  type?: string;
+  typeDescription?: string;
+}
+
+// Viator v2 "additionalInfo" item.
+export interface ViatorAdditionalInfo {
+  description?: string;
+  type?: string;
 }
 
 export interface ViatorDestination {

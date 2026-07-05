@@ -110,11 +110,17 @@ function ExperienceCard({ product }: { product: ViatorProduct }) {
 export default function FeaturedExperiences() {
   const [products, setProducts] = useState<ViatorProduct[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     searchExperiences({ sortOrder: 'TOP_RATED', perPage: 8 })
       .then(({ products }) => setProducts(products))
-      .catch(() => {})
+      .catch((err: unknown) => {
+        // Surface the real cause instead of always showing a generic
+        // "connect your Viator key" message — this fires the same way for
+        // CORS errors, a stale NEXT_PUBLIC_API_URL, or heroapi-v2 being down.
+        setError(err instanceof Error ? err.message : 'Could not reach the experiences API.');
+      })
       .finally(() => setLoading(false));
   }, []);
 
