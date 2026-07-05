@@ -77,7 +77,7 @@ export default function Footer() {
             color: 'rgba(255,255,255,0.35)',
           }}
         >
-          <span>© Nuvho Systems Pty Ltd. All rights reserved.</span>
+          <span>© Nuvho IP Pty Ltd. All rights reserved.</span>
         </div>
       </div>
     </footer>
