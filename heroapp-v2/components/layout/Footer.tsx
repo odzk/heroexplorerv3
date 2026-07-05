@@ -39,7 +39,7 @@ export default function Footer() {
             </Link>
             <p className="text-sm" style={{ color: 'rgba(255,255,255,0.55)' }}>
               Discover and book extraordinary travel experiences around the
-              world, powered by Viator.
+              world.
             </p>
           </div>
 
@@ -78,7 +78,6 @@ export default function Footer() {
           }}
         >
           <span>© Nuvho Systems Pty Ltd. All rights reserved.</span>
-          <span>Powered by Viator Partner API</span>
         </div>
       </div>
     </footer>

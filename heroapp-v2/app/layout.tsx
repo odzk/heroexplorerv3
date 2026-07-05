@@ -23,8 +23,8 @@ export const metadata: Metadata = {
     template: '%s | Hero Explorer',
   },
   description:
-    'Discover and book extraordinary tours, activities, and experiences around the world. Powered by Viator.',
-  keywords: ['travel', 'tours', 'experiences', 'activities', 'booking', 'viator'],
+    'Discover and book extraordinary tours, activities, and experiences around the world.',
+  keywords: ['travel', 'tours', 'experiences', 'activities', 'booking'],
   icons: {
     icon: '/tab_logo.png',
     shortcut: '/tab_logo.png',
