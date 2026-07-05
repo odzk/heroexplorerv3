@@ -58,6 +58,10 @@ export default function BookPage() {
     if (!code) return;
     getExperienceDetail(code)
       .then((data) => {
+        // getExperienceDetail (heroapi-v2) now enriches the response with a
+        // real, server-fetched price when Viator's content endpoint didn't
+        // include one — see viatorClient.ts getProductDetail. No client-
+        // supplied price is read from the query string.
         setProduct(data);
         // Seed any traveler bands the query string didn't cover (e.g. the
         // user landed here directly) using the product's own defaults —
@@ -279,6 +283,7 @@ export default function BookPage() {
                   value={form.date}
                   onChange={(date) => setForm({ ...form, date })}
                   variant="inline"
+                  fallbackPrice={product.price}
                 />
               </div>
             </div>

@@ -1,4 +1,5 @@
 import { Router, Request, Response } from 'express';
+import axios from 'axios';
 import {
   searchProducts,
   getProductDetail,
@@ -87,16 +88,32 @@ router.get('/:code', async (req: Request, res: Response) => {
 // shape is defensively typed on the frontend (see lib/types.ts) since it is
 // not exhaustively confirmed against a live sandbox response.
 router.get('/:code/reviews', async (req: Request, res: Response) => {
+  const pageNum = Number(req.query.page);
+  const perPageNum = Number(req.query.perPage);
+  // Guard against NaN/0/negative from a bad or missing query param — Viator
+  // rejects a non-positive-integer `start`, and (page-1)*perPage+1 only
+  // stays a positive integer when both inputs already are.
+  const page = Number.isInteger(pageNum) && pageNum > 0 ? pageNum : 1;
+  const perPage = Number.isInteger(perPageNum) && perPageNum > 0 ? perPageNum : 10;
+  const start = (page - 1) * perPage + 1;
+
   try {
-    const page = Number(req.query.page ?? 1);
-    const perPage = Number(req.query.perPage ?? 10);
     const data = await getProductReviews({
       productCode: req.params.code,
       provider: 'ALL',
-      pagination: { start: (page - 1) * perPage + 1, count: perPage },
+      pagination: { start, count: perPage },
     });
     res.json(data);
   } catch (error: unknown) {
+    // Viator 400s this endpoint (e.g. "specified start must be a positive
+    // integer") once you request a page/count past what actually exists for
+    // a product with few or zero reviews — that's a normal "no (more)
+    // reviews" state, not a real failure, so degrade to an empty payload
+    // instead of a 502 the frontend would otherwise have to swallow.
+    if (axios.isAxiosError(error) && error.response?.status === 400) {
+      res.json({ reviews: [], products: [] });
+      return;
+    }
     const msg = error instanceof Error ? error.message : 'Unknown error';
     res.status(502).json({ message: 'Failed to fetch experience reviews', details: msg });
   }

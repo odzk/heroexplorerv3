@@ -159,3 +159,15 @@ export function formatCompactPrice(price: number, currencyCode: string): string 
   const symbol = CURRENCY_SYMBOLS[currencyCode] ?? `${currencyCode} `;
   return `${symbol}${Math.round(price)}`;
 }
+
+/**
+ * Link to a product's detail page. Pricing used to be carried here as a
+ * query-param fallback because Viator's product-detail content endpoint
+ * (`/products/{code}`) doesn't include `pricing`/fromPrice — but that's now
+ * fetched server-side in heroapi-v2 (getProductDetail enriches the response
+ * via /products/search/codes), so the detail page always has a real,
+ * Viator-sourced price without any client-supplied value in the URL.
+ */
+export function experienceHref(product: ViatorProduct): string {
+  return `/experience/${product.productCode}`;
+}

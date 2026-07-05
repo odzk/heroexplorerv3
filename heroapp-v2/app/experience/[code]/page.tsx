@@ -53,6 +53,9 @@ export default function ExperiencePage() {
 
   useEffect(() => {
     if (!code) return;
+    // heroapi-v2's getProductDetail enriches the raw Viator content response
+    // with a real, server-fetched price (via /products/search/codes) when
+    // the content endpoint itself doesn't include one — see viatorClient.ts.
     getExperienceDetail(code)
       .then(setProduct)
       .catch((e) => setError(e.message))

@@ -225,7 +225,31 @@ export const searchProductsByCodes = (body: unknown) => viatorPost('/products/se
 // ─── Product detail / availability ────────────
 export const getProductDetail = async (productCode: string) => {
   const { data } = await viatorClient.get(`/products/${productCode}`);
-  return normalizeViatorProduct(data as Record<string, unknown>);
+  const normalized = normalizeViatorProduct(data as Record<string, unknown>);
+
+  // The content endpoint above never includes live pricing — Viator only
+  // returns `pricing.summary.fromPrice` from /products/search and its
+  // codes-scoped variant (/products/search/codes). Fetch it server-side
+  // here (never trust a client-supplied price) so the detail/booking pages
+  // always show a real, current Viator price with no query-param carrying.
+  if (!normalized.price) {
+    try {
+      const priceData = (await searchProductsByCodes({
+        productCodes: [productCode],
+        currency: CURRENCY,
+      })) as { products?: Record<string, unknown>[] };
+      const match = priceData?.products?.[0];
+      if (match) {
+        const withPrice = normalizeViatorProduct(match);
+        if (withPrice.price) normalized.price = withPrice.price;
+      }
+    } catch {
+      // Non-fatal — the detail/booking page just renders without a price,
+      // same as before this enrichment existed.
+    }
+  }
+
+  return normalized;
 };
 
 export const getProductAvailability = async (productCode: string, month?: string) => {

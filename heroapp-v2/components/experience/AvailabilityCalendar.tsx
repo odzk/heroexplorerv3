@@ -13,9 +13,16 @@ interface Props {
   onChange: (date: string) => void;
   /** 'dropdown' (product page preview) or 'inline' (booking page, always expanded). */
   variant?: 'dropdown' | 'inline';
+  /**
+   * The product's general "from" price (product.price), shown under a
+   * bookable date whenever Viator's per-date schedule has no pricingDetails
+   * match for that date — so the calendar always shows *a* price instead of
+   * silently rendering blank cells.
+   */
+  fallbackPrice?: { fromPrice: number; currencyCode: string };
 }
 
-export default function AvailabilityCalendar({ code, value, onChange, variant = 'dropdown' }: Props) {
+export default function AvailabilityCalendar({ code, value, onChange, variant = 'dropdown', fallbackPrice }: Props) {
   const [open, setOpen] = useState(variant === 'inline');
   const [schedule, setSchedule] = useState<AvailabilitySchedule | null>(null);
   const [loading, setLoading] = useState(false);
@@ -65,7 +72,11 @@ export default function AvailabilityCalendar({ code, value, onChange, variant = 
     if (!d) return null;
     const isPast = d < today;
     const bookable = isPast ? false : loadFailed ? true : isDateBookable(schedule, d);
-    const price = !isPast && !loadFailed && bookable ? getLowestPriceForDate(schedule, d) : null;
+    const price =
+      !isPast && bookable
+        ? getLowestPriceForDate(schedule, d) ??
+          (fallbackPrice ? { price: fallbackPrice.fromPrice, currencyCode: fallbackPrice.currencyCode } : null)
+        : null;
     return { date: d, isPast, bookable, price };
   });
 

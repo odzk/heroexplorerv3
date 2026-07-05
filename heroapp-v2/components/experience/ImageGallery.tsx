@@ -67,12 +67,12 @@ export default function ImageGallery({ images, fallbackUrl, title }: ImageGaller
         {/* Thumbnail rail — vertical on desktop, horizontal on mobile */}
         {gallery.length > 1 && (
           <div
-            className="flex sm:flex-col gap-2 overflow-x-auto sm:overflow-y-auto sm:h-96 sm:w-20 order-2 sm:order-1 pb-1 sm:pb-0"
+            className="flex sm:flex-col gap-2 overflow-x-auto sm:overflow-y-auto sm:h-96 sm:w-32 order-2 sm:order-1 pb-1 sm:pb-0"
             role="listbox"
             aria-label="Product photos"
           >
             {gallery.map((img, i) => {
-              const thumb = getImageVariantUrl(img, 120);
+              const thumb = getImageVariantUrl(img, 200);
               const isActive = i === safeActive;
               return (
                 <button
@@ -81,10 +81,10 @@ export default function ImageGallery({ images, fallbackUrl, title }: ImageGaller
                   role="option"
                   aria-selected={isActive}
                   onClick={() => goTo(i)}
-                  className="relative flex-shrink-0 rounded-lg overflow-hidden"
+                  className="relative flex-shrink-0 rounded-lg overflow-hidden w-full"
                   style={{
-                    width: 72,
-                    height: 56,
+                    width: 116,
+                    height: 84,
                     outline: isActive ? '2px solid var(--nv-blue-slate)' : '2px solid transparent',
                     outlineOffset: '-2px',
                     opacity: isActive ? 1 : 0.75,

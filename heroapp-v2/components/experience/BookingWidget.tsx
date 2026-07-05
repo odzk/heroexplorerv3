@@ -41,6 +41,8 @@ export default function BookingWidget({ product }: Props) {
     Object.entries(counts).forEach(([band, n]) => {
       if (n && n > 0) qs.set(band.toLowerCase(), String(n));
     });
+    // Price is no longer carried here — /book/[code] fetches it server-side
+    // via the same getProductDetail enrichment as the detail page.
     const query = qs.toString();
     return `/book/${product.productCode}${query ? `?${query}` : ''}`;
   })();
@@ -73,7 +75,12 @@ export default function BookingWidget({ product }: Props) {
       )}
 
       <div className="space-y-3 mb-5">
-        <AvailabilityCalendar code={product.productCode} value={date} onChange={setDate} />
+        <AvailabilityCalendar
+          code={product.productCode}
+          value={date}
+          onChange={setDate}
+          fallbackPrice={product.price}
+        />
         <TravelersSelector
           ageBands={ageBands}
           maxTotal={maxTotal}

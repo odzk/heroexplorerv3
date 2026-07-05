@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Star, Clock } from 'lucide-react';
 import { getRelatedExperiences } from '@/lib/api';
 import type { ViatorProduct } from '@/lib/types';
-import { getProductImageUrl } from '@/lib/utils';
+import { experienceHref, getProductImageUrl } from '@/lib/utils';
 
 // "Other related experiences" rail — Viator v2 has no dedicated similar-
 // products endpoint, so the backend (GET /api/experiences/:code/related)
@@ -41,7 +41,7 @@ function RelatedCard({ product }: { product: ViatorProduct }) {
 
   return (
     <Link
-      href={`/experience/${product.productCode}`}
+      href={experienceHref(product)}
       className="nv-card flex-shrink-0 block group"
       style={{ width: 260 }}
     >

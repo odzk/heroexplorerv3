@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { Star, Clock, ArrowRight } from 'lucide-react';
 import { searchExperiences } from '@/lib/api';
 import type { ViatorProduct } from '@/lib/types';
-import { getProductImageUrl } from '@/lib/utils';
+import { experienceHref, getProductImageUrl } from '@/lib/utils';
 
 function formatDuration(p: ViatorProduct): string {
   const d = p.duration;
@@ -29,7 +29,7 @@ function ExperienceCard({ product }: { product: ViatorProduct }) {
   const img = getProductImageUrl(product, 480);
 
   return (
-    <Link href={`/experience/${product.productCode}`} className="nv-card group block">
+    <Link href={experienceHref(product)} className="nv-card group block">
       {/* Image */}
       <div className="relative h-44 overflow-hidden bg-gray-100">
         {img ? (
