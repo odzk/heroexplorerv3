@@ -14,17 +14,32 @@ import { searchFreetext, getDestinations, freetextSearch } from '../services/via
 
 const router = Router();
 
-// GET /api/destinations            — full taxonomy (Viator)
-// GET /api/destinations?q=sydney   — freetext destination search (Viator)
+// GET /api/destinations            — full taxonomy (Viator, cached)
+// GET /api/destinations?q=sydney   — freetext destination search (Viator, not cached)
+//
+// The plain taxonomy branch is what the frontend actually calls (see
+// heroapp-v2/lib/api.ts getDestinations()), from multiple components on the
+// same page (DestinationGrid + the search page), with zero caching — every
+// mount hit Viator live. That's the main contributor to the sandbox 429s seen
+// on this route. Cache it the same way /getAllDestinations already does.
 router.get(
   '/',
   asyncHandler(async (req: Request, res: Response) => {
     const { q, destId } = req.query;
     if (q) {
       res.json(await searchFreetext(String(q)));
-    } else {
-      res.json(await getDestinations(destId ? Number(destId) : undefined));
+      return;
     }
+
+    const cacheKey = `viator:destinations:${destId ?? 'all'}`;
+    const cached = await cacheGet(cacheKey);
+    if (cached) {
+      res.json(cached);
+      return;
+    }
+    const data = await getDestinations(destId ? Number(destId) : undefined);
+    await cacheSet(cacheKey, data, 86400);
+    res.json(data);
   }),
 );
 

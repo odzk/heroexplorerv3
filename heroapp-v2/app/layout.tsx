@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Comfortaa, Raleway } from 'next/font/google';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
+import DebugConsole from '@/components/debug/DebugConsole';
 import './globals.css';
 
 const comfortaa = Comfortaa({
@@ -54,6 +55,7 @@ export default function RootLayout({
         <Header />
         <main className="flex-1">{children}</main>
         <Footer />
+        <DebugConsole />
       </body>
     </html>
   );

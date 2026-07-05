@@ -16,6 +16,7 @@ import type {
   ViatorReviewsResponse,
   RelatedExperiencesResponse,
 } from './types';
+import { logApiCall } from './debugLog';
 
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
@@ -27,23 +28,73 @@ function getAuthHeaders(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
+// Every call through here now also feeds the dev debug console footer
+// (components/debug/DebugConsole.tsx) via logApiCall — method, path, status,
+// timing, and the response/error body. logApiCall itself is a no-op outside
+// development, so this adds no overhead or data exposure in production.
 async function request<T>(
   path: string,
   options: RequestInit = {},
 ): Promise<T> {
-  const res = await fetch(`${BASE_URL}${path}`, {
-    ...options,
-    headers: {
-      'Content-Type': 'application/json',
-      ...getAuthHeaders(),
-      ...(options.headers as Record<string, string> | undefined),
-    },
-  });
+  const method = (options.method ?? 'GET').toUpperCase();
+  const startedAt = Date.now();
+
+  let res: Response;
+  try {
+    res = await fetch(`${BASE_URL}${path}`, {
+      ...options,
+      headers: {
+        'Content-Type': 'application/json',
+        ...getAuthHeaders(),
+        ...(options.headers as Record<string, string> | undefined),
+      },
+    });
+  } catch (networkError) {
+    logApiCall({
+      method,
+      path,
+      status: 0,
+      ok: false,
+      durationMs: Date.now() - startedAt,
+      error: networkError,
+    });
+    throw networkError;
+  }
+
+  const durationMs = Date.now() - startedAt;
+
   if (!res.ok) {
     const err = await res.json().catch(() => ({ message: 'Request failed' }));
+    logApiCall({ method, path, status: res.status, ok: false, durationMs, body: err });
     throw new Error(err.message || `HTTP ${res.status}`);
   }
-  return res.json();
+
+  const data = await res.json();
+  logApiCall({ method, path, status: res.status, ok: true, durationMs, body: data });
+  return data;
+}
+
+// Near-static taxonomy (destinations, categories) is independently fetched
+// on mount by more than one component per page — e.g. DestinationGrid +
+// the search page both call getDestinations(), CategoryBar + SearchFilters
+// both call getCategories(). With no dedupe, a single page load issued the
+// same request twice, doubling the calls that hit the (now-cached, but
+// still rate-limited) Viator-backed API routes. This dedupes concurrent
+// calls to the same key and short-caches the result so back-to-back mounts
+// within a few minutes reuse one response instead of refetching.
+const dedupeCache = new Map<string, { promise: Promise<unknown>; expiresAt: number }>();
+
+function requestDeduped<T>(key: string, fetcher: () => Promise<T>, ttlMs = 5 * 60 * 1000): Promise<T> {
+  const cached = dedupeCache.get(key);
+  if (cached && cached.expiresAt > Date.now()) {
+    return cached.promise as Promise<T>;
+  }
+  const promise = fetcher().catch((err) => {
+    dedupeCache.delete(key); // never cache a failure
+    throw err;
+  });
+  dedupeCache.set(key, { promise, expiresAt: Date.now() + ttlMs });
+  return promise as Promise<T>;
 }
 
 // ── destinations ──────────────────────────────────────────────
@@ -60,9 +111,8 @@ export async function getDestinations(
   const params = destId
     ? new URLSearchParams({ destId: String(destId) })
     : '';
-  return request<ViatorDestination[]>(
-    `/api/destinations${params ? `?${params}` : ''}`,
-  );
+  const path = `/api/destinations${params ? `?${params}` : ''}`;
+  return requestDeduped(path, () => request<ViatorDestination[]>(path));
 }
 
 // ── experiences ───────────────────────────────────────────────
@@ -79,7 +129,9 @@ export async function searchExperiences(
 }
 
 export async function getCategories(): Promise<ViatorCategory[]> {
-  return request<ViatorCategory[]>('/api/experiences/categories');
+  return requestDeduped('/api/experiences/categories', () =>
+    request<ViatorCategory[]>('/api/experiences/categories'),
+  );
 }
 
 export async function getExperienceDetail(

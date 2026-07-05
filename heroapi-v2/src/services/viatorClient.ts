@@ -17,6 +17,18 @@ import { env, isProd } from '../config/env';
 // code — verify the exact v2 path against current Viator docs before go-live.
 // ─────────────────────────────────────────────
 
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+// Bounded retries for Viator's sandbox rate limit (429). The sandbox key is
+// shared across every taxonomy/search/review call this API makes, and a
+// single burst (e.g. one page load fetching destinations + categories +
+// products + reviews, sometimes duplicated by the frontend) was enough to
+// trip it. A 429 here used to propagate straight through as a 500/502, which
+// on the reviews endpoint in particular was indistinguishable on the
+// frontend from "this product has no reviews" — see ReviewsSection.tsx.
+const MAX_RETRIES = 2;
+const RETRY_BASE_DELAY_MS = 500;
+
 const createViatorClient = (): AxiosInstance => {
   const client = axios.create({
     baseURL: env.VIATOR_API_URL,
@@ -31,10 +43,28 @@ const createViatorClient = (): AxiosInstance => {
 
   client.interceptors.response.use(
     (res) => res,
-    (err) => {
+    async (err) => {
+      const status = err.response?.status;
+      const config = err.config as (typeof err.config & { __retryCount?: number }) | undefined;
+
+      if (status === 429 && config) {
+        config.__retryCount = (config.__retryCount ?? 0) + 1;
+        if (config.__retryCount <= MAX_RETRIES) {
+          const delay = RETRY_BASE_DELAY_MS * 2 ** (config.__retryCount - 1);
+          if (!isProd) {
+            // eslint-disable-next-line no-console
+            console.warn(
+              `[Viator] 429 on ${config.url} — retry ${config.__retryCount}/${MAX_RETRIES} after ${delay}ms`,
+            );
+          }
+          await sleep(delay);
+          return client.request(config);
+        }
+      }
+
       if (!isProd) {
         // eslint-disable-next-line no-console
-        console.error(`[Viator] ERROR ${err.response?.status} ${err.response?.config?.url}:`, err.response?.data);
+        console.error(`[Viator] ERROR ${status} ${err.response?.config?.url}:`, err.response?.data);
       }
       return Promise.reject(err);
     },

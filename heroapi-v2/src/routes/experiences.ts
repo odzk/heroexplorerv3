@@ -9,6 +9,7 @@ import {
   getLocationsBulk,
 } from '../services/viatorClient';
 import { collectLocationRefs, buildLocationMap } from '../lib/itineraryLocations';
+import { cacheGet, cacheSet } from '../config/redis';
 
 const router = Router();
 
@@ -43,9 +44,20 @@ router.get('/', async (req: Request, res: Response) => {
 });
 
 // GET /api/experiences/categories
+// Near-static Viator tag taxonomy, but was fetched live on every call with no
+// caching — and is mounted independently by both CategoryBar and
+// SearchFilters on the frontend, so a single page load issued this (and the
+// underlying Viator /products/tags call) twice. Cached here for the same
+// reason /api/destinations now is: to stop burning the sandbox rate limit.
 router.get('/categories', async (_req: Request, res: Response) => {
   try {
+    const cached = await cacheGet('viator:categories');
+    if (cached) {
+      res.json(cached);
+      return;
+    }
     const data = await getCategories();
+    await cacheSet('viator:categories', data, 86400);
     res.json(data);
   } catch (error: unknown) {
     const msg = error instanceof Error ? error.message : 'Unknown error';

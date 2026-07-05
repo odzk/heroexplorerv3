@@ -127,6 +127,14 @@ export default function ReviewsSection({ code, fallbackRating, fallbackReviewCou
   const [error, setError] = useState(false);
   const [hasMore, setHasMore] = useState(true);
 
+  // NOTE: `page` used to only be set inside the try block, so a failed
+  // *initial* fetch left `page` at 0 forever. The `error && page > 0` guard
+  // below therefore never fired for that case, and the component fell
+  // through to the "No reviews yet" empty state — a fetch failure (e.g. the
+  // API's /reviews route degrading a Viator 429/502 to nothing usable) was
+  // indistinguishable from a product that genuinely has zero reviews. Setting
+  // `page` in `finally` means "page" now tracks "an attempt for this page
+  // completed," success or not, so the error guard actually works.
   const loadPage = async (nextPage: number) => {
     setLoading(true);
     setError(false);
@@ -136,11 +144,11 @@ export default function ReviewsSection({ code, fallbackRating, fallbackReviewCou
       setReviews((prev) => (nextPage === 1 ? batch : [...prev, ...batch]));
       setSummary(data.products?.[0]);
       setHasMore(batch.length >= PER_PAGE);
-      setPage(nextPage);
     } catch {
       setError(true);
       setHasMore(false);
     } finally {
+      setPage(nextPage);
       setLoading(false);
     }
   };
@@ -154,7 +162,23 @@ export default function ReviewsSection({ code, fallbackRating, fallbackReviewCou
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
 
-  if (error && reviews.length === 0 && page > 0) return null;
+  const initialLoadFailed = error && reviews.length === 0 && page > 0;
+
+  if (initialLoadFailed) {
+    return (
+      <div className="mb-8">
+        <h2 className="text-lg font-bold mb-3" style={{ fontFamily: 'var(--font-comfortaa)', color: 'var(--nv-text-heading)' }}>
+          Traveler reviews
+        </h2>
+        <p className="text-sm" style={{ color: 'var(--nv-text-muted)' }}>
+          Couldn&apos;t load reviews right now.{' '}
+          <button type="button" onClick={() => loadPage(1)} className="underline font-semibold">
+            Try again
+          </button>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className="mb-8">
