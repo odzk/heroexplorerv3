@@ -111,6 +111,36 @@ export const getCategories = async () => {
 };
 export const getProductTags = getCategories;
 
+// ─── Response normalization ───────────────────
+// Viator v2 nests rating/review data under `reviews` and price under
+// `pricing.summary`, but heroapp-v2's ViatorProduct type (lib/types.ts) and
+// every card component read a flat `rating`, `reviewCount`, and
+// `price: { fromPrice, currencyCode }`. Passing the raw Viator shape straight
+// through (as searchProducts/getProductDetail previously did) left
+// `product.price` and `product.rating` undefined on every card. Confirmed
+// against the working legacy Angular app, which reads
+// `data.reviews.combinedAverageRating`, `data.reviews.totalReviews`,
+// `data.pricing.currency`, and `data.pricing.summary.fromPrice`.
+function normalizeViatorProduct<T extends Record<string, unknown>>(raw: T): T {
+  const reviews = raw.reviews as { combinedAverageRating?: number; totalReviews?: number } | undefined;
+  const pricing = raw.pricing as { summary?: { fromPrice?: number }; currency?: string } | undefined;
+
+  return {
+    ...raw,
+    rating: (raw.rating as number | undefined) ?? reviews?.combinedAverageRating,
+    reviewCount: (raw.reviewCount as number | undefined) ?? reviews?.totalReviews,
+    price:
+      raw.price ??
+      (pricing?.summary?.fromPrice !== undefined
+        ? { fromPrice: pricing.summary.fromPrice, currencyCode: pricing.currency ?? CURRENCY }
+        : undefined),
+  };
+}
+
+function normalizeViatorProducts<T extends Record<string, unknown>>(products: T[]): T[] {
+  return products.map(normalizeViatorProduct);
+}
+
 // ─── Product search (typed, tested) ───────────
 export const searchProducts = async (params: {
   destId?: number;
@@ -151,11 +181,17 @@ export const searchProducts = async (params: {
     // consistent { products, totalCount } response either way.
     const productsField = (data as { products?: unknown })?.products;
     if (Array.isArray(productsField)) {
-      return { products: productsField, totalCount: productsField.length };
+      return {
+        products: normalizeViatorProducts(productsField as Record<string, unknown>[]),
+        totalCount: productsField.length,
+      };
     }
     const nested = productsField as { results?: unknown[]; totalCount?: number } | undefined;
     const results = nested?.results ?? [];
-    return { products: results, totalCount: nested?.totalCount ?? results.length };
+    return {
+      products: normalizeViatorProducts(results as Record<string, unknown>[]),
+      totalCount: nested?.totalCount ?? results.length,
+    };
   }
 
   const destination = rest.destId ? String(rest.destId) : DEFAULT_DEST_ID;
@@ -173,6 +209,10 @@ export const searchProducts = async (params: {
     pagination: { start: (page - 1) * perPage + 1, count: perPage },
     currency: CURRENCY,
   });
+  const products = (data as { products?: unknown })?.products;
+  if (Array.isArray(products)) {
+    return { ...data, products: normalizeViatorProducts(products as Record<string, unknown>[]) };
+  }
   return data;
 };
 
@@ -185,7 +225,7 @@ export const searchProductsByCodes = (body: unknown) => viatorPost('/products/se
 // ─── Product detail / availability ────────────
 export const getProductDetail = async (productCode: string) => {
   const { data } = await viatorClient.get(`/products/${productCode}`);
-  return data;
+  return normalizeViatorProduct(data as Record<string, unknown>);
 };
 
 export const getProductAvailability = async (productCode: string, month?: string) => {

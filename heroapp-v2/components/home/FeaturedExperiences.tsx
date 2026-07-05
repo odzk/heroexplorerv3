@@ -67,41 +67,54 @@ function ExperienceCard({ product }: { product: ViatorProduct }) {
           {product.title}
         </h3>
 
-        {/* Meta row */}
-        <div className="flex items-center gap-3 text-xs mb-3" style={{ color: 'var(--nv-text-muted)' }}>
-          {product.rating && product.rating > 0 && (
-            <span className="flex items-center gap-1">
-              <Star size={11} fill="var(--nv-tuscan-sun)" color="var(--nv-tuscan-sun)" />
+        {/* Duration / confirmation line */}
+        {(dur || product.bookingConfirmationSettings?.confirmationType === 'INSTANT') && (
+          <div className="flex items-center gap-2 text-xs mb-3" style={{ color: 'var(--nv-text-muted)' }}>
+            {dur && (
+              <span className="flex items-center gap-1">
+                <Clock size={11} />
+                {dur}
+              </span>
+            )}
+            {dur && product.bookingConfirmationSettings?.confirmationType === 'INSTANT' && (
+              <span aria-hidden="true">•</span>
+            )}
+            {product.bookingConfirmationSettings?.confirmationType === 'INSTANT' && (
+              <span>Instant confirmation</span>
+            )}
+          </div>
+        )}
+
+        {/* Bottom row: reviews left, price right */}
+        <div className="flex items-center justify-between gap-2">
+          {product.rating && product.rating > 0 ? (
+            <span className="flex items-center gap-1 text-xs" style={{ color: 'var(--nv-text-muted)' }}>
+              <Star size={13} fill="var(--nv-tuscan-sun)" color="var(--nv-tuscan-sun)" />
               <strong style={{ color: 'var(--nv-text-body)' }}>{product.rating.toFixed(1)}</strong>
               {product.reviewCount ? (
                 <span>({product.reviewCount.toLocaleString()})</span>
               ) : null}
             </span>
+          ) : (
+            <span />
           )}
-          {dur && (
-            <span className="flex items-center gap-1">
-              <Clock size={11} />
-              {dur}
-            </span>
+
+          {product.price?.fromPrice !== undefined && (
+            <div className="flex items-baseline gap-1">
+              <span className="text-xs" style={{ color: 'var(--nv-text-muted)' }}>from</span>
+              <span
+                className="text-base font-bold"
+                style={{ fontFamily: 'var(--font-comfortaa)', color: 'var(--nv-blue-slate)' }}
+              >
+                {product.price.currencyCode}{' '}
+                {product.price.fromPrice.toLocaleString('en-AU', {
+                  minimumFractionDigits: 2,
+                  maximumFractionDigits: 2,
+                })}
+              </span>
+            </div>
           )}
         </div>
-
-        {/* Price */}
-        {product.price?.fromPrice !== undefined && (
-          <div className="flex items-baseline gap-1">
-            <span className="text-xs" style={{ color: 'var(--nv-text-muted)' }}>From</span>
-            <span
-              className="text-base font-bold"
-              style={{ fontFamily: 'var(--font-comfortaa)', color: 'var(--nv-blue-slate)' }}
-            >
-              {product.price.currencyCode}{' '}
-              {product.price.fromPrice.toLocaleString('en-AU', {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}
-            </span>
-          </div>
-        )}
       </div>
     </Link>
   );

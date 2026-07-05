@@ -51,6 +51,19 @@ export interface ViatorProduct {
   exclusions?: ViatorInclusionExclusion[];
   additionalInfo?: ViatorAdditionalInfo[];
   itinerary?: ViatorItinerary;
+  // Viator v2 age-band pricing config — drives the Adult/Child/Infant traveler
+  // picker. Not every product returns every band; the UI must only render the
+  // bands actually present here (see components/experience/TravelersSelector).
+  pricingInfo?: {
+    type?: 'PER_PERSON' | 'PER_GROUP' | string;
+    ageBands?: ViatorAgeBand[];
+  };
+  // Overall booking-level traveler cap (independent of per-band max).
+  bookingRequirements?: {
+    minTravelersPerBooking?: number;
+    maxTravelersPerBooking?: number;
+    requiresAdultForBooking?: boolean;
+  };
   // Populated server-side (heroapi-v2) by resolving every itinerary
   // location ref via Viator's /locations/bulk — see backend
   // src/lib/itineraryLocations.ts. Keyed by the raw `LOC-...` ref.
@@ -238,8 +251,20 @@ export interface AuthState {
 }
 
 // ── bookings ──────────────────────────────────────────────────
+export type AgeBandCode = 'ADULT' | 'CHILD' | 'INFANT' | 'YOUTH' | 'SENIOR' | 'TRAVELER';
+
+// One entry of ViatorProduct.pricingInfo.ageBands — the per-band min/max the
+// Adult/Child/Infant traveler picker enforces.
+export interface ViatorAgeBand {
+  ageBand: AgeBandCode;
+  startAge?: number;
+  endAge?: number;
+  minTravelersPerBooking?: number;
+  maxTravelersPerBooking?: number;
+}
+
 export interface PaxMixEntry {
-  ageBand: 'ADULT' | 'CHILD' | 'INFANT' | 'YOUTH' | 'SENIOR' | 'TRAVELER';
+  ageBand: AgeBandCode;
   numberOfTravelers: number;
 }
 

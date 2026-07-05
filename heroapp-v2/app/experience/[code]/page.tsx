@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
-  Star, Clock, Check, X, ChevronLeft, MapPin, Users, Calendar
+  Star, Clock, Check, X, ChevronLeft, MapPin
 } from 'lucide-react';
 import { getExperienceDetail } from '@/lib/api';
 import type { ViatorProduct, ViatorInclusionExclusion, ViatorAdditionalInfo } from '@/lib/types';
@@ -13,6 +13,7 @@ import ItinerarySection from '@/components/experience/ItinerarySection';
 import ReviewsSection from '@/components/experience/ReviewsSection';
 import TravellerPhotos from '@/components/experience/TravellerPhotos';
 import RelatedExperiences from '@/components/experience/RelatedExperiences';
+import BookingWidget from '@/components/experience/BookingWidget';
 
 // Viator returns inclusions/exclusions as structured objects, not strings.
 // Prefer the free-text override, then fall back through the type hierarchy.
@@ -42,64 +43,6 @@ function formatDuration(p: ViatorProduct): string {
     return `${Math.floor(d.variableDurationFromMinutes / 60)}–${Math.floor(d.variableDurationToMinutes / 60)} hours`;
   }
   return '';
-}
-
-function BookingPanel({ product }: { product: ViatorProduct }) {
-  return (
-    <div
-      className="rounded-2xl p-6 sticky top-24"
-      style={{
-        background: 'white',
-        border: '1px solid var(--nv-border-hair)',
-        boxShadow: 'var(--nv-shadow-md)',
-      }}
-    >
-      {product.price?.fromPrice !== undefined && (
-        <div className="mb-4">
-          <span className="text-sm" style={{ color: 'var(--nv-text-muted)' }}>From</span>
-          <div
-            className="text-3xl font-bold"
-            style={{ fontFamily: 'var(--font-comfortaa)', color: 'var(--nv-blue-slate)' }}
-          >
-            {product.price.currencyCode}{' '}
-            {product.price.fromPrice.toLocaleString('en-AU', { minimumFractionDigits: 2 })}
-          </div>
-          <span className="text-sm" style={{ color: 'var(--nv-text-muted)' }}>per person</span>
-        </div>
-      )}
-
-      <div className="space-y-3 mb-5">
-        <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--nv-surface-page)' }}>
-          <Calendar size={16} style={{ color: 'var(--nv-steel-blue)' }} />
-          <div>
-            <p className="text-xs" style={{ color: 'var(--nv-text-muted)' }}>Select date</p>
-            <p className="text-sm font-medium" style={{ color: 'var(--nv-text-body)' }}>Choose a date</p>
-          </div>
-        </div>
-        <div className="flex items-center gap-3 p-3 rounded-xl" style={{ background: 'var(--nv-surface-page)' }}>
-          <Users size={16} style={{ color: 'var(--nv-steel-blue)' }} />
-          <div>
-            <p className="text-xs" style={{ color: 'var(--nv-text-muted)' }}>Travellers</p>
-            <p className="text-sm font-medium" style={{ color: 'var(--nv-text-body)' }}>1 adult</p>
-          </div>
-        </div>
-      </div>
-
-      <Link
-        href={`/book/${product.productCode}`}
-        className="nv-btn nv-btn--solid nv-btn--lg w-full justify-center"
-        style={{ display: 'flex' }}
-      >
-        Book now
-      </Link>
-
-      {product.bookingConfirmationSettings?.confirmationType === 'INSTANT' && (
-        <p className="text-center text-xs mt-3 flex items-center justify-center gap-1" style={{ color: 'var(--nv-success)' }}>
-          <Check size={12} /> Instant confirmation
-        </p>
-      )}
-    </div>
-  );
 }
 
 export default function ExperiencePage() {
@@ -274,7 +217,7 @@ export default function ExperiencePage() {
 
         {/* Booking panel */}
         <div className="lg:w-80 flex-shrink-0">
-          <BookingPanel product={product} />
+          <BookingWidget product={product} />
         </div>
       </div>
 

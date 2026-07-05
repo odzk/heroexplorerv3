@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useParams } from 'next/navigation';
+import { useParams, useSearchParams } from 'next/navigation';
 import { ChevronLeft, Calendar, Users, CreditCard, Check, AlertCircle } from 'lucide-react';
 import {
   getExperienceDetail,
@@ -10,10 +10,34 @@ import {
   holdBooking,
   bookExperience,
 } from '@/lib/api';
-import type { ViatorProduct, BookRequestPayload, BookingResult } from '@/lib/types';
+import type { AgeBandCode, BookRequestPayload, BookingResult, PaxMixEntry, ViatorProduct } from '@/lib/types';
+import { formatDateLabel } from '@/lib/utils';
+import AvailabilityCalendar from '@/components/experience/AvailabilityCalendar';
+import TravelersSelector, {
+  DEFAULT_AGE_BANDS,
+  defaultCounts,
+  summarizeCounts,
+  totalTravelers,
+  type TravelerCounts,
+} from '@/components/experience/TravelersSelector';
+
+// Every ageBand key TravelerCounts / query params might use, lowercased for
+// the ?adult=2&child=1 query string BookingWidget builds on the product page.
+const BAND_CODES: AgeBandCode[] = ['ADULT', 'CHILD', 'INFANT', 'YOUTH', 'SENIOR', 'TRAVELER'];
+
+function countsFromSearchParams(params: URLSearchParams): TravelerCounts {
+  const counts: TravelerCounts = {};
+  BAND_CODES.forEach((band) => {
+    const raw = params.get(band.toLowerCase());
+    const n = raw != null ? parseInt(raw, 10) : NaN;
+    if (!Number.isNaN(n) && n > 0) counts[band] = n;
+  });
+  return counts;
+}
 
 export default function BookPage() {
   const { code } = useParams<{ code: string }>();
+  const searchParams = useSearchParams();
   const [product, setProduct] = useState<ViatorProduct | null>(null);
   const [loading, setLoading] = useState(true);
   const [step, setStep] = useState<'details' | 'confirm' | 'done'>('details');
@@ -23,8 +47,8 @@ export default function BookPage() {
   const [selectedOptionCode, setSelectedOptionCode] = useState<string | null>(null);
   const [bookingResult, setBookingResult] = useState<BookingResult | null>(null);
   const [form, setForm] = useState({
-    date: '',
-    adults: 1,
+    date: searchParams.get('date') ?? '',
+    counts: countsFromSearchParams(searchParams),
     firstName: '',
     lastName: '',
     email: '',
@@ -33,15 +57,44 @@ export default function BookPage() {
   useEffect(() => {
     if (!code) return;
     getExperienceDetail(code)
-      .then(setProduct)
+      .then((data) => {
+        setProduct(data);
+        // Seed any traveler bands the query string didn't cover (e.g. the
+        // user landed here directly) using the product's own defaults —
+        // but never clobber counts that already came from the query string.
+        const bands = data.pricingInfo?.ageBands?.length ? data.pricingInfo.ageBands : DEFAULT_AGE_BANDS;
+        setForm((f) => {
+          if (Object.keys(f.counts).length > 0) return f;
+          return { ...f, counts: defaultCounts(bands) };
+        });
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [code]);
+
+  const ageBands = product?.pricingInfo?.ageBands?.length ? product.pricingInfo.ageBands : DEFAULT_AGE_BANDS;
+  const maxTotal = product?.bookingRequirements?.maxTravelersPerBooking ?? 12;
+
+  // INFANT is free on Viator (see the FREE tag in TravelersSelector) — never charged.
+  const chargeableTravelers = ageBands
+    .filter((b) => b.ageBand !== 'INFANT')
+    .reduce((sum, b) => sum + (form.counts[b.ageBand] ?? 0), 0);
+  const travelers = totalTravelers(form.counts);
+
+  function buildPaxMix(): PaxMixEntry[] {
+    return Object.entries(form.counts)
+      .filter(([, n]) => (n ?? 0) > 0)
+      .map(([ageBand, numberOfTravelers]) => ({
+        ageBand: ageBand as AgeBandCode,
+        numberOfTravelers: numberOfTravelers as number,
+      }));
+  }
 
   // Step 1 -> 2: confirm real availability on heroapi-v2 before showing the
   // confirm screen (POST /api/products/loadOptionsOfAProduct).
   async function handleContinue() {
-    if (!product || !form.date) return;
+    if (!product || !form.date || travelers === 0) return;
     setChecking(true);
     setError(null);
     try {
@@ -50,7 +103,7 @@ export default function BookPage() {
         productCode: code,
         travelDate: form.date,
         currency,
-        paxMix: [{ ageBand: 'ADULT', numberOfTravelers: form.adults }],
+        paxMix: buildPaxMix(),
       });
       const item = result.bookableItems?.[0];
       if (!item) {
@@ -78,7 +131,7 @@ export default function BookPage() {
       productOptionCode: selectedOptionCode ?? undefined,
       travelDate: form.date,
       currency,
-      paxMix: [{ ageBand: 'ADULT', numberOfTravelers: form.adults }],
+      paxMix: buildPaxMix(),
       communication: { email: form.email, firstName: form.firstName, lastName: form.lastName },
       bookingQuestionAnswers: [],
       partnerBookingRef: `HE-${code}-${Date.now()}`,
@@ -123,7 +176,7 @@ export default function BookPage() {
     </div>
   );
 
-  const total = (product.price?.fromPrice || 0) * form.adults;
+  const total = (product.price?.fromPrice || 0) * chargeableTravelers;
 
   if (step === 'done') return (
     <div className="max-w-2xl mx-auto px-4 py-16 text-center">
@@ -220,37 +273,27 @@ export default function BookPage() {
               <label className="flex items-center gap-2 text-xs font-semibold mb-2" style={{ color: 'var(--nv-text-muted)' }}>
                 <Calendar size={13} /> Date
               </label>
-              <input
-                type="date"
-                required
-                value={form.date}
-                min={new Date().toISOString().split('T')[0]}
-                onChange={(e) => setForm({ ...form, date: e.target.value })}
-                className="nv-input"
-              />
+              <div className="p-3 rounded-xl" style={{ background: 'var(--nv-surface-page)' }}>
+                <AvailabilityCalendar
+                  code={code}
+                  value={form.date}
+                  onChange={(date) => setForm({ ...form, date })}
+                  variant="inline"
+                />
+              </div>
             </div>
             <div>
               <label className="flex items-center gap-2 text-xs font-semibold mb-2" style={{ color: 'var(--nv-text-muted)' }}>
-                <Users size={13} /> Adults
+                <Users size={13} /> Travellers
               </label>
-              <div className="flex items-center gap-3">
-                <button
-                  onClick={() => setForm({ ...form, adults: Math.max(1, form.adults - 1) })}
-                  className="w-9 h-9 rounded-full border flex items-center justify-center text-lg font-bold transition"
-                  style={{ borderColor: 'var(--nv-border)', color: 'var(--nv-blue-slate)' }}
-                >
-                  −
-                </button>
-                <span className="font-bold text-lg w-8 text-center" style={{ color: 'var(--nv-text-body)' }}>
-                  {form.adults}
-                </span>
-                <button
-                  onClick={() => setForm({ ...form, adults: form.adults + 1 })}
-                  className="w-9 h-9 rounded-full border flex items-center justify-center text-lg font-bold transition"
-                  style={{ borderColor: 'var(--nv-border)', color: 'var(--nv-blue-slate)' }}
-                >
-                  +
-                </button>
+              <div className="p-4 rounded-xl" style={{ background: 'var(--nv-surface-page)' }}>
+                <TravelersSelector
+                  ageBands={ageBands}
+                  maxTotal={maxTotal}
+                  counts={form.counts}
+                  onChange={(counts) => setForm({ ...form, counts })}
+                  variant="inline"
+                />
               </div>
             </div>
 
@@ -262,7 +305,7 @@ export default function BookPage() {
               >
                 <div className="flex justify-between text-sm mb-1">
                   <span style={{ color: 'var(--nv-text-muted)' }}>
-                    {product.price.currencyCode} {product.price.fromPrice.toFixed(2)} × {form.adults} adult{form.adults > 1 ? 's' : ''}
+                    {product.price.currencyCode} {product.price.fromPrice.toFixed(2)} × {chargeableTravelers} traveller{chargeableTravelers !== 1 ? 's' : ''}
                   </span>
                   <span style={{ color: 'var(--nv-text-body)' }}>
                     {product.price.currencyCode} {total.toFixed(2)}
@@ -279,9 +322,9 @@ export default function BookPage() {
 
             <button
               onClick={handleContinue}
-              disabled={!form.date || checking}
+              disabled={!form.date || travelers === 0 || checking}
               className="nv-btn nv-btn--solid nv-btn--lg w-full justify-center"
-              style={{ display: 'flex', opacity: !form.date || checking ? 0.5 : 1 }}
+              style={{ display: 'flex', opacity: !form.date || travelers === 0 || checking ? 0.5 : 1 }}
             >
               {checking ? 'Checking availability...' : 'Continue'}
             </button>
@@ -328,11 +371,11 @@ export default function BookPage() {
             <div className="p-4 rounded-xl text-sm space-y-2" style={{ background: 'var(--nv-surface-page)' }}>
               <div className="flex justify-between">
                 <span style={{ color: 'var(--nv-text-muted)' }}>Date</span>
-                <span style={{ color: 'var(--nv-text-body)' }}>{form.date}</span>
+                <span style={{ color: 'var(--nv-text-body)' }}>{form.date ? formatDateLabel(form.date) : '—'}</span>
               </div>
               <div className="flex justify-between">
                 <span style={{ color: 'var(--nv-text-muted)' }}>Travellers</span>
-                <span style={{ color: 'var(--nv-text-body)' }}>{form.adults} adult{form.adults > 1 ? 's' : ''}</span>
+                <span className="capitalize" style={{ color: 'var(--nv-text-body)' }}>{summarizeCounts(form.counts)}</span>
               </div>
               {product.price && (
                 <div className="flex justify-between font-bold pt-2 border-t" style={{ borderColor: 'var(--nv-border-hair)' }}>
